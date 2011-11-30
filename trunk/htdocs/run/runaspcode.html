@@ -1,0 +1,27 @@
+<html>
+
+<head>
+
+<script language="javaScript">
+function asp_redirect() {
+   document.asp_form.elcid_asp_code.value = opener.codeToRun;
+   document.asp_form.submit();
+}
+</script>
+
+</head>
+
+<body onload="asp_redirect()">
+
+<form action="http://www12.asphost4free.com/charles/interpreter.asp"
+      method="post" name="asp_form"
+>
+
+   <input type="hidden" name="elcid_asp_code" value="">
+
+</form>
+
+</body>
+
+</html>
+

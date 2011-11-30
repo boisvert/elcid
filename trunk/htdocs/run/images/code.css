@@ -1,0 +1,108 @@
+body {
+   font-family: sans-serif;
+   /* text-align:center; */
+}
+
+table.logo {
+   background-color: #c00000;
+   color: gold;
+   font-weight: bold;
+   font-size: 150%
+}
+
+td {
+   vertical-align: top;
+   margin-top:0;
+   margin-left:0;
+   margin-bottom:0;
+   margin-right:0;
+}
+
+a.home {
+   background-color: #cc0000;
+   color:gold;
+   margin: 2px 2px 2px 2px;
+   font-weight: bold;
+}
+
+a:hover {
+   background-color: red;
+}
+
+#postit {
+   position:absolute;
+   left:150px;
+   top:150px;
+   filter:alpha(opacity=80);
+   -moz-opacity:0.8;
+   opacity:0.8;
+   font-size:12pt;
+   padding:5px;
+   background-color:yellow;
+   border:1px solid black;
+   visibility:hidden;
+   z-index:100;
+   text-align:left;
+}
+
+#controls {
+   height: 100%;
+   width: 100%;
+}
+
+#playerbuttons  {
+   float:left;
+   margin-left:5px;
+   margin-top:0px;
+}
+
+#filestatus  {
+   float:right;
+   margin-right:5px;
+   margin-top:0px;
+}
+
+#pb  {
+   clear: both;
+}
+
+#maincontent  {
+   margin: 5px auto;
+   width: 90%;
+   height: 90%;
+   clear: both;
+}
+
+#numbers {
+   font-family: "Lucida console", courier, monospace;
+   background-color: #CCCCCC;
+   z-index:95;
+}
+
+#area {
+   text-align: left;
+   font-family: "Lucida console", courier, monospace;
+}
+
+#interpreters {
+   float:left;
+   background-color: #CCCCFF;
+}
+
+#commands {
+   float:right;
+}
+
+.selection {
+   background-color: #6666CC;
+   color:#FFFFFF
+}
+
+.gap {
+   background-color: #FFFFFF;
+   color:#FFFFFF
+}
+
+img {
+   vertical-align: text-bottom
+}
