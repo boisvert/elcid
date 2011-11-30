@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<!-- Copyright (C) Anglia Polytechnic University, 2003-04 -->
+
+<elcid>
+
+<source>&lt;html&gt;
+&lt;head&gt;
+   &lt;title&gt;Basic image rollover&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;h2 align="center"&gt;Rollover image&lt;/h2&gt;
+
+&lt;a href="http://www.linux.org/"
+   onMouseover = "photo.src='images/tuxcol.gif';"
+   onMouseout = "photo.src='images/tuxbw.gif';"
+&gt;Move the mouse over here&lt;/a&gt;
+&lt;p&gt;
+&lt;img src="images/tuxbw.gif" name="photo"&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</source>
+
+<iteration>
+   <move>
+      <linenumber>14</linenumber>
+   </move>
+
+   <select>
+      <chars>43</chars>
+      <comment>If we move the img tag to inside the link (between a href... and /a).
+The image will change when the mouse moves over it,
+rather than over a link elsewhere.</comment>
+   </select>
+
+   <copy />
+
+   <delete />
+
+   <move>
+      <linenumber>12</linenumber>
+      <colnumber>1</colnumber>
+   </move>
+
+   <select>
+      <chars>24</chars>
+   </select>
+
+   <paste />
+
+   <move>
+      <linenumber>12</linenumber>
+      <colnumber>28</colnumber>
+      <comment>The final change is to remove the conspicuous border around the link-image.</comment>
+   </move>
+
+   <insert>
+      <chars> border="0"</chars>
+   </insert>
+
+</iteration>
+
+</elcid>
+

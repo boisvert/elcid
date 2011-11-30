@@ -1,0 +1,27 @@
+<html>
+
+<head>
+
+<script language="javaScript">
+function sql_redirect() {
+   document.sql_form.sql_cmd.value = opener.codeToRun;
+   document.sql_form.submit();
+}
+</script>
+
+</head>
+
+<body onload="sql_redirect()">
+
+<form action="http://sqlcourse2.com/cgi-bin/sqlcmd-sqlcourse2.cgi"
+      method="get" name="sql_form"
+>
+
+   <input type="hidden" name="sql_cmd" value="">
+
+</form>
+
+</body>
+
+</html>
+

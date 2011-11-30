@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<!-- Copyright (C) Anglia Polytechnic University, 2003-04 -->
+
+<elcid>
+
+<source>
+&lt;html&gt;
+&lt;body&gt;
+
+&lt;a href="http://images.google.com/"&gt;Over here&lt;/a&gt;
+&lt;p&gt;
+&lt;img src="charles.jpg"&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</source>
+
+<iteration>
+
+   <move>
+      <linenumber>6</linenumber>
+      <colnumber>29</colnumber>
+      <comment>First the image is given a *name*. This name is used
+to refer to it when it needs to be changed.</comment>
+   </move
+
+   <insert>
+      <chars> name="photo"</chars>
+
+   </insert>
+
+   <move>
+      <linenumber>4</linenumber>
+      <colnumber>35</colnumber>
+      <comment>Then an event is used to control when a new file is loaded in the image.
+To tell the system what image to change, we used the name we've just given it.</comment>
+   </move>
+
+   <insert>
+      <chars> onMouseover = "photo.src='bull.gif';"</chars>
+   </insert>
+
+</iteration>
+
+</elcid>
+
