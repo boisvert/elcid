@@ -59,7 +59,7 @@ The tutorials all present some code and play through its successive changes.
 </p>
 
 <p>
-You can also <a href="about">Find out about the system</a>, or <a href="download">Download eL-CID</a>.
+You can also <a href="about">Find out about the system</a>, or <a href="download">visit the project page</a>.
 </p>
 
 <p>

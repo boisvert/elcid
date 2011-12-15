@@ -25,7 +25,7 @@
       <a href="/contact">Contact</a>
    </td>	 
    <td>
-      <a href="/download">Download</a>
+      <a href="/project">Project</a>
    </td>
    </tr>
 </table>

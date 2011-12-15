@@ -26,15 +26,14 @@
 <div id="main">
 
 <p>
-eL-CID is compatible with any browser that supports XML DOM parsing, which is the vast majority of modern browsers.
+eL-CID is an open source project. You can obtain the complete source on Google code:
 
 <blockquote>
-   <a href="elcid.zip">Download the code</a>
+   <a href="code.google.com/p/elcid">el-cid on Google Code</a>
 </blockquote>
 
 <p>
-To install, unzip in the folder where you want to use it. Click on <tt>elcid.html</tt> to run and load an <tt>xml</tt> file from the provided samples.
-
+The project requires a Web server supporting PHP and MySQL. Contributions are welcome.
 </div>
 
 </body>
