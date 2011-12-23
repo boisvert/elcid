@@ -6,9 +6,10 @@ require('cgi/utils.php');
 $title = "eL-CID :- Web programming, step by step";
 $trail = 'You are here: <a href="index.php">Home</a>';
   
-$tag = $_GET["tag"];
-  
-if ($tag!="") {
+$tag = "";
+
+if (isset($_GET["tag"])) {
+   $tag = $_GET["tag"];
    $title = "$title - $tag";
    $trail = "$trail &gt; $tag";
 }
