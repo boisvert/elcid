@@ -67,7 +67,7 @@ function home_link() {
 
 <body
    onload = "controls=document.forms.controls; controls.fontsize.value = area.fontSize; controls.enabled=true; postit=extendPost('postit'); loadfile();"
-   onUnload = "return checkSave();";
+   onunload = "return checkSave();";
 >
 
 <div id="postit"
@@ -154,7 +154,7 @@ function home_link() {
               onClick="viewXML();" alt="View the XML">
          <img src="../images/fileTabOff.png" name="fileTab"
               onClick="fileManager();" alt="File manager">
-	  </td>
+	   </td>
       </tr>
     </table>
 </div>

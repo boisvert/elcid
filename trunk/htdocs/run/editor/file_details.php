@@ -1,7 +1,7 @@
 <?php
 
 // definitions of database name, user, password
-require('utils.php');
+require('../../cgi/utils.php');
 
 $loggedin=(isset($_COOKIE['user']));
 
@@ -21,8 +21,6 @@ if ($loggedin) {
 <title>eL-CID :- Edit file details</title>
 
 <?php
-
-   echo '<base href="'.$htURL.'">';
 
    $styleURL=$htURL."images/style.css";
   
@@ -65,7 +63,7 @@ if ($loggedin) {
 	   }
 
 ?>
-	   <form name="filedetails" target="elcidTutorial" action="cgi/file_manager.php"
+	   <form name="filedetails" target="elcidTutorial" action="file_manager.php"
 	         onSubmit="opener.focus();" onCancel="opener.focus();" method="post" >
 		  <b>File details</b> <br />
 	      <input type="hidden" name="key" value="<?php echo $file_key;?>" />

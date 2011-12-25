@@ -5,17 +5,18 @@ var currentCartridge; // records which "cartridge" is being shown
 var fullXML; // the final XML file to produce a tutorial
 var user = getCookie("user");
 var notSaved = false;
+var currentTab = 1;
 
 function checkSave() {
    // alert("checking: "+notSaved);
    if (notSaved) {
-      //var discardChanges = confirm("This development is not saved. Discard changes?");
-	   // if (!discardChanges) {
+      var keepChanges = confirm("This development is not saved. Save recovery file?");
+	   if (keepChanges) {
 		   generateXML();
          // alert(fullXML);
 		   uploadTempXML();
          // alert("temp save is done");
-	  // }
+	   }
    }
    return true;
 }
@@ -25,8 +26,9 @@ function viewXML() {
    document.images.XMLTab.src=XMLTabOn.src;
    document.images.formTab.src=formTabOff.src;
    document.images.fileTab.src=fileTabOff.src;
-   generateXML();
+   if (currentTab==1) generateXML(); // from form entry to editing XML file
    document.getElementById("elcidTutorial").src="show_xml.html";
+   currentTab = 2;
 }
 
 function generateXML() {
@@ -47,8 +49,9 @@ function formEditor() {
    document.images.formTab.src=formTabOn.src;
    document.images.fileTab.src=fileTabOff.src;
    document.getElementById("elcidTutorial").src="xmlsource.html";
-   xmlDoc.setXML(fullXML);
+   if (currentTab==2) xmlDoc.setXML(fullXML); // from editing XML file to form entry
    setTimeout("showSourceXml(); updateDisplay();",300); // should do only if XML is well-formed.
+   currentTab = 1;
 }
 
 function fileManager() {
@@ -57,6 +60,9 @@ function fileManager() {
    document.images.formTab.src=formTabOff.src;
    document.images.fileTab.src=fileTabOn.src;
    document.getElementById("elcidTutorial").src="file_manager.php";
+   if (currentTab==1) generateXML(); // from form entry - update XML file
+   if (currentTab==2) xmlDoc.setXML(fullXML); // from editing XML file update form data
+   currentTab = 3;
 }
 
 function delayUpdateDisplay() {
