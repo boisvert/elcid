@@ -11,13 +11,11 @@ require('../../cgi/login.php');
 
 <head>
 
-<script LANGUAGE="JavaScript" src="../run/config.js" type="text/javascript"> </script>
+<script LANGUAGE="JavaScript" src="../config.js" type="text/javascript"> </script>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>eL-CID :- file manager</title>
 
 <?php // base and style sheet
-
-echo '<base href="'.$htURL.'">';
 
 $styleURL=$htURL."images/style.css";
 
@@ -56,9 +54,9 @@ function togglePublic(fileKey, public) {
 }
 
 function setPublicResponse() {
-   //alert("Request readyState: " + parent.httpRequest.readyState);
+   // alert("Request readyState: " + parent.httpRequest.readyState);
    if (parent.httpRequest.readyState == 4) {
-	  //alert("Response status: " + parent.httpRequest.status);
+	   // alert("Response status: " + parent.httpRequest.status);
       if (parent.httpRequest.status == 200) {
          window.location=window.location+" ";
 		 alert(parent.httpRequest.responseText);
@@ -71,7 +69,7 @@ function setPublicResponse() {
 }
 
 function detailsDialog(fileKey) {
-	var dd = parent.popup(cgiURL+"file_details.php?file="+fileKey);
+	var dd = parent.popup("file_details.php?file="+fileKey);
 	dd.focus();
 }
 
@@ -102,7 +100,7 @@ function detailsDialog(fileKey) {
       global $order;
       global $dir;
       global $cgiURL;
-      $q = "<a href='".$cgiURL."file_manager.php?order=$column&dir=";
+      $q = "<a href='?order=$column&dir=";
       if ($column == $order) {
          if ($dir=="asc")
             $q .= "desc";
@@ -154,20 +152,30 @@ function detailsDialog(fileKey) {
 open_db();
 
 // optionally update file details
-if ($key=$_POST["key"] && $date=$_POST["date"] && $description=$_POST["description"]) {
+if (isset($_POST["key"]) && isset($_POST["date"])) {
 
    // Details to update
-	$sql = "file_date='$date', file_description='$description'";
-	// also need file_name='".$_POST["name"]."',
-	// but not implemented because needs renaming the file itself
-	if ($_POST["public"]=="true") {
-		$sql = "$sql, file_active=true";
+   
+   $d = $_POST["date"];
+	$sets = "file_date='$d'";
+   
+	if (isset($_POST["public"])) {
+		$sets .= ", file_active=1";
 	}
    else {
-		$sql = "$sql, file_active=false";
+		$sets .= ", file_active=0";
 	}
-   
-   $sql = "UPDATE files_tbl SET $sql WHERE file_key=$key AND file_author='$username';";
+	// also need file_name='$_POST["name"]',
+	// but not implemented because needs renaming the file itself
+
+   if (isset($_POST["description"])) {
+      $d = $_POST["description"];
+		$sets .= ", file_description='$d'";
+	}
+
+   $key=$_POST["key"];
+ 
+   $sql = "UPDATE files_tbl SET $sets WHERE file_key=$key AND file_author='$username';";
 	query_db($sql);
 
    // update file classification tags
@@ -182,21 +190,21 @@ if ($key=$_POST["key"] && $date=$_POST["date"] && $description=$_POST["descripti
    $tagsArray = explode(";",$tags);
 
    foreach ($tagsArray as $tag) {
-	  $tag=trim($tag);
-	  if ($tag!="")
-     {
+	   $tag=trim($tag);
+	   if ($tag!="")
+      {
          $sql = "INSERT INTO tags_tbl(tag_name,tag_author) VALUES ('$tag','$username')";
-            
+
          debug_msg($sql);
 	      mysql_query($sql);
-            
+
          $sql = "SELECT tags_key FROM tags_tbl WHERE (tag_name='$tag')";
 	      $tag_key = query_one_item($sql);
          $sql = "INSERT INTO file_tags_tbl VALUES ($key,$tag_key,'$username')";
          query_db($sql);
-		}
-   }
-} // Files updated
+		} // one tag
+   } // each tag
+} // File updated if needed
 
 // Query the file list
 $sql  = "SELECT file_key, file_active AS active, file_name AS name, file_date AS date, file_path AS path, count(file_use_key) AS visits FROM files_tbl";
@@ -210,8 +218,8 @@ $result = query_db($sql);
 while ($record = mysql_fetch_array($result)) {
    $file_key = $record["file_key"];
 	$file = $record["name"];
-   $path = $record["path"]."/";
-   $url = $path.$file.".xml";
+   $path = $record["path"];
+   $url = "../$path/$file.xml";
    $js = 'parent.loadCommandServer("'.$url.'"); return false;';
 ?>
       <tr onMouseover="hifile(this);" onMouseout="lofile(this);" />
@@ -220,7 +228,7 @@ while ($record = mysql_fetch_array($result)) {
 		          id="<?php echo $file_key;?>" <?php echo ($record["active"])?"checked":"" ?> / >
 		</form></td>
 		<td>
-	      <a href='<?php echo "run/".$url;?>' onClick='<?php echo $js;?>'>
+	      <a href='<?php echo $url;?>' onClick='<?php echo $js;?>'>
 			   <?php echo $file;?>
 		   </a>
 		</td>
