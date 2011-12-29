@@ -7,18 +7,23 @@ var user = getCookie("user");
 var notSaved = false;
 var currentTab = 1;
 
-function checkSave() {
+function askSave() {
    // alert("checking: "+notSaved);
-   if (notSaved) {
-      var keepChanges = confirm("This development is not saved. Save recovery file?");
-	   if (keepChanges) {
-		   generateXML();
-         // alert(fullXML);
-		   uploadTempXML();
-         // alert("temp save is done");
-	   }
+   var keepChanges = confirm("This development is not saved. Save recovery file?");
+   if (keepChanges) {
+	   generateXML();
+      // alert(fullXML);
+      uploadTempXML();
+      // alert("temp save is done");
    }
-   return true;
+}
+
+function warnNotSaved() {
+   window.onbeforeunload = askSave;
+}
+
+function noWarnSaved() {
+   window.onbeforeunload = "";
 }
 
 function viewXML() {
@@ -113,7 +118,7 @@ function setCartridgeColour(num,colour) {
 }
 
 function updateNewStep(newType) {
-   notSaved = true;
+   notSaved = true; warnNotSaved();
    var num = current_step-1;
    var step;
 
@@ -137,7 +142,7 @@ function updateNewStep(newType) {
 }
 
 function deleteStep() {
-   notSaved = true;
+   notSaved = true; warnNotSaved();
    if (current_step>0) {
       var num = current_step-1;
       steps.splice(num,1);
@@ -150,7 +155,7 @@ function deleteStep() {
 }
 
 function insertStep() {
-   notSaved = true;
+   notSaved = true; warnNotSaved();
    steps.splice(current_step,0,new step_move());
    document.getElementById("pb").innerHTML = progressBar();
    showHistory();
@@ -175,7 +180,7 @@ but by now I do wish javascript was object-oriented for real.
 */
 
 function updateSource() {
-   notSaved = true;
+   notSaved = true; warnNotSaved();
    source = elcidTutorial.document.forms.source.text.value.split('\n');
    delayUpdateDisplay();
 }
@@ -189,7 +194,7 @@ function genSource() {
 }
 
 function updateMove() {
-   notSaved = true;
+   notSaved = true;  warnNotSaved();
    var Num=current_step-1;
    var step=steps[Num];
    var form=elcidTutorial.document.forms[Num+1];
@@ -216,7 +221,7 @@ function showMove(step) {
 }
 
 function updateInsert() {
-   notSaved = true;
+   notSaved = true; warnNotSaved();
    var Num=current_step-1;
    var step=steps[Num];
    var form=elcidTutorial.document.forms[Num+1];
@@ -268,7 +273,7 @@ function showInsert(step) {
 }
 
 function updateSelect() {
-   notSaved = true;
+   notSaved = true; warnNotSaved();
    updateDisplayThread=null;
    var Num=current_step-1;
    var step=steps[Num];
@@ -444,7 +449,7 @@ function showStepComment(i) {
 }
 
 function setComment(i) {
-   notSaved = true;
+   notSaved = true; warnNotSaved();
    var formElt = elcidTutorial.document.forms[i+1];
    if (formElt.commentCheck.checked) {
       steps[i].comment = "";
@@ -560,7 +565,7 @@ function uploadResponse() {
    if (uploadRequest.readyState == 4) {
       result = uploadRequest.responseText;
 	   if (uploadRequest.status == 200) {
-         notSaved = false;
+         notSaved = false; noWarnSaved();
 		   var lines = result.split("\n");
          alert("File saved: \n"+result);
 		   // window.location = htURL+"run/editor/cid_editor.html?file="+lines[1];
