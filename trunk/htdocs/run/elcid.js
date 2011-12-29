@@ -1190,9 +1190,6 @@ function loadCommandClient(filename) {
 function loadCommandServer(fileName) {
    if (fileName!='') {
       fileName = replaceAll(fileName,'\\','/');
-      if (editorIsOn) {
-         fileName = '../'+fileName;
-      }
       location=getURL()+'?file='+escape(fileName);
    }
 }
