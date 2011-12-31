@@ -29,7 +29,7 @@
 eL-CID is an open source project. You can obtain the complete source on Google code:
 
 <blockquote>
-   <a href="code.google.com/p/elcid">el-cid on Google Code</a>
+   <a href="http://code.google.com/p/elcid">el-cid on Google Code</a>
 </blockquote>
 
 <p>

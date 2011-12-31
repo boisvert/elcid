@@ -81,3 +81,7 @@ table.filelist td {
 	 left: 300px;
 }
 
+.tags {}
+.hitags {
+   background-color: yellow;
+}
