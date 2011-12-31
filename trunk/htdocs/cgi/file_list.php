@@ -2,21 +2,10 @@
 
   // definitions of database name, user, password
   require_once('utils.php');
-
-$styleURL=$htURL."images/style.css";
   
-echo '<link rel="StyleSheet" href="'.$styleURL.'" type="text/css">';
-
 ?>
 
-<style>
-.tags {}
-.hitags {
-   background-color: yellow;
-}
-</style>
-
-<script>
+<script type="text/javascript">
 
 var tagsRequest = false;
 
@@ -41,7 +30,8 @@ function editTags(elt) {
    }
 }
 
-function setTags(fileKey, tags) {
+function setTags(fileId, tags) {
+   var fileKey = fileId.substring(1);
    var parameters = "file="+fileKey+"&tags="+tags;
    tagsRequest = parent.POSTRequest('cgi/set_tags.php', parameters, setTagsResponse);
 }
@@ -110,11 +100,11 @@ function setTagsResponse() {
 	        <a target='_top' href='<?php echo $url;?>' onClick='<?php echo $js;?>'>
 			   <?php echo $record["file_name"];?>
 			</a>
-			<br />
+			<br>
 		    <?php echo $record["file_date"];?> <br>
 		    <?php echo "By ".$record["file_author"];?>
 		    <p><?php echo $record["file_description"];?></p>
-            <div id="<?php echo $file_key;?>" class="tags" rel="<?php echo $file;?>"
+            <div id="k<?php echo $file_key;?>" class="tags"
 			     onClick="editTags(this);" onMouseover="hitags(this);" onMouseout="lotags(this)"
 			><?php echo $tagcell;?></div>
 	     </td>
