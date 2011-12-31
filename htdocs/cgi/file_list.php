@@ -3,8 +3,6 @@
   // definitions of database name, user, password
   require_once('utils.php');
 
-echo '<base href="'.$htURL.'">';
-
 $styleURL=$htURL."images/style.css";
   
 echo '<link rel="StyleSheet" href="'.$styleURL.'" type="text/css">';
@@ -113,7 +111,7 @@ function setTagsResponse() {
 			   <?php echo $record["file_name"];?>
 			</a>
 			<br />
-		    <?php echo $record["file_date"];?> <br />
+		    <?php echo $record["file_date"];?> <br>
 		    <?php echo "By ".$record["file_author"];?>
 		    <p><?php echo $record["file_description"];?></p>
             <div id="<?php echo $file_key;?>" class="tags" rel="<?php echo $file;?>"
