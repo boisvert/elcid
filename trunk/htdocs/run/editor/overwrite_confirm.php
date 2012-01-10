@@ -3,7 +3,7 @@
 //$debug = true;
 
 // secure page
-require('login.php');
+require('../../cgi/login.php');
 
 debug_msg("User is logged in as $username");
 
@@ -17,7 +17,7 @@ if ($action = $_GET["action"]) {
    remove_temp_file($fname);
 }
 
-$files = getDirectoryList("../run/users/$username/temp");
+$files = getDirectoryList("../users/$username/temp");
 $num = count($files);
 
 if ($num>0) {
@@ -70,7 +70,7 @@ function remove_temp_file($fname) {
    debug_msg("delete $fname");
 
    global $username;
-   $pathname = "../run/users/$username/temp/$fname";
+   $pathname = "../users/$username/temp/$fname";
 
    debug_msg("File will be saved as $pathname");
 
@@ -86,13 +86,13 @@ function overwrite_old_file($fname) {
 
    global $username;
    $filepath = "users/$username";
-   $pathname = "../run/$filepath/$fname";
+   $pathname = "../$filepath/$fname";
 
    debug_msg("File will be saved as $pathname");
 
    // move the file
 
-   move_uploaded_file("../run/$filepath/temp/$filename",$pathname);
+   move_uploaded_file("../$filepath/temp/$filename",$pathname);
 
    debug_msg("Move succeeded");
 	  

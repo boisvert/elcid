@@ -67,19 +67,17 @@ function POSTRequest(url, parameters, responseProcess) {
 
 function loginResponse() {
    if (loginRequest.readyState == 4) {
+      // alert(loginRequest.status+'\n'+loginRequest.responseText);
       if (loginRequest.status == 200) {
          loggedin = true;
          userName = document.getElementById("user").value;
          welcomeLogin();           
       }
-      else
-      {
-         if (loginRequest.status == 403) {
-            register();
-         }
-         else {
-            alert('Your login could not be checked.\nPlease try again later.');
-	     }
+      else if (loginRequest.status == 403) {
+         register();
+      }
+      else {
+         alert('Your login could not be checked.\nPlease try again later.');
       }
    }
 }

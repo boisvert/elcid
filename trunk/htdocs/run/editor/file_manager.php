@@ -258,7 +258,7 @@ close_db();  // close connection
 
    <p>Upload:</p>
 
-   <form action="/cgi/upload_file.php" method="post" enctype="multipart/form-data">
+   <form action="upload_file.php" method="post" enctype="multipart/form-data">
       <input type="file" name="tutorial" onChange="this.form.submit();">
    </form>
 

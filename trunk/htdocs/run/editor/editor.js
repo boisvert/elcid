@@ -564,17 +564,18 @@ function POSTRequest(url, parameters, responseProcess) {
 function uploadResponse() {
    if (uploadRequest.readyState == 4) {
       result = uploadRequest.responseText;
-	   if (uploadRequest.status == 200) {
+      // alert("response:\n"+uploadRequest.readyState+"\nStatus: "+uploadRequest.status+"\n"+result);
+      if (uploadRequest.status == 200) {
          notSaved = false; noWarnSaved();
-		   var lines = result.split("\n");
+         var lines = result.split("\n");
          alert("File saved: \n"+result);
-		   // window.location = htURL+"run/editor/cid_editor.html?file="+lines[1];
+         // window.location = htURL+"run/editor/cid_editor.html?file="+lines[1];
       }
       else if (uploadRequest.status == 403) {
-		   alert("Log in has expired.\nLog in again to save the file.");
+         alert("Log in has expired.\nLog in again to save the file.");
       }
       else if (uploadRequest.status == 500) {
-		   alert("File could not be saved due to a server error.");
+         alert("File could not be saved due to a server error.");
       }
       else {
          alert('There was a problem saving the file.\n'+result);

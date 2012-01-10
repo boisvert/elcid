@@ -1,0 +1,72 @@
+<elcid>
+
+<source>&lt;html&gt;
+&lt;head&gt;
+   &lt;title&gt;Basic image rollover&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;h2 align=&quot;center&quot;&gt;Rollover image&lt;/h2&gt;
+
+&lt;a href=&quot;http://images.google.com/&quot;&gt;Move the mouse over here&lt;/a&gt;
+&lt;p&gt;
+&lt;img src=&quot;charles.jpg&quot;&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</source>
+
+<iteration>
+
+<move>
+   <linenumber>11</linenumber>
+   <colnumber>22</colnumber>
+   <comment>First the image is given a *name*. This name is used
+to refer to it when it needs to be changed.</comment>
+</move>
+
+<insert>
+   <chars> name=&quot;photo&quot;</chars>
+</insert>
+
+<move>
+   <linenumber>9</linenumber>
+   <colnumber>35</colnumber>
+   <comment>Then an event is used to control when a new file is loaded in the image.
+To tell the system what image to change, we used the name we've just given it.</comment>
+</move>
+
+<insert>
+   <chars> onMouseover = &quot;photo.src='bull.gif';&quot;</chars>
+</insert>
+
+<move>
+   <linenumber>9</linenumber>
+   <colnumber>35</colnumber>
+</move>
+
+<insert>
+   <chars>&#32;&#32;</chars>
+   <line />
+   <comment>We can now tidy up the code for that version. At present the image will
+change over when the mouse moves over the link, but not change back.</comment>
+</insert>
+
+<move>
+   <linenumber>10</linenumber>
+   <colnumber>40</colnumber>
+</move>
+
+<insert>
+   <line />
+   <comment>To make the image change back, we use an *onMouseout* event.</comment>
+</insert>
+
+<insert>
+   <line>   onMouseout = &quot;photo.src='charles.jpg';&quot;</line>
+</insert>
+
+</iteration>
+
+</elcid>
