@@ -1,0 +1,173 @@
+<elcid>
+
+<source>&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Displaying an array using the javascript write functions&lt;/title&gt;
+
+&lt;script LANGUAGE=&quot;JavaScript&quot;&gt; &lt;!--
+
+var numbers = new Array(673,623,63,54,34,23,9,4,1);
+
+var sorted = false;
+
+if (sorted)
+   {alert(&quot;The array is in descending order&quot;);}
+else
+   {alert(&quot;The array is not in descending order&quot;);}
+
+
+//--&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+
+&lt;/html&gt;
+</source>
+
+<iteration>
+
+<move>
+   <linenumber>9</linenumber>
+   <colnumber>0</colnumber>
+</move>
+
+<insert>
+   <line />
+   <line />
+</insert>
+
+<move>
+   <linenumber>10</linenumber>
+   <colnumber>0</colnumber>
+</move>
+
+<insert>
+   <chars>if (numbers[0]&gt;=numbers[1]) {sorted=true;}</chars>
+   <comment>We'll start by checking the first two numbers are sorted.</comment>
+</insert>
+
+<move>
+   <linenumber>10</linenumber>
+   <colnumber>26</colnumber>
+</move>
+
+<insert>
+   <chars> &amp;&amp; numbers[1]&gt;=numbers[2]</chars>
+   <comment>This approach can work - but it is not general.</comment>
+</insert>
+
+<move>
+   <linenumber>9</linenumber>
+   <colnumber>0</colnumber>
+</move>
+
+<insert>
+   <line />
+</insert>
+
+<insert>
+   <chars>for (var i=0; i&lt;numbers.length; i++) {</chars>
+   <comment>With a loop we can checkevery the whole array.</comment>
+</insert>
+
+<move>
+   <linenumber>11</linenumber>
+   <colnumber>0</colnumber>
+</move>
+
+<insert>
+   <chars>   </chars>
+</insert>
+
+<move>
+   <linenumber>12</linenumber>
+   <colnumber>0</colnumber>
+</move>
+
+<insert>
+   <line>}</line>
+</insert>
+
+<move>
+   <linenumber>11</linenumber>
+   <colnumber>15</colnumber>
+</move>
+
+<select>
+   <chars>1</chars>
+</select>
+
+<insert>
+   <chars>i</chars>
+</insert>
+
+<move>
+   <linenumber>11</linenumber>
+   <colnumber>27</colnumber>
+</move>
+
+<select>
+   <chars>27</chars>
+</select>
+
+<insert>
+   <chars>i+1</chars>
+   <comment>A small detail to check...</comment>
+</insert>
+
+<move>
+   <linenumber>10</linenumber>
+   <colnumber>30</colnumber>
+   <comment>An off-by-one error in the array,
+because we are working on pairs of numbers.</comment>
+</move>
+
+<insert>
+   <chars>-1</chars>
+   <comment>Test this version: it still doesn't work.</comment>
+</insert>
+
+<move>
+   <linenumber>8</linenumber>
+   <colnumber>13</colnumber>
+   <comment />
+</move>
+
+<select>
+   <chars>5</chars>
+   <comment>We should actually check when the array is *not* sorted.</comment>
+</select>
+
+<insert>
+   <chars>true</chars>
+</insert>
+
+<move>
+   <linenumber>11</linenumber>
+   <colnumber>17</colnumber>
+</move>
+
+<select>
+   <chars>2</chars>
+</select>
+
+<insert>
+   <chars>&lt;</chars>
+</insert>
+
+<move>
+   <linenumber>11</linenumber>
+   <colnumber>40</colnumber>
+</move>
+
+<select>
+   <chars>4</chars>
+</select>
+
+<insert>
+   <chars>false</chars>
+   <comment />
+</insert>
+
+</iteration>
+
+</elcid>
