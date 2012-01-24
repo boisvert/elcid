@@ -205,7 +205,7 @@ function XMLdocument () {
 		    parseError = main.parseError;
 			onload();
 		 }
-		 
+
       }
    }
    else if (window.XMLHttpRequest) {
@@ -848,7 +848,6 @@ function setPlayerButtons() {
       disable(controls.backButton,backDis);
       disable(controls.forwardButton,stepDis);
       disable(controls.ffdButton,ffdDis);
-      enable(controls.go_playButton,stopOff);
       controls.runButton.disabled=true;
    } else {
       if (current_step>0) {
@@ -1082,15 +1081,18 @@ Control functions:
    back
    getTo
    forward
-   go_play
    fast
    onload
    loadfile
 
 ***********************/
 
-function rewind() {
+function track_rewind() {
    monitorUsage('rewind');
+   rewind();
+}
+
+function rewind() {
    auto_on=false;
    area.x=0;
    area.y=0;
@@ -1125,6 +1127,11 @@ function getTo(step) {
    }
 }
 
+function fast() {
+   monitorUsage('fast');
+   fast_to(steps.length);
+}
+
 function forward() {
    monitorUsage('forward');
    if (current_step<steps.length) {
@@ -1136,23 +1143,6 @@ function forward() {
       step.debug();
    } else
       window.status = 'Animation finished';
-}
-
-function go_play() {
-   monitorUsage('go-play')
-   if (auto_on) {
-      auto_on=false
-      swapImg(controls.go_playButton,playOn)
-   } else {
-      auto_on=true
-      swapImg(controls.go_playButton,stopOn)
-      auto()
-   }
-}
-
-function fast() {
-   monitorUsage('fast');
-   fast_to(steps.length);
 }
 
 function changeFile() {
@@ -1338,7 +1328,7 @@ function monitorUsage(currentCommand) {
          fileUseID = generateFileUseID();
 
       var monitorString = '?command='+currentCommand+'&fileuseid='+fileUseID;
-	  if (editorIsOn) monitorString += '&editor=on';
+	   if (editorIsOn) monitorString += '&editor=on';
       if (qString.full!='') monitorString += '&'+qString.full;
       document.el_icon.src = monitorImg+monitorString;
    }
