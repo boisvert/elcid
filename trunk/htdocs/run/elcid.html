@@ -73,7 +73,7 @@ function home_link() {
 <form name="controls" id="controls" action="" onSubmit="return false;">
 
 <div id="playerbuttons" >
-   <button onClick="rewind()"
+   <button onClick="track_rewind()"
            onMouseOver="this.focus()"
            onMouseout="this.blur()"
            onFocus="swapImg(this,rewOn)"
@@ -110,7 +110,7 @@ function home_link() {
 
 <div id="filestatus">
    Animation:<tt><span id="filename"></span></tt>
-   <img src="images/iconsmall.png" alt="Login to rate this tutorial" name="el_icon" width="85" height="20" border="0" onclick="rateTutorial();"> <br />
+   <img src="images/notRated.png" alt="Login to rate this tutorial" name="el_icon" width="85" height="20" border="0" onclick="rateTutorial();"> <br />
    <div id="rates" style="visibility:hidden;float:right">
       Rate: 0<input type="radio" name="rating" value="0" onClick="rateFinish(0);"
 	       >-<input type="radio" name="rating" value="1" onClick="rateFinish(1);"
