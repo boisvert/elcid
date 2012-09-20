@@ -3,7 +3,7 @@
 // definitions of database name, user, password
 require('cgi/utils.php');
 
-$title = "eL-CID :- Web programming, step by step";
+$title = "eL-CID :- Learn programming, step by step";
 $trail = 'You are here: <a href="index.php">Home</a>';
   
 $tag = "";
