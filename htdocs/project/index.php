@@ -7,7 +7,7 @@
 
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<title>eL-CID :- download</title>
+<title>eL-CID :- project</title>
 
 <link rel="StyleSheet" href="/images/style.css" type="text/css">
 
@@ -20,7 +20,7 @@
 <div id="trail">
  You are here:
  <a href="../index.php">Home</a>
- &gt; download
+ &gt; project
 </div>
 
 <div id="main">

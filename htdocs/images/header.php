@@ -7,7 +7,7 @@
 </div>
 
 <div id="tagline">
-	<div id="line">Learn Web Programming, step by step</div>
+	<div id="line">Learn Programming, step by step</div>
 	<div id="login"> </div>
 </div>
 
