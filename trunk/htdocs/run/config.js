@@ -6,6 +6,5 @@
 
 */
 
-var cgiURL = 'http://localhost/cgi/';
-var htURL = 'http://localhost/';
-
+var htURL = 'http://'+location.hostname;
+var cgiURL = htURL + 'cgi/';
