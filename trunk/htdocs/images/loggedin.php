@@ -6,6 +6,8 @@
 
    $loggedin=(isset($_COOKIE['user']));
    $username = ($loggedin)?$_COOKIE['user']:"";
+   
+   header('Content-Type: application/javascript');
 ?>
 
 loggedin = <?php echo ($loggedin)?"true":"false"; ?>;

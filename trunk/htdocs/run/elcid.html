@@ -1,5 +1,5 @@
 <!--
-eL-CID, Copyright (C) Anglia Polytechnic University, 2003-04, Charles Boisvert, 2004.
+eL-CID, Copyright (C) Anglia Polytechnic University, 2003-04, Charles Boisvert, 2004-2012.
 
 eL-CID is free software, and you are welcome to redistribute
 it under certain conditions; it comes with ABSOLUTELY NO
@@ -11,14 +11,14 @@ with the distribution.
 
 <head>
    <title>eL-CID: learn programming, step by step</title>
+   <script LANGUAGE="JavaScript" src="config.js" type="text/javascript"> </script>
 
-<script LANGUAGE="JavaScript" src="config.js" type="text/javascript"> </script>
 <script> <!--
 var loggedin = false;
 --> </script>
 
-<script LANGUAGE="JavaScript" src="/images/loggedin.php" type="text/javascript"> </script>
-<script LANGUAGE="JavaScript" src="elcid.js" type="text/javascript"> </script>
+   <script LANGUAGE="JavaScript" src="/images/loggedin.php" type="text/javascript"> </script>
+   <script LANGUAGE="JavaScript" src="elcid.js" type="text/javascript"> </script>
 
 <script> <!--
 
@@ -49,9 +49,11 @@ var commentsTabOff = new Image(); commentsTabOff.src = 'images/commentsTabOff.pn
 var editTabOn = new Image(); editTabOn.src = 'images/editTabOn.png';
 var editTabOff = new Image(); editTabOff.src = 'images/editTabOff.png';
 
-function home_link() {
-  window.location = htURL;
-}
+
+
+
+
+
 
 --> </script>
 
@@ -60,7 +62,9 @@ function home_link() {
    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
 </head>
 
-<body onload="controls=document.forms.controls; controls.fontsize.value = area.fontSize; postit=extendPost('postit'); loadfile();">
+<body
+   onload="controls=document.forms.controls; controls.fontsize.value = area.fontSize; postit=extendPost('postit'); loadfile();"
+>
 
 <div id="postit"
      onMouseDown = "startDrag(this,event.clientX,event.clientY);"
@@ -70,7 +74,7 @@ function home_link() {
 >
 </div>
 
-<form name="controls" id="controls" action="" onSubmit="return false;">
+<form name="controls" action="" id="controls" onSubmit="return false;">
 
 <div id="playerbuttons" >
    <button onClick="track_rewind()"

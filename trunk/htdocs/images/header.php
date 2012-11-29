@@ -11,8 +11,9 @@
 	<div id="login"> </div>
 </div>
 
+<script LANGUAGE="JavaScript" src="/images/loggedin.php" type="text/javascript"> </script>
+
 <script type="text/javascript">
-   <?php include('loggedin.php'); ?>
    welcomeLogin();
 </script>
 
