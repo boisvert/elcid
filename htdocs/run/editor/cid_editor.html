@@ -1,5 +1,5 @@
 <!--
-eL-CID, Copyright (C) Anglia Polytechnic University, 2003-04, Charles Boisvert, 2004-2009.
+eL-CID, Copyright (C) Anglia Polytechnic University, 2003-04, Charles Boisvert, 2004-2012.
 
 eL-CID is free software, and you are welcome to redistribute
 it under certain conditions; it comes with ABSOLUTELY NO
@@ -12,13 +12,19 @@ with the distribution.
 <head>
    <title>eL-CID: learn programming, step by step</title>
    <script LANGUAGE="JavaScript" src="../config.js" type="text/javascript"> </script>
+
+<script> <!--
+var loggedin = false;
+--> </script>
+
+   <script LANGUAGE="JavaScript" src="/images/loggedin.php" type="text/javascript"> </script>
+
    <script LANGUAGE="JavaScript" src="../elcid.js" type="text/javascript"> </script>
-   <script LANGUAGE="JavaScript" src="../../images/behaviour.js" type="text/javascript"> </script>
    <script LANGUAGE="JavaScript" src="editor.js" type="text/javascript"> </script>
 
 <script> <!--
 
-var editorIsOn = true
+var editorIsOn = true;
 
 var rewOn = new Image(); rewOn.src = '../images/rew_red.gif';
 var rewOff = new Image(); rewOff.src = '../images/rew.gif';
@@ -53,10 +59,6 @@ var formTabOff = new Image(); formTabOff.src = '../images/formTabOff.png';
 
 var fileTabOn = new Image(); fileTabOn.src = '../images/fileTabOn.png';
 var fileTabOff = new Image(); fileTabOff.src = '../images/fileTabOff.png';
-
-function home_link() {
-  window.location = "../"+htURL;
-}
 
 --> </script>
 
@@ -116,8 +118,8 @@ function home_link() {
 </div>
 
 <div id="filestatus">
-   <a href="" onClick="home_link(); return false;"><img src="../images/iconsmall.png" alt="eL-CID" name="el_icon" width="85" height="20" border="0"></a>
    Animation:<tt><span id="filename"></span></tt>
+   <img src="../images/notRated.png" alt="Rating is disabled for tutorials you are editing" name="el_icon" width="85" height="20" border="0"> <br />
 </div>
 
 <div id = "pb"> </div>
