@@ -81,7 +81,7 @@ If your browser fulfills these conditions, and it still doesn't work, let me kno
 <h3>Can I change the system or make my own version?</h3>
 
 <p>
-The source is on Google code, <a href="/download">download it</a>. Contributions are welcome, so is forking.
+The source is on Google code, <a href="/project">download it</a>. Contributions are welcome, so is forking.
 </p>
 
 <h3>Where can I get more information?</h3>
