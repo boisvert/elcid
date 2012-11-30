@@ -33,7 +33,8 @@ eL-CID is an open source project. You can obtain the complete source on Google c
 </blockquote>
 
 <p>
-The project requires a Web server supporting PHP and MySQL. Contributions are welcome.
+The project requires a Web server supporting PHP and MySQL. Register on Google if you want to contribute to the site;
+any ideas are welcome, any many different skills are needed from the designing and programming the site to improving the user interaction.
 </div>
 
 </body>
