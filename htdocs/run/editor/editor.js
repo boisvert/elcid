@@ -30,7 +30,7 @@ function viewXML() {
    monitorUsage('viewXML');
    document.images.XMLTab.src=XMLTabOn.src;
    document.images.formTab.src=formTabOff.src;
-   document.images.fileTab.src=fileTabOff.src;
+   // document.images.fileTab.src=fileTabOff.src;
    if (currentTab==1) generateXML(); // from form entry to editing XML file
    document.getElementById("elcidTutorial").src="show_xml.html";
    currentTab = 2;
@@ -52,7 +52,7 @@ function formEditor() {
    monitorUsage('EditXML');
    document.images.XMLTab.src=XMLTabOff.src;
    document.images.formTab.src=formTabOn.src;
-   document.images.fileTab.src=fileTabOff.src;
+   //document.images.fileTab.src=fileTabOff.src;
    document.getElementById("elcidTutorial").src="xmlsource.html";
    if (currentTab==2) xmlDoc.setXML(fullXML); // from editing XML file to form entry
    setTimeout("showSourceXml(); updateDisplay();",300); // should do only if XML is well-formed.
@@ -61,13 +61,13 @@ function formEditor() {
 
 function fileManager() {
    monitorUsage('FileManager');
-   document.images.XMLTab.src=XMLTabOff.src;
-   document.images.formTab.src=formTabOff.src;
-   document.images.fileTab.src=fileTabOn.src;
-   document.getElementById("elcidTutorial").src="file_manager.php";
+   //document.images.XMLTab.src=XMLTabOff.src;
+   //document.images.formTab.src=formTabOff.src;
+   //document.images.fileTab.src=fileTabOn.src;
+   document.getElementById("code").src="file_manager.php";
    if (currentTab==1) generateXML(); // from form entry - update XML file
    if (currentTab==2) xmlDoc.setXML(fullXML); // from editing XML file update form data
-   currentTab = 3;
+   //currentTab = 3;
 }
 
 function delayUpdateDisplay() {
