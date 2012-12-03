@@ -96,11 +96,13 @@ function welcomeLogin() {
 }
 
 function register() {
-   var u = document.getElementById("user").value;
-   var p = document.getElementById("pass").value;
+   // var u = document.getElementById("user").value;
+   // var p = document.getElementById("pass").value;
    popup(cgiURL+'registration.php');
 }
 
 function popup(url) { 
-   return window.open(url,'newwin','height=300,width=350,location=no,resizable=yes'); 
+   var f = window.open(url,'newwin','height=300,width=350,location=no,resizable=yes');
+   f.focus();
+   return true;
 }

@@ -61,6 +61,16 @@ function formEditor() {
 
 function fileManager() {
    monitorUsage('FileManager');
+   
+   var winloc="file_manager.php";
+   var winprop = 'height=700,width=750,location=no,scrollbars=yes,menu=no,toolbar=no,status=no,resizable=yes';
+
+   var w = window.open(winloc, 'file', winprop);
+   w.focus();
+
+}
+
+/*
    //document.images.XMLTab.src=XMLTabOff.src;
    //document.images.formTab.src=formTabOff.src;
    //document.images.fileTab.src=fileTabOn.src;
@@ -68,7 +78,7 @@ function fileManager() {
    if (currentTab==1) generateXML(); // from form entry - update XML file
    if (currentTab==2) xmlDoc.setXML(fullXML); // from editing XML file update form data
    //currentTab = 3;
-}
+*/
 
 function delayUpdateDisplay() {
    updateDisplayThread=setTimeout('updateDisplay();',2000);

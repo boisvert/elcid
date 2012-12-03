@@ -220,7 +220,7 @@ while ($record = mysql_fetch_array($result)) {
 	$file = $record["name"];
    $path = $record["path"];
    $url = "../$path/$file.xml";
-   $js = 'parent.loadCommandServer("'.$url.'"); return false;';
+   $js = 'opener.loadCommandServer("'.$url.'"); return false;';
 ?>
       <tr onMouseover="hifile(this);" onMouseout="lofile(this);" />
 		<td><form>
