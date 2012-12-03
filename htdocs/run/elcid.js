@@ -1180,6 +1180,7 @@ function loadCommandClient(filename) {
 function loadCommandServer(fileName) {
    if (fileName!='') {
       fileName = replaceAll(fileName,'\\','/');
+      window.focus();
       location=getURL()+'?file='+escape(fileName);
    }
 }
