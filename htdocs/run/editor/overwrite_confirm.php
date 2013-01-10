@@ -32,6 +32,7 @@ else {
    header("Location: file_manager.php?msg=All files processed.");
 }
 
+
 function getDirectoryList ($directory) 
 {
    // create an array to hold directory list
@@ -55,6 +56,7 @@ function getDirectoryList ($directory)
    return $results;
 }
 
+
 function output_form($file) {
 ?>
    <form action="" method="get"> <li>
@@ -65,6 +67,7 @@ function output_form($file) {
    </li> </form>
 <?php
 }
+
 
 function remove_temp_file($fname) {
    debug_msg("delete $fname");
@@ -80,6 +83,7 @@ function remove_temp_file($fname) {
 
    debug_msg("Removal succeeded");
 }
+
 
 function overwrite_old_file($fname) {
    debug_msg( "overwrite $fname");
@@ -105,7 +109,6 @@ function overwrite_old_file($fname) {
           " ON DUPLICATE KEY UPDATE file_date='$date';";
 
    query_db($sql);
-
 }
 
 ?>
