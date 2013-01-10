@@ -1,5 +1,7 @@
 <?php
 
+header('Content-type: text/plain');
+
 // secure page
 require('login.php');
 // $debug=true;

@@ -1,5 +1,7 @@
 <?php
 
+header('Content-type: text/plain');
+
 // database and debug functionality
 require('utils.php');
 
