@@ -69,8 +69,10 @@ function setPublicResponse() {
 }
 
 function detailsDialog(fileKey) {
-	var dd = parent.popup("file_details.php?file="+fileKey);
-	dd.focus();
+   var winloc="file_details.php?file="+fileKey;
+   var winprop = 'height=500,width=450,location=no,scrollbars=no,menu=no,toolbar=no,status=no,resizable=yes';
+   var w = window.open(winloc, 'file', winprop);
+	w.focus();
 }
 
 </script>

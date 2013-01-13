@@ -19,10 +19,12 @@ function askSave() {
 }
 
 function warnNotSaved() {
+   notSaved = true;
    window.onbeforeunload = askSave;
 }
 
 function noWarnSaved() {
+   notSaved = false;
    window.onbeforeunload = "";
 }
 
@@ -52,7 +54,6 @@ function formEditor() {
    monitorUsage('EditXML');
    document.images.XMLTab.src=XMLTabOff.src;
    document.images.formTab.src=formTabOn.src;
-   //document.images.fileTab.src=fileTabOff.src;
    document.getElementById("elcidTutorial").src="xmlsource.html";
    if (currentTab==2) xmlDoc.setXML(fullXML); // from editing XML file to form entry
    setTimeout("showSourceXml(); updateDisplay();",300); // should do only if XML is well-formed.
@@ -69,16 +70,6 @@ function fileManager() {
    w.focus();
 
 }
-
-/*
-   //document.images.XMLTab.src=XMLTabOff.src;
-   //document.images.formTab.src=formTabOff.src;
-   //document.images.fileTab.src=fileTabOn.src;
-   document.getElementById("code").src="file_manager.php";
-   if (currentTab==1) generateXML(); // from form entry - update XML file
-   if (currentTab==2) xmlDoc.setXML(fullXML); // from editing XML file update form data
-   //currentTab = 3;
-*/
 
 function delayUpdateDisplay() {
    updateDisplayThread=setTimeout('updateDisplay();',2000);
@@ -128,7 +119,7 @@ function setCartridgeColour(num,colour) {
 }
 
 function updateNewStep(newType) {
-   notSaved = true; warnNotSaved();
+   warnNotSaved();
    var num = current_step-1;
    var step;
 
@@ -152,7 +143,7 @@ function updateNewStep(newType) {
 }
 
 function deleteStep() {
-   notSaved = true; warnNotSaved();
+   warnNotSaved();
    if (current_step>0) {
       var num = current_step-1;
       steps.splice(num,1);
@@ -165,7 +156,7 @@ function deleteStep() {
 }
 
 function insertStep() {
-   notSaved = true; warnNotSaved();
+   warnNotSaved();
    steps.splice(current_step,0,new step_move());
    document.getElementById("pb").innerHTML = progressBar();
    showHistory();
@@ -190,7 +181,7 @@ but by now I do wish javascript was object-oriented for real.
 */
 
 function updateSource() {
-   notSaved = true; warnNotSaved();
+   warnNotSaved();
    source = elcidTutorial.document.forms.source.text.value.split('\n');
    delayUpdateDisplay();
 }
@@ -204,7 +195,7 @@ function genSource() {
 }
 
 function updateMove() {
-   notSaved = true;  warnNotSaved();
+   warnNotSaved();
    var Num=current_step-1;
    var step=steps[Num];
    var form=elcidTutorial.document.forms[Num+1];
@@ -231,7 +222,7 @@ function showMove(step) {
 }
 
 function updateInsert() {
-   notSaved = true; warnNotSaved();
+   warnNotSaved();
    var Num=current_step-1;
    var step=steps[Num];
    var form=elcidTutorial.document.forms[Num+1];
@@ -283,7 +274,7 @@ function showInsert(step) {
 }
 
 function updateSelect() {
-   notSaved = true; warnNotSaved();
+   warnNotSaved();
    updateDisplayThread=null;
    var Num=current_step-1;
    var step=steps[Num];
@@ -440,18 +431,18 @@ function showStepComment(i) {
 
    var result='<br><div align="right">';
    
-   var tempCheck, tempDisabled;
+   var tempCheck, tempVisible;
    if (steps[i].comment == null) {
       tempCheck = '';
-      tempDisabled = ' disabled="true"';
+      tempVisible = 'hidden';
    }
    else {
       tempCheck = ' checked ';
-      tempDisabled = '';
+      tempVisible = 'show';
    }    
 
    result += 'Comment:<input type="checkbox" onChange="parent.setComment('+i+');" name="commentCheck"'+tempCheck+'>';
-   result += '<input type="button" name="commentButton"'+tempDisabled+' value="Text..." onClick="parent.commentDialog('+i+')"></div>';
+   result += '<input type="button" name="commentButton"  style= "visibility: '+tempVisible+'" value="Text..." onClick="parent.commentDialog('+i+')"></div>';
    result += '<textarea name = "commentText" style= "visibility: hidden" cols="1" rows="1"></textarea>';
 
    return result;
@@ -459,7 +450,7 @@ function showStepComment(i) {
 }
 
 function setComment(i) {
-   notSaved = true; warnNotSaved();
+   warnNotSaved();
    var formElt = elcidTutorial.document.forms[i+1];
    if (formElt.commentCheck.checked) {
       steps[i].comment = "";
@@ -513,6 +504,7 @@ function commentTextOK(i) {
 var uploadRequest;
 
 function uploadXML() {
+   if (currentTab==1) generateXML(); // from form entries to XML file
    var fileName = xmlDoc.url;
    if (!fileName) fileName = "";
    fileName = prompt("Filename: ", parseFileName(fileName));
@@ -576,7 +568,7 @@ function uploadResponse() {
       result = uploadRequest.responseText;
       // alert("response:\n"+uploadRequest.readyState+"\nStatus: "+uploadRequest.status+"\n"+result);
       if (uploadRequest.status == 200) {
-         notSaved = false; noWarnSaved();
+         noWarnSaved();
          var lines = result.split("\n");
          alert("File saved: \n"+result);
          // window.location = htURL+"run/editor/cid_editor.html?file="+lines[1];
