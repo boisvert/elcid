@@ -226,12 +226,12 @@ function XMLdocument () {
          }
 		 setXML = function(text) {
 		    var parser = new DOMParser();
-			main = parser.parseFromString(text,"text/xml");
-			setTimeout("xmlDoc.ready();", 100);
+			 main = parser.parseFromString(text,"text/xml");
+			 setTimeout("xmlDoc.ready();", 100);
 		 }
 		 ready = function() {
 		    parseError = new checkForParseError(main.documentElement); 
-			onload();
+			 onload();
 		 }
       }
    }
