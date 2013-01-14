@@ -438,7 +438,7 @@ function showStepComment(i) {
    }
    else {
       tempCheck = ' checked ';
-      tempVisible = 'show';
+      tempVisible = 'visible';
    }    
 
    result += 'Comment:<input type="checkbox" onChange="parent.setComment('+i+');" name="commentCheck"'+tempCheck+'>';
@@ -453,13 +453,13 @@ function setComment(i) {
    warnNotSaved();
    var formElt = elcidTutorial.document.forms[i+1];
    if (formElt.commentCheck.checked) {
-      steps[i].comment = "";
-      formElt.commentButton.disabled = false;
+      formElt.commentButton.style.visibility = 'visible';
+      commentDialog(i);
    }
    else {
       commentTextOK(i);
       steps[i].comment = null;
-      formElt.commentButton.disabled = true;
+      formElt.commentButton.style.visibility = 'hidden';
    }
 }
 
@@ -469,23 +469,27 @@ function commentDialog(i) {
    
    if (formElt.commentButton.value == "Text...") {
    
-      var comment = steps[i].comment;
+      var comment;
+      if (steps[i].comment) {
+         comment = steps[i].comment;
+         formElt.commentText.value = comment;
+      } else {
+         comment = formElt.commentText.value;
+         steps[i].comment = comment;
+      }
 
       formElt.commentButton.value = "OK";
       formElt.commentText.style.visibility = "visible";
 
-      if (comment) {
-         var c = 15;
-         var commentLines = comment.split('\n');
-         var r =  commentLines.length+1;
-         for (var j=0; j<commentLines.length; j++)
-            if (commentLines[j].length > c) c = commentLines[j].length;
-         c++;
-         formElt.commentText.value = comment;
-         formElt.commentText.cols = c;
-         formElt.commentText.rows = r;
-         formElt.commentText.focus();
-      }
+      var c = 20;
+      var commentLines = comment.split('\n');
+      var r =  commentLines.length+1;
+      for (var j=0; j<commentLines.length; j++)
+         if (commentLines[j].length > c) c = commentLines[j].length;
+      c++;
+      formElt.commentText.cols = c;
+      formElt.commentText.rows = r;
+      formElt.commentText.focus();
    }
    else
       commentTextOK(i);
