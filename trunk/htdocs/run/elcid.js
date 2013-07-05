@@ -1210,8 +1210,9 @@ function runCode() {
    if (code.document.getElementById('edbox'))
       codeToRun = code.document.getElementById('edbox').value;
    else
-      codeToRun = area.lines.join('\n');
+      codeToRun = area.lines.join('\n\r');
    // insert base href in the head
+   var interpreter = controls.interpreter.value;
    var folderToRun = location.protocol + "//" + location.host + folderPart(location.pathname) + (isServer()?folderPart(xmlDoc.url):AnimationsFolder);
    var i = codeToRun.indexOf("</head>");
    if (i>=0)

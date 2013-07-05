@@ -50,20 +50,20 @@ function lofile(elt) {
 function togglePublic(fileKey, public) {
    var parameters = "file="+fileKey+"&public="+public;
    // alert(parameters);
-   parent.httpRequest = parent.POSTRequest(cgiURL+'set_public.php', parameters, setPublicResponse);
+   parent.POSTRequest(cgiURL+'set_public.php', parameters, setPublicResponse);
 }
 
-function setPublicResponse() {
+function setPublicResponse(req) {
    // alert("Request readyState: " + parent.httpRequest.readyState);
-   if (parent.httpRequest.readyState == 4) {
+   if (req.readyState == 4) {
 	   // alert("Response status: " + parent.httpRequest.status);
-      if (parent.httpRequest.status == 200) {
+      if (req.status == 200) {
          window.location=window.location+" ";
-		 alert(parent.httpRequest.responseText);
+		 alert(req.responseText);
       }
       else {
 		 msg = 'There was a problem changing the file status.\nCheck that you are logged in\n';
-         alert(msg+parent.httpRequest.responseText);
+         alert(msg+req.responseText);
 	  }
    }
 }
@@ -118,14 +118,15 @@ function detailsDialog(fileKey) {
 	
    // Shows a link to recover file if a copy of the file exists in the ./temp directory
    function recovery($file,$path) {
-      $url = $path."temp/$file.xml";
+      $url = $path."/temp/$file.xml";
       debug_msg("Looking for file");
       debug_msg($url);
-      $js = 'parent.loadCommandServer("'.$url.'"); return false;';
-      if (file_exists("../$url")) {
+      if (file_exists($url)) {
          debug_msg("Found");
+         $js = 'opener.loadCommandServer("'.$url.'"); return false;';
          ?>
-         <a href='<?php echo "run/".$url;?>' onClick='<?php echo $js;?>'>
+         Recover:
+         <a href='<?php echo $url;?>' onClick='<?php echo $js;?>'>
 			   <?php echo $file;?>
 		   </a>
          <?php
@@ -220,8 +221,8 @@ $result = query_db($sql);
 while ($record = mysql_fetch_array($result)) {
    $file_key = $record["file_key"];
 	$file = $record["name"];
-   $path = $record["path"];
-   $url = "../$path/$file.xml";
+   $path = "../".$record["path"];
+   $url = "$path/$file.xml";
    $js = 'opener.loadCommandServer("'.$url.'"); return false;';
 ?>
       <tr onMouseover="hifile(this);" onMouseout="lofile(this);" />

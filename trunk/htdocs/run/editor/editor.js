@@ -3,24 +3,13 @@
 var updateDisplayThread;  // used to delay the display changes while editing
 var currentCartridge; // records which "cartridge" is being shown
 var fullXML; // the final XML file to produce a tutorial
-var user = getCookie("user");
-var notSaved = false;
+var user = getCookie("user"); // User name, though login is actually controlled by session
+var notSaved = false; // true when there is work to save
 var currentTab = 1;
-
-function askSave() {
-   // alert("checking: "+notSaved);
-   var keepChanges = confirm("This development is not saved. Save recovery file?");
-   if (keepChanges) {
-	   generateXML();
-      // alert(fullXML);
-      uploadTempXML();
-      // alert("temp save is done");
-   }
-}
 
 function warnNotSaved() {
    notSaved = true;
-   window.onbeforeunload = askSave;
+   window.onbeforeunload = uploadTempXML;
 }
 
 function noWarnSaved() {
@@ -505,8 +494,6 @@ function commentTextOK(i) {
    steps[i].comment = allWhiteSpace(comment)?"":comment;
 }
 
-var uploadRequest;
-
 function uploadXML() {
    if (currentTab==1) generateXML(); // from form entries to XML file
    var fileName = xmlDoc.url;
@@ -516,18 +503,20 @@ function uploadXML() {
    if (fileName) {
       var params = "filename=" + encodeURIComponent( fileName ) +
                    "&data=" + encodeURIComponent( fullXML );
-      uploadRequest = POSTRequest(cgiURL+'upload.php', params, uploadResponse);
+      POSTRequest(cgiURL+'upload.php', params, uploadResponse);
    }
 }
 
 function uploadTempXML() {
+	generateXML();
    var fileName = parseFileName(xmlDoc.url);
    // alert('Emergency save: '+fileName);
    if (fileName) {
       var params = "filename=" + encodeURIComponent(fileName ) +
                    "&data=" + encodeURIComponent( fullXML ) +
                    "&user=" + encodeURIComponent( user );
-      uploadRequest = POSTRequest(cgiURL+'upload_temp.php', params, uploadResponse);
+      POSTRequest(cgiURL+'upload_temp.php', params, function(){});
+      alert('Backup copy saved');
    }
 }
 
@@ -544,30 +533,29 @@ function POSTRequest(url, parameters, responseProcess) {
          request.overrideMimeType('text/ascii');
       }
    }
-	 else if (window.ActiveXObject) { // IE
+   else if (window.ActiveXObject) { // IE
       try {
          request = new ActiveXObject("Msxml2.XMLHTTP");
-     } catch (e) {
-        try {
+      } catch (e) {
+         try {
            request = new ActiveXObject("Microsoft.XMLHTTP");
-        } catch (e) {}
-     }
+         } catch (e) {}
+      }
    }
    
    if (!request) {
       alert('Cannot create XMLHTTP instance'); // Kludge this should raise an error
    } else {
-      request.onreadystatechange = responseProcess;
+      request.onreadystatechange = function() { responseProcess(this); } ;
       request.open('POST', url, true);
       request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       request.setRequestHeader("Content-length", parameters.length);
       request.setRequestHeader("Connection", "close");
       request.send(parameters);
    }
-   return request;
 }
 
-function uploadResponse() {
+function uploadResponse(uploadRequest) {
    if (uploadRequest.readyState == 4) {
       result = uploadRequest.responseText;
       // alert("response:\n"+uploadRequest.readyState+"\nStatus: "+uploadRequest.status+"\n"+result);
