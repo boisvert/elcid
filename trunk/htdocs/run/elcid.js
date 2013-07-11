@@ -58,7 +58,7 @@ Using with new iterative development tutorials
 
 */
 
-var AnimationsFolder = 'samples/';
+var AnimationsFolder = 'users/example/';
     // This folder is where XML data is loaded from by default
 
 var monitorImg= cgiURL + 'monitor_usage.php';
@@ -77,6 +77,9 @@ var xmlDoc = new XMLdocument();
 xmlDoc.onload = parse;
     // Call the parse function when it is loaded.
 
+var source = new Array();
+    // Initial source code of example - an array of string (one per line)
+    
 var steps = new Array();
     // Parse will store the iterative changes in an array of steps
 
@@ -84,14 +87,11 @@ var current_step=0;
     // current step
 
 var temp_chars='';
-
-var auto_on=false;
-    // Whether the animation is running on its own
-    // Changes when the user presses the play button
+    // used to display multi-character inserts progressively
 
 var browser=getBrowser();
     // for browser-dependent display details like font sizes 
-	// other javascript compatibility problems are dealt with by testing functionality
+	 // other javascript compatibility problems are dealt with by testing functionality
 
 var controls;
     // the control panel
@@ -101,13 +101,10 @@ var area;
 
 var displaying = true;
     // Whether the display should be refreshed with every step played
-    // False when the user presses rewind/fast forward
+    // False in back/rewind/fast forward
 
 var clipboard = new textpad();
     // Test clipboard to simulate copy/paste
-
-var source = new Array();
-    // Initial source code of example - an array of string (one per line)
 
 var postit;
     // Yellow comment box
@@ -115,8 +112,9 @@ var postit;
 var codeToRun='';
 var folderToRun='';
     // codeToRun and folderToRun are filled in when the user presses the run button
+var testData;
+    // testData is the info needed to test js functions
 
-	
 /***********************
 
 Object initialisations:
@@ -189,23 +187,22 @@ function XMLdocument () {
       with (this) {
          main.onreadystatechange = function() {
             if (main.readyState == 4) {
-                 ready();
+               ready();
             }
          }
          load = function(address) {
             url = address;
             main.load(url);
          }
-		 setXML = function(text) {
-		    main.async = "false";
-			main.loadXML(text);
-			setTimeout("xmlDoc.ready();", 100);
-		 }
-		 ready = function() {
-		    parseError = main.parseError;
-			onload();
-		 }
-
+		   setXML = function(text) {
+		      main.async = "false";
+			   main.loadXML(text);
+			   setTimeout("xmlDoc.ready();", 100);
+		   }
+		   ready = function() {
+		      parseError = main.parseError;
+			   onload();
+		   }
       }
    }
    else if (window.XMLHttpRequest) {
@@ -213,16 +210,16 @@ function XMLdocument () {
       this.request = new window.XMLHttpRequest();
       with (this) {
          request.onreadystatechange = function() {
-			if (request.readyState == 4) {
-                 main = request.responseXML;
-                 ready(); 
+			   if (request.readyState == 4) {
+               main = request.responseXML;
+               ready(); 
             }
          }
          load = function(address) {
-             url = address;
-             request.open("GET",url+"?random="+Math.random(),true);
+            url = address;
+            request.open("GET",url+"?random="+Math.random(),true);
                                        	         // random number so the xml file is not loaded from the cache
-             request.send(null);
+            request.send(null);
          }
 		 setXML = function(text) {
 		    var parser = new DOMParser();
@@ -257,8 +254,7 @@ function checkForParseError (documentElement) {
    }
 }
 
-function parse()
-{
+function parse() {
 // also with help from PPK
 // This parsing algorithm and its functions on validate XML syntax.
 // Check your XML thoroughly if you find unexpected animation results.
@@ -275,12 +271,19 @@ function parse()
 
    x = xmlDoc.main.getElementsByTagName('iteration')[0];
 
-   var j=0;
+   var s, j=0;
    for (var i=0;i<x.childNodes.length;i++)
    {
       if (x.childNodes[i].nodeType != 1) continue;
-      steps[j] = make_step(x.childNodes[i]);
-      j++;
+      s = make_step(x.childNodes[i]);
+      if (s.constructor==step_start) {
+         steps.start = s;
+         if (s.test) setTestOptions(s.test);
+      }
+      else {
+         steps[j] = s;
+         j++;
+      }
    }
 
    document.getElementById("pb").innerHTML = progressBar();
@@ -301,31 +304,45 @@ function progressBar() {
 function generateProgBar0ption(i) {
 // Make progressBar object
 // Add a radio, set all radios as new progBar
-   return '<input type="radio" name="progressbar" onClick="getTo('+i+');" >';
+   var pbo = '<input type="radio" name="progressbar" onClick="';
+   pbo += (i==0)?'rewind();':'getTo('+i+');'
+   pbo += '" >';
+   return pbo;
  }
 
 function make_step (node) {
-  var step;
-  if (node.nodeName=="move") step = new step_move();
-  else if (node.nodeName=="insert") step = new step_insert()
-  else if (node.nodeName=="select") step = new step_select()
-  else if (node.nodeName=="delete") step = new step_delete()
-  else if (node.nodeName=="cut") step = new step_cut()
-  else if (node.nodeName=="copy") step = new step_copy()
-  else if (node.nodeName=="paste") step = new step_paste()
-  else  step = new step_doh();  // in case
+   var step;
+   if (node.nodeName=="move") step = new step_move();
+   else if (node.nodeName=="insert") step = new step_insert();
+   else if (node.nodeName=="select") step = new step_select();
+   else if (node.nodeName=="delete") step = new step_delete();
+   else if (node.nodeName=="cut") step = new step_cut();
+   else if (node.nodeName=="copy") step = new step_copy();
+   else if (node.nodeName=="paste") step = new step_paste();
+   else if (node.nodeName=="start") step = new step_start();
+   else  step = new step_doh();  // in case
 
-  step.parse(node)
-  var element = node.getElementsByTagName('comment');
-  if (element.length==1) {
-     step.comment = (element[0].firstChild==null)?'':element[0].firstChild.nodeValue;
-  }
-  return step;
+   step.parse(node);
+   var element = node.getElementsByTagName('comment');
+   if (element.length==1) {
+      step.comment = (element[0].firstChild==null)?'':element[0].firstChild.nodeValue;
+   }
+
+   var element = node.getElementsByTagName('test');
+   if (element.length==1) {
+      step.test = {};
+      var a = element[0].attributes;
+      for (var i in a) {
+         step.test[a[i].nodeName] = a[i].nodeValue;
+      }
+   }
+   return step;
 }
 
-// The "steps" are a good example of polymorphism in Javascript.
+// The "steps" are the simplest way to do polymorphism in Javascript.
 // Each step is different but defines debug and forward functions
 // that are called during the animation.
+// parse is used to obtain the data from the XML, show and generate are defined and used in editor.js.
 
 function step_move () {
    this.type = 'Move';
@@ -426,11 +443,20 @@ function step_delete() {
    this.generate = function() {return genDelete(this)}
 }
 
+function step_start() {
+   this.type = 'Start'
+   this.debug = function() {window.status = "start"}
+   this.forward =  function() {}
+   this.show = function() {return showStart(this)}
+   this.parse = function(node) {}
+   this.generate = function() {return genStart(this)}
+}
+
 function step_doh() {
    this.type = 'Unknown'
    this.debug = function() {window.status = "doh?"}
    this.forward =  function() {}
-   this.doh = function() {return showDoh(this)}
+   this.show = function() {return showDoh(this)}
    this.parse = function(node) {}
    this.generate = function() {return genDoh(this)}
 }
@@ -658,7 +684,6 @@ function elcid_move(step) {
 }
 
 function elcid_insert(step) {
-
    elcid_delete(step)
    if (displaying) disablePlayer()
    with (area) {
@@ -685,7 +710,6 @@ function elcid_insert(step) {
          x=step.chars.length
          update();
       } else {
-
          // Add characters
          if (displaying) {
             temp_chars=step.chars;
@@ -751,6 +775,7 @@ function elcid_copy(step) {
       clipboard.chars = area.lines[y].slice(x,area.selection_chars+x);
 	 }
    setTimeout('update();',100);
+
 }
 
 function elcid_paste(step) {
@@ -843,13 +868,9 @@ function make_line(i) {
 }
 
 function setPlayerButtons() {
-   if (auto_on && current_step<steps.length) {
-      disable(controls.rewindButton,rewDis);
-      disable(controls.backButton,backDis);
-      disable(controls.forwardButton,stepDis);
-      disable(controls.ffdButton,ffdDis);
-      controls.runButton.disabled=true;
-   } else {
+   if (steps.length>0) {
+      enableRadioGroup(controls.progressbar);
+      controls.progressbar[current_step].checked = true;
       if (current_step>0) {
          enable(controls.rewindButton,rewOff);
          enable(controls.backButton,backOff);
@@ -864,28 +885,16 @@ function setPlayerButtons() {
          disable(controls.forwardButton,stepDis);
          disable(controls.ffdButton,ffdDis);
       }
-      controls.runButton.disabled=false;
    }
-   if (steps.length>0) {
-      enableRadioGroup(controls.progressbar);
-      controls.progressbar[current_step].checked = true;
-   }
-}
-
-function auto() {
-   if (current_step<steps.length && auto_on) {
-      if (temp_chars=='') forward()
-      setTimeout("auto()",1500)
-   } else {
-	    if (auto_on) auto_on=false
-      setPlayerButtons()
-   }
+   else
+      disablePlayer();
 }
 
 function view_comments() {
-   var i
-   var content_string  = ''
-
+   var content_string  = '';
+   if (steps.start)
+      if (steps.start.comment)
+         content_string+='<p>'+steps.start.comment;
    for (var i=0; i<steps.length ; i++)
      if (steps[i].comment) content_string+='<p>'+steps[i].comment
 
@@ -933,16 +942,6 @@ function enable(b,img) {
       b.disabled = false;
       swapImg(b,img);
    }
-}
-
-function fast_to(step) {
-   displaying = false;
-   while (current_step<step) {
-      steps[current_step].forward();
-      current_step++;
-   }
-   displaying = true;
-   update();
 }
 
 
@@ -1093,7 +1092,6 @@ function track_rewind() {
 }
 
 function rewind() {
-   auto_on=false;
    area.x=0;
    area.y=0;
    area.selection_lines=0;
@@ -1102,12 +1100,15 @@ function rewind() {
    area.lines.length = source.length;
    hidePost(postit);
    current_step=0;
+   var s;
+   if (displaying && (s = steps.start)) {
+      if (s.comment) fillPost(postit,s.comment);
+   }
    update();
 }
 
 function back() {
    monitorUsage('back');
-   auto_on=false;
    if (current_step>0) {
       var step = current_step-1;
       rewind();
@@ -1118,18 +1119,25 @@ function back() {
 function getTo(step) {
    if (step != current_step) {
       monitorUsage('getTo');
-      auto_on=false;
       displaying = false;
       if (current_step>step) rewind();
       fast_to(step);
-      displaying = true;
-      update();
    }
 }
 
 function fast() {
    monitorUsage('fast');
    fast_to(steps.length);
+}
+
+function fast_to(step) {
+   displaying = false;
+   while (current_step<step-1) {
+      steps[current_step].forward();
+      current_step++;
+   }
+   displaying = true;
+   forward();
 }
 
 function forward() {
@@ -1205,6 +1213,12 @@ function loadfile() {
    }
 }
 
+function setTestOptions(testOp) {
+   o = document.getElementById(testOp.lang);
+   o.setAttribute('selected','selected');
+   testData = testOp;
+}
+
 function runCode() {
    monitorUsage('run');
    if (code.document.getElementById('edbox'))
@@ -1213,13 +1227,7 @@ function runCode() {
       codeToRun = area.lines.join('\n\r');
    // insert base href in the head
    var interpreter = controls.interpreter.value;
-   var folderToRun = location.protocol + "//" + location.host + folderPart(location.pathname) + (isServer()?folderPart(xmlDoc.url):AnimationsFolder);
-   var i = codeToRun.indexOf("</head>");
-   if (i>=0)
-      codeToRun = codeToRun.slice(0,i)+'<base href="'+folderToRun+'" >'+codeToRun.slice(i,codeToRun.length);
-   else
-      codeToRun = '<head><base href="'+folderToRun+'" ></head>'+codeToRun;
-   var interpreter = controls.interpreter.value;
+   folderToRun = location.protocol + "//" + location.host + folderPart(location.pathname) + (isServer()?folderPart(xmlDoc.url):AnimationsFolder);
    var winprop = 'height=400,width=600,location=no,scrollbars=yes,menu=no,toolbar=no,status=yes,resizable=yes';
    var w = window.open(interpreter, 'run', winprop);
    w.focus();
@@ -1231,18 +1239,15 @@ function folderPart(str) {
 
 function editCode() {
    monitorUsage('edit'); 
-   if (!auto_on) {
-      var editText = "<textarea id='edbox' style=\"font-size:"+area.fontSize+"px; font-family: inherit;\" onKeyUp=\"parent.updateEdbox();\">";
-      editText += area.lines.join('\n');
-      editText += "</textarea>";
-      area.innerHTML = editText;
-      updateEdbox();
-      document.images.iterateTab.src=iterateTabOff.src;
-      document.images.commentsTab.src=commentsTabOff.src;
-      document.images.editTab.src=editTabOn.src;
-      disablePlayer();
-      controls.runButton.disabled=false;
-   }
+   var editText = "<textarea id='edbox' style=\"font-size:"+area.fontSize+"px; font-family: inherit;\" onKeyUp=\"parent.updateEdbox();\">";
+   editText += area.lines.join('\n');
+   editText += "</textarea>";
+   area.innerHTML = editText;
+   updateEdbox();
+   document.images.iterateTab.src=iterateTabOff.src;
+   document.images.commentsTab.src=commentsTabOff.src;
+   document.images.editTab.src=editTabOn.src;
+   disablePlayer();
 }
 
 function options() {
@@ -1255,13 +1260,11 @@ function options() {
 
 function showComments() {
    monitorUsage('comments'); 
-   if (!auto_on) {
-      view_comments()
-      document.images.iterateTab.src=iterateTabOff.src
-      document.images.commentsTab.src=commentsTabOn.src
-      document.images.editTab.src=editTabOff.src
-      disablePlayer()
-   }		 
+   view_comments()
+   document.images.iterateTab.src=iterateTabOff.src
+   document.images.commentsTab.src=commentsTabOn.src
+   document.images.editTab.src=editTabOff.src
+   disablePlayer()		 
 }
 
 function showIterate() {
@@ -1355,7 +1358,6 @@ function disablePlayer() {
    disable(controls.forwardButton,stepDis);
    disable(controls.ffdButton,ffdDis);
    disableRadioGroup(controls.progressbar);
-   controls.runButton.disabled = true;
 }
 
 function disableRadioGroup (radioGroup) {

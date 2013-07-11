@@ -1,53 +1,41 @@
 <elcid>
 
-<source>&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Displaying an array using the javascript write functions&lt;/title&gt;
+<source>
 
-&lt;script LANGUAGE=&quot;JavaScript&quot;&gt; &lt;!--
+function sorted(numbers) { 
+   var result = false;
 
-var numbers = new Array(673,623,63,54,34,23,9,4,1);
+   return result;
+}
 
-var sorted = false;
-
-if (sorted)
-   {alert(&quot;The array is in descending order&quot;);}
-else
-   {alert(&quot;The array is not in descending order&quot;);}
-
-
-//--&gt;&lt;/script&gt;
-
-&lt;/body&gt;
-
-&lt;/html&gt;
 </source>
 
 <iteration>
 
+<start>
+   <comment>In this example we will write a function to check whether an array is in descending order.
+If the array is in descending order, it should return true; otherwise, false.</comment>
+   <test
+      lang = "jstest"
+      call = "sorted"
+      in = "[[[673,623,63,54,34,23,9,4,1]],[[1000,2000]]]"
+      out = "[true,false]"
+   />
+</start>
+
 <move>
-   <linenumber>9</linenumber>
+   <linenumber>4</linenumber>
    <colnumber>0</colnumber>
 </move>
 
 <insert>
-   <line />
-   <line />
-</insert>
-
-<move>
-   <linenumber>10</linenumber>
-   <colnumber>0</colnumber>
-</move>
-
-<insert>
-   <chars>if (numbers[0]&gt;=numbers[1]) {sorted=true;}</chars>
+   <chars>   if (numbers[0]&gt;=numbers[1]) {result=true;}</chars>
    <comment>We'll start by checking the first two numbers are sorted.</comment>
 </insert>
 
 <move>
-   <linenumber>10</linenumber>
-   <colnumber>26</colnumber>
+   <linenumber>4</linenumber>
+   <colnumber>29</colnumber>
 </move>
 
 <insert>
@@ -56,8 +44,8 @@ else
 </insert>
 
 <move>
-   <linenumber>9</linenumber>
-   <colnumber>0</colnumber>
+   <linenumber>3</linenumber>
+   <colnumber>22</colnumber>
 </move>
 
 <insert>
@@ -65,12 +53,12 @@ else
 </insert>
 
 <insert>
-   <chars>for (var i=0; i&lt;numbers.length; i++) {</chars>
-   <comment>With a loop we can checkevery the whole array.</comment>
+   <chars>   for (var i=0; i&lt;numbers.length; i++) {</chars>
+   <comment>With a loop we can check the whole array.</comment>
 </insert>
 
 <move>
-   <linenumber>11</linenumber>
+   <linenumber>5</linenumber>
    <colnumber>0</colnumber>
 </move>
 
@@ -79,17 +67,17 @@ else
 </insert>
 
 <move>
-   <linenumber>12</linenumber>
+   <linenumber>6</linenumber>
    <colnumber>0</colnumber>
 </move>
 
 <insert>
-   <line>}</line>
+   <line>   }</line>
 </insert>
 
 <move>
-   <linenumber>11</linenumber>
-   <colnumber>15</colnumber>
+   <linenumber>5</linenumber>
+   <colnumber>18</colnumber>
 </move>
 
 <select>
@@ -101,8 +89,8 @@ else
 </insert>
 
 <move>
-   <linenumber>11</linenumber>
-   <colnumber>27</colnumber>
+   <linenumber>5</linenumber>
+   <colnumber>30</colnumber>
 </move>
 
 <select>
@@ -111,25 +99,24 @@ else
 
 <insert>
    <chars>i+1</chars>
-   <comment>A small detail to check...</comment>
+   <comment>This looks promising, but check the loop boundaries.</comment>
 </insert>
 
 <move>
-   <linenumber>10</linenumber>
-   <colnumber>30</colnumber>
-   <comment>An off-by-one error in the array,
+   <linenumber>4</linenumber>
+   <colnumber>33</colnumber>
+   <comment>There is an off-by-one error,
 because we are working on pairs of numbers.</comment>
 </move>
 
 <insert>
    <chars>-1</chars>
-   <comment>Test this version: it still doesn't work.</comment>
 </insert>
 
 <move>
-   <linenumber>8</linenumber>
-   <colnumber>13</colnumber>
-   <comment />
+   <linenumber>3</linenumber>
+   <colnumber>16</colnumber>
+   <comment>Test this version: it still doesn't work.</comment>
 </move>
 
 <select>
@@ -142,8 +129,8 @@ because we are working on pairs of numbers.</comment>
 </insert>
 
 <move>
-   <linenumber>11</linenumber>
-   <colnumber>17</colnumber>
+   <linenumber>5</linenumber>
+   <colnumber>20</colnumber>
 </move>
 
 <select>
@@ -155,8 +142,8 @@ because we are working on pairs of numbers.</comment>
 </insert>
 
 <move>
-   <linenumber>11</linenumber>
-   <colnumber>40</colnumber>
+   <linenumber>5</linenumber>
+   <colnumber>43</colnumber>
 </move>
 
 <select>
