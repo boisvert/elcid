@@ -1,6 +1,16 @@
 <script language="javaScript">
 
-document.write(opener.codeToRun);
+var code = opener.codeToRun;
+
+var folder = opener.folderToRun;
+
+var i = code.indexOf("</head>");
+if (i>=0)
+   code = code.slice(0,i)+'<base href="'+folder+'" >'+code.slice(i,code.length);
+else
+   code = '<head><base href="'+folder+'" ></head>'+code;
+
+document.write(code);
 
 </script>
 

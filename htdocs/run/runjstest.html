@@ -1,0 +1,104 @@
+
+<html>
+<head></head>
+
+<body onload="testInterface(opener.testData);">
+
+<form id="testData">
+   <table id="testTable">
+       <td>Arguments</td>
+       <td>Result</td>
+   </table>
+   <img src="add.png" onClick="addRow();" height="15" /> <br />
+   <input type="button" id="go" value="Run test">
+</form>
+
+</body>
+
+<script language="javaScript">
+
+eval(opener.codeToRun);
+
+// test interface - creates a form to view and edit the tests, then to run them.
+var lastRow=0, table, numArgs;
+
+function testInterface(data) {
+    var f = window[data.call];
+    var tin = JSON.parse(data.in);
+    var tout = JSON.parse(data.out);
+    table = document.getElementById('testTable');
+    numArgs = f.length;
+    for (var i in tin) addRow(tin[i]);
+    document.getElementById('go').onclick = function() {
+        runTest(f,tout);
+    };
+}
+
+function addRow(inVals) {
+    var row, td, rem, box;
+    if (!inVals) inVals = [];
+    rem = document.createElement('img');
+    rem.setAttribute('src',"remove.png");
+    rem.setAttribute('height',"15");
+    rem.setAttribute('onClick',"removeRow(this);");
+    td = document.createElement('td');
+    td.appendChild(rem);
+    for (var i=0; i<numArgs; i++) {
+        box = document.createElement('input');
+        box.setAttribute('type','text');
+        box.setAttribute('id','in'+lastRow+'-'+i);
+        if (inVals[i])
+            box.setAttribute('value',JSON.stringify(inVals[i]));        
+        td.appendChild(box);
+    }
+    row = document.createElement('tr');
+    row.appendChild(td);
+    box = document.createElement('input');
+    box.setAttribute('type','text');
+    box.setAttribute('id','out'+lastRow);
+    td = document.createElement('td');
+    td.appendChild(box);
+    row.appendChild(td);
+    table.appendChild(row);
+    lastRow++;
+}
+
+function removeRow(r) {
+    e = r.parentNode.parentNode;
+    e.parentNode.removeChild(e);
+}
+
+// runTest - apply the test to each input, and make the output
+function runTest(f,tout) {
+    var inElt, outElt, inVals, outVal;
+    for (var i=0; i<lastRow; i++) {
+        if (document.getElementById('in'+i+'-0')) {
+            inVals = [];
+            for (var j=0; j<numArgs; j++) {
+                inElt = document.getElementById('in'+i+'-'+j);
+                if (inVal = inElt.value) {
+                    inVals.push(JSON.parse(inVal))
+                }
+                else
+                    j = numArgs;     
+            }
+            outElt = document.getElementById('out'+i);
+            try {
+                outVal = f.apply(this,inVals);
+                outElt.setAttribute('value',JSON.stringify(outVal));
+                var el = outElt.parentNode.lastChild;
+                if (el != outElt) el.parentNode.removeChild(el);
+            }
+            catch (e) {
+                var errMsg = document.createElement('span');
+                errMsg.innerHTML = e;
+                outElt.parentNode.appendChild(errMsg);
+                outElt.setAttribute('value','');
+            }
+        }
+    }
+}
+
+
+</script>
+
