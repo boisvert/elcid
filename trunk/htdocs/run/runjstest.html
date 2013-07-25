@@ -2,14 +2,17 @@
 <html>
 <head></head>
 
-<body onload="testInterface(opener.testData);">
+<body onload="_testInterface();">
 
 <form id="testData">
+   Test the function: <select id="functions"></select>
    <table id="testTable">
-       <td>Arguments</td>
-       <td>Result</td>
+      <tr>
+         <td>Arguments</td>
+         <td>Result</td>
+      </tr>
    </table>
-   <img src="add.png" onClick="addRow();" height="15" /> <br />
+   <img src="add.png" onClick="_addRow();" height="15" /> <br />
    <input type="button" id="go" value="Run test">
 </form>
 
@@ -17,88 +20,113 @@
 
 <script language="javaScript">
 
-eval(opener.codeToRun);
-
 // test interface - creates a form to view and edit the tests, then to run them.
-var lastRow=0, table, numArgs;
+var _testData = opener.testData,
+    _lastRow=0, _numArgs;
 
-function testInterface(data) {
-    var f = window[data.call];
-    var tin = JSON.parse(data.in);
-    var tout = JSON.parse(data.out);
-    table = document.getElementById('testTable');
-    numArgs = f.length;
-    for (var i in tin) addRow(tin[i]);
-    document.getElementById('go').onclick = function() {
-        runTest(f,tout);
-    };
+function _testInterface() {
+   for (var key in window) _addOption(key);
+   var elt = document.getElementById('functions');
+   _setRows();
 }
 
-function addRow(inVals) {
-    var row, td, rem, box;
-    if (!inVals) inVals = [];
-    rem = document.createElement('img');
-    rem.setAttribute('src',"remove.png");
-    rem.setAttribute('height',"15");
-    rem.setAttribute('onClick',"removeRow(this);");
-    td = document.createElement('td');
-    td.appendChild(rem);
-    for (var i=0; i<numArgs; i++) {
-        box = document.createElement('input');
-        box.setAttribute('type','text');
-        box.setAttribute('id','in'+lastRow+'-'+i);
-        if (inVals[i])
-            box.setAttribute('value',JSON.stringify(inVals[i]));        
-        td.appendChild(box);
-    }
-    row = document.createElement('tr');
-    row.appendChild(td);
-    box = document.createElement('input');
-    box.setAttribute('type','text');
-    box.setAttribute('id','out'+lastRow);
-    td = document.createElement('td');
-    td.appendChild(box);
-    row.appendChild(td);
-    table.appendChild(row);
-    lastRow++;
+function _setRows() {
+   document.getElementById('testTable').innerHTML = '<tr><td>Arguments</td><td>Result</td></tr>';
+   var elt = document.getElementById('functions');
+   var f = window[elt.options[elt.selectedIndex].text];
+   _numArgs = f.length;
+   var tin = JSON.parse(_testData.in);
+   for (var key in tin) _addRow(tin[key]);
+   document.getElementById('go').onclick = function() {
+      _runTest(f);
+   };
 }
 
-function removeRow(r) {
+function _addOption(o) {
+   if (typeof window[o] =='function' && !nativeFunction[o]) {
+      var opt = document.createElement('option');
+      opt.setAttribute('value',o);
+      opt.setAttribute('onclick','_setRows()');
+      if (o == _testData.call) opt.setAttribute('selected','selected');
+      opt.innerHTML = o;
+      var sel = document.getElementById('functions');
+      sel.appendChild(opt);
+   }
+}
+
+function _addRow(inVals) {
+   var row, td, rem, box;
+   if (!inVals) inVals = [];
+   rem = document.createElement('img');
+   rem.setAttribute('src',"remove.png");
+   rem.setAttribute('height',"15");
+   rem.setAttribute('onClick',"_removeRow(this);");
+   td = document.createElement('td');
+   td.appendChild(rem);
+   for (var i=0; i<_numArgs; i++) {
+      box = document.createElement('input');
+      box.setAttribute('type','text');
+      box.setAttribute('id','in'+_lastRow+'-'+i);
+      if (inVals[i])
+         box.setAttribute('value',JSON.stringify(inVals[i]));        
+      td.appendChild(box);
+   }
+   row = document.createElement('tr');
+   row.appendChild(td);
+   box = document.createElement('input');
+   box.setAttribute('type','text');
+   box.setAttribute('id','out'+_lastRow);
+   td = document.createElement('td');
+   td.appendChild(box);
+   row.appendChild(td);
+   document.getElementById('testTable').appendChild(row);
+   _lastRow++;
+}
+
+function _removeRow(r) {
     e = r.parentNode.parentNode;
     e.parentNode.removeChild(e);
 }
 
 // runTest - apply the test to each input, and make the output
-function runTest(f,tout) {
-    var inElt, outElt, inVals, outVal;
-    for (var i=0; i<lastRow; i++) {
-        if (document.getElementById('in'+i+'-0')) {
-            inVals = [];
-            for (var j=0; j<numArgs; j++) {
-                inElt = document.getElementById('in'+i+'-'+j);
-                if (inVal = inElt.value) {
-                    inVals.push(JSON.parse(inVal))
-                }
-                else
-                    j = numArgs;     
+function _runTest(f) {
+   var inElt, outElt, inVals, outVal;
+   for (var i=0; i<_lastRow; i++) {
+      if (document.getElementById('in'+i+'-0')) {
+         inVals = [];
+         for (var j=0; j<_numArgs; j++) {
+            inElt = document.getElementById('in'+i+'-'+j);
+            if (inVal = inElt.value) {
+               inVals.push(JSON.parse(inVal))
             }
-            outElt = document.getElementById('out'+i);
-            try {
-                outVal = f.apply(this,inVals);
-                outElt.setAttribute('value',JSON.stringify(outVal));
-                var el = outElt.parentNode.lastChild;
-                if (el != outElt) el.parentNode.removeChild(el);
-            }
-            catch (e) {
-                var errMsg = document.createElement('span');
-                errMsg.innerHTML = e;
-                outElt.parentNode.appendChild(errMsg);
-                outElt.setAttribute('value','');
-            }
-        }
-    }
+            else
+               j = _numArgs;     
+         }
+         outElt = document.getElementById('out'+i);
+         try {
+            outVal = f.apply(this,inVals);
+            outElt.setAttribute('value',JSON.stringify(outVal));
+            var el = outElt.parentNode.lastChild;
+            if (el != outElt) el.parentNode.removeChild(el);
+         }
+         catch (e) {
+            var errMsg = document.createElement('span');
+            errMsg.innerHTML = e;
+            outElt.parentNode.appendChild(errMsg);
+            outElt.setAttribute('value','');
+         }
+      }
+   }
 }
 
+var nativeFunction = {};
+   for(var i in window){
+      if(typeof window[i] =='function'){
+         nativeFunction[i] = true;
+      }
+   }
+   
+eval(opener.codeToRun);
 
 </script>
 
