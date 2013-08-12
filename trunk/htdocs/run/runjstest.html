@@ -6,13 +6,15 @@
 
 <form id="testData">
    Test the function: <select id="functions"></select>
-   <table id="testTable">
+   <table id="testTable" border="1">
       <tr>
-         <td>Arguments</td>
-         <td>Result</td>
+         <th> </th>
+         <th>Call</th>
+         <th>Expected result</th>
+         <th>Actual result</th>
       </tr>
    </table>
-   <img src="add.png" onClick="_addRow();" height="15" /> <br />
+   <img src="images/add.png" onClick="_addRow();" height="15" /> <br />
    <input type="button" id="go" value="Run test">
 </form>
 
@@ -22,7 +24,7 @@
 
 // test interface - creates a form to view and edit the tests, then to run them.
 var _testData = opener.testData,
-    _lastRow=0, _numArgs;
+    _lastRow, _numArgs;
 
 function _testInterface() {
    for (var key in window) _addOption(key);
@@ -31,19 +33,22 @@ function _testInterface() {
 }
 
 function _setRows() {
-   document.getElementById('testTable').innerHTML = '<tr><td>Arguments</td><td>Result</td></tr>';
+   document.getElementById('testTable').innerHTML = '<tr><td></td><td>Arguments</td><td>Expected result</td><td>Actual result</td></tr>';
    var elt = document.getElementById('functions');
-   var f = window[elt.options[elt.selectedIndex].text];
+   var fname = elt.options[elt.selectedIndex].text;
+   var f = window[fname];
    _numArgs = f.length;
    var tin = JSON.parse(_testData.in);
-   for (var key in tin) _addRow(tin[key]);
+   var tout = JSON.parse(_testData.out);
+   _lastRow = 0;
+   for (var key in tin) _addRow(fname,tin[key],tout[key]);
    document.getElementById('go').onclick = function() {
       _runTest(f);
    };
 }
 
 function _addOption(o) {
-   if (typeof window[o] =='function' && !nativeFunction[o]) {
+   if (typeof window[o] =='function' && !_nativeFunction[o]) {
       var opt = document.createElement('option');
       opt.setAttribute('value',o);
       opt.setAttribute('onclick','_setRows()');
@@ -54,30 +59,54 @@ function _addOption(o) {
    }
 }
 
-function _addRow(inVals) {
-   var row, td, rem, box;
+function _addRow(fname,inVals,outVal) {
+   var row, td, inElt;
    if (!inVals) inVals = [];
-   rem = document.createElement('img');
-   rem.setAttribute('src',"remove.png");
-   rem.setAttribute('height',"15");
-   rem.setAttribute('onClick',"_removeRow(this);");
-   td = document.createElement('td');
-   td.appendChild(rem);
-   for (var i=0; i<_numArgs; i++) {
-      box = document.createElement('input');
-      box.setAttribute('type','text');
-      box.setAttribute('id','in'+_lastRow+'-'+i);
-      if (inVals[i])
-         box.setAttribute('value',JSON.stringify(inVals[i]));        
-      td.appendChild(box);
-   }
    row = document.createElement('tr');
-   row.appendChild(td);
-   box = document.createElement('input');
-   box.setAttribute('type','text');
-   box.setAttribute('id','out'+_lastRow);
+   // option to remove
    td = document.createElement('td');
-   td.appendChild(box);
+   inElt = document.createElement('img');
+   inElt.setAttribute('src',"images/remove.png");
+   inElt.setAttribute('height',"15");
+   inElt.setAttribute('onClick',"_removeRow(this);");
+   td.appendChild(inElt);
+   row.appendChild(td);
+   // Function to call and arguments
+   td = document.createElement('td');
+   inElt = document.createElement('span');
+   inElt.innerHTML = fname +'(';
+   if (_numArgs == 0) {
+      td.appendChild(inElt);
+      inElt = document.createElement('span');
+   }
+   else {
+      for (var i=0; i<_numArgs; i++) {
+         td.appendChild(inElt);
+         inElt = document.createElement('input');
+         inElt.setAttribute('type','text');
+         inElt.setAttribute('id','in'+_lastRow+'-'+i);
+         if (typeof inVals[i] != 'undefined')
+            inElt.setAttribute('value',JSON.stringify(inVals[i]));
+         td.appendChild(inElt);
+         inElt = document.createElement('span');
+         inElt.innerHTML = ',';
+      }
+   }
+   inElt.innerHTML = ')';
+   td.appendChild(inElt);
+   row.appendChild(td);
+   // Expected output
+   inElt = document.createElement('input');
+   inElt.setAttribute('type','text');
+   inElt.setAttribute('id','exp'+_lastRow);
+   if (typeof outVal != 'undefined')
+      inElt.setAttribute('value',outVal); 
+   td = document.createElement('td');
+   td.appendChild(inElt);
+   row.appendChild(td);
+   // Actual output
+   td = document.createElement('td');
+   td.setAttribute('id','act'+_lastRow);
    row.appendChild(td);
    document.getElementById('testTable').appendChild(row);
    _lastRow++;
@@ -90,9 +119,9 @@ function _removeRow(r) {
 
 // runTest - apply the test to each input, and make the output
 function _runTest(f) {
-   var inElt, outElt, inVals, outVal;
+   var inElt, outElt, expVal, actVal;
    for (var i=0; i<_lastRow; i++) {
-      if (document.getElementById('in'+i+'-0')) {
+      if (document.getElementById('exp'+i)) {
          inVals = [];
          for (var j=0; j<_numArgs; j++) {
             inElt = document.getElementById('in'+i+'-'+j);
@@ -102,30 +131,36 @@ function _runTest(f) {
             else
                j = _numArgs;     
          }
-         outElt = document.getElementById('out'+i);
-         try {
-            outVal = f.apply(this,inVals);
-            outElt.setAttribute('value',JSON.stringify(outVal));
-            var el = outElt.parentNode.lastChild;
-            if (el != outElt) el.parentNode.removeChild(el);
+         outElt = document.getElementById('act'+i);
+         actVal = _oneTest(f,inVals);
+         expVal = document.getElementById('exp'+i).value;
+         if (expVal) {
+            actVal = actVal + '<img src="images/' + ((expVal==actVal)?'tick.gif':'cross.png') + '" />';
          }
-         catch (e) {
-            var errMsg = document.createElement('span');
-            errMsg.innerHTML = e;
-            outElt.parentNode.appendChild(errMsg);
-            outElt.setAttribute('value','');
-         }
+         outElt.innerHTML = actVal;
       }
    }
 }
 
-var nativeFunction = {};
-   for(var i in window){
-      if(typeof window[i] =='function'){
-         nativeFunction[i] = true;
+function _oneTest(f,inVals) {
+   var res;
+   try {
+      var outVal = f.apply(window,inVals);
+      res = JSON.stringify(outVal);
+   }
+   catch (e) {
+      res = e;
+   }
+   return res;
+}
+
+var _nativeFunction = {};
+   for(var _token in window){
+      if(typeof window[_token] =='function'){
+         _nativeFunction[_token] = true;
       }
    }
-   
+
 eval(opener.codeToRun);
 
 </script>
