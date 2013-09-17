@@ -24,7 +24,7 @@
 
 // test interface - creates a form to view and edit the tests, then to run them.
 var _testData = opener.testData,
-    _lastRow, _numArgs;
+    _lastRow, _fname, _numArgs;
 
 function _testInterface() {
    for (var key in window) _addOption(key);
@@ -35,13 +35,13 @@ function _testInterface() {
 function _setRows() {
    document.getElementById('testTable').innerHTML = '<tr><td></td><td>Arguments</td><td>Expected result</td><td>Actual result</td></tr>';
    var elt = document.getElementById('functions');
-   var fname = elt.options[elt.selectedIndex].text;
-   var f = window[fname];
+   _fname = elt.options[elt.selectedIndex].text;
+   var f = window[_fname];
    _numArgs = f.length;
    var tin = JSON.parse(_testData.in);
    var tout = JSON.parse(_testData.out);
    _lastRow = 0;
-   for (var key in tin) _addRow(fname,tin[key],tout[key]);
+   for (var key in tin) _addRow(tin[key],tout[key]);
    document.getElementById('go').onclick = function() {
       _runTest(f);
    };
@@ -59,7 +59,7 @@ function _addOption(o) {
    }
 }
 
-function _addRow(fname,inVals,outVal) {
+function _addRow(inVals,outVal) {
    var row, td, inElt;
    if (!inVals) inVals = [];
    row = document.createElement('tr');
@@ -74,7 +74,7 @@ function _addRow(fname,inVals,outVal) {
    // Function to call and arguments
    td = document.createElement('td');
    inElt = document.createElement('span');
-   inElt.innerHTML = fname +'(';
+   inElt.innerHTML = _fname +'(';
    if (_numArgs == 0) {
       td.appendChild(inElt);
       inElt = document.createElement('span');
