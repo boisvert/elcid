@@ -10,15 +10,15 @@
 var tagsRequest = false;
 
 function hitags(elt) {
- if (parent.loggedin) elt.className='hitags';
+ if (loggedin) elt.className='hitags';
 }
 
 function lotags(elt) {
- if (parent.loggedin) elt.className='tags';
+ if (loggedin) elt.className='tags';
 }
 
 function editTags(elt) {
-   if (parent.loggedin) {
+   if (loggedin) {
       var tags = elt.innerHTML;
       if (tags.indexOf(';')==-1) // if no tags
 	     tags = '';
@@ -33,7 +33,7 @@ function editTags(elt) {
 function setTags(fileId, tags) {
    var fileKey = fileId.substring(1);
    var parameters = "file="+fileKey+"&tags="+tags;
-   tagsRequest = parent.POSTRequest('cgi/set_tags.php', parameters, setTagsResponse);
+   tagsRequest = POSTRequest('cgi/set_tags.php', parameters, setTagsResponse);
 }
 
 function setTagsResponse() {
@@ -77,24 +77,24 @@ function setTagsResponse() {
   $result = query_db($sql);
 
   while ($record = mysql_fetch_array($result)) {
-   		 $column = $total % 3 + 1;
+   	  $column = $total % 3 + 1;
 	     if ($column==1) echo "<tr>";
 
-         $file_key = $record["file_key"];
-		 $file_author = $record["file_author"];
+        $file_key = $record["file_key"];
+		  $file_author = $record["file_author"];
 	     $file = $record["file_path"]."/".$record["file_name"].".xml";
-         $url = $htURL.'run/elcid.html?file='.URLEncode($file);
-         $js = 'parent.runTutorial("'.$file.'"); return false;';
+        $url = $htURL.'run/elcid.html?file='.URLEncode($file);
+        $js = 'runTutorial("'.$file.'"); return false;';
 
 	     $sql2  = "select GROUP_CONCAT( tag_name SEPARATOR '; ' ) from tags_tbl";
-		 $sql2 .= " INNER JOIN file_tags_tbl ON tags_tbl.tags_key = file_tags_tbl.tag_id";
+		  $sql2 .= " INNER JOIN file_tags_tbl ON tags_tbl.tags_key = file_tags_tbl.tag_id";
 	     $sql2 .= " WHERE file_id=".$file_key;
-		 $tags = query_one_item($sql2);
-		 if ($tags==false) 
-		    $tagcell = "no tags";
+		  $tags = query_one_item($sql2);
+		  if ($tags==false) 
+		     $tagcell = "no tags";
 	     else
-			$tagcell = $tags;
-         ?>
+			  $tagcell = $tags;
+        ?>
 
 	     <td width='33%'>
 	        <a target='_top' href='<?php echo $url;?>' onClick='<?php echo $js;?>'>
