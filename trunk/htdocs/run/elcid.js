@@ -182,7 +182,34 @@ function XMLdocument () {
    this.url = '';
    this.parseError = '';
 
-   if (window.ActiveXObject) {
+   if (window.XMLHttpRequest) {  // Firefox, Mozilla, Safari, newer IE
+      this.main = null;
+      this.request = new window.XMLHttpRequest();
+      with (this) {
+         request.onreadystatechange = function() {
+			   if (request.readyState == 4) {
+               main = request.responseXML;
+               ready(); 
+            }
+         }
+         load = function(address) {
+            url = address;
+            request.open("GET",url+"?random="+Math.random(),true);
+                                       	         // random number so the xml file is not loaded from the cache
+            request.send(null);
+         }
+		   setXML = function(text) {
+		      var parser = new DOMParser();
+			   main = parser.parseFromString(text,"text/xml");
+			   setTimeout("xmlDoc.ready();", 100);
+		   }
+		   ready = function() {
+		      parseError = new checkForParseError(main.documentElement); 
+			   onload();
+		   }
+      }
+   }
+   else if (window.ActiveXObject) { // older IE
       this.main = new ActiveXObject("Microsoft.XMLDOM");
       with (this) {
          main.onreadystatechange = function() {
@@ -205,33 +232,7 @@ function XMLdocument () {
 		   }
       }
    }
-   else if (window.XMLHttpRequest) {
-      this.main = null;
-      this.request = new window.XMLHttpRequest();
-      with (this) {
-         request.onreadystatechange = function() {
-			   if (request.readyState == 4) {
-               main = request.responseXML;
-               ready(); 
-            }
-         }
-         load = function(address) {
-            url = address;
-            request.open("GET",url+"?random="+Math.random(),true);
-                                       	         // random number so the xml file is not loaded from the cache
-            request.send(null);
-         }
-		 setXML = function(text) {
-		    var parser = new DOMParser();
-			 main = parser.parseFromString(text,"text/xml");
-			 setTimeout("xmlDoc.ready();", 100);
-		 }
-		 ready = function() {
-		    parseError = new checkForParseError(main.documentElement); 
-			 onload();
-		 }
-      }
-   }
+
    else {
       alert('Your browser can\'t handle this script');
          // Kludge - should raise an exception

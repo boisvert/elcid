@@ -1,3 +1,9 @@
+<?php
+
+  // definitions of database name, user, password
+  require_once('utils.php');
+  
+?>
 
 <!--
 eL-CID, Copyright (C) Anglia Polytechnic University, 2003-04, Charles Boisvert, 2004-05.
@@ -23,9 +29,7 @@ with the distribution.
 <script type="text/javascript">
 
 function runTutorial(tutorial)  {
-
-   document.filename.file.value=tutorial; 
-
+   document.filename.file.value=tutorial;
 }
 
 </script>

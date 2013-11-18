@@ -40,7 +40,7 @@ function GETRequest(url, parameters) {
          request.overrideMimeType('text/ascii');
       } 
    }
-	 else if (window.ActiveXObject) { // IE
+	else if (window.ActiveXObject) { // IE
       try {
          request = new ActiveXObject("Msxml2.XMLHTTP");
      } catch (e) {
