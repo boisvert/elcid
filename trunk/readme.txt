@@ -1,17 +1,18 @@
-How to install
+eL-CID - e-Learning by Communicating Iterative Development
 
-el-cid runs online from a website. it is written in PHP with a mySQL database
+Readme
+======
 
-the site has no auto installation. To install your version
+Thank you for downloading!
 
-- database/ contains an SQL export of the DB
-- htdocs/ contain the system, including
-   - tutorials/users/samples
-             contains a few examples of tutorials showing how to make more.
-             When the site is running, users who register to add tutorials
-             get a folder by their username under users/
+To install, unzip in a folder of your choice. Click on index.html to follow links to the existing examples or elcid.shtml to start running.
 
-- I have a running version of the site at http://www.boisvert.me.uk/ . If you create your own site, you are welcome to fork this project to share your adaptation. If you are considering hosting tutorials, tutorials you make can be excluded from the GPL (so you can continue owning them, etc.).
+The samples folder contains example XML files to help demonstrate code development. If you make your own XML examples, save them in the same folder - this is the folder that the system loads from.
 
-contact: charles@boisvert.me.uk || c.boisvert@shu.ac.uk
+eL-CID has been tested on Mozilla 1.4, Safari 1.2, Internet Explorer 5.5 and later.
+
+The licensing of eL-CID is open source except that you may create your own development examples and exploit them commercially - see the source for details. The XML examples included are in the public domain.
+
+Charles Boisvert,
+Cboisver@ccn.ac.uk
 
