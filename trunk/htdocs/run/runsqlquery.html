@@ -4,8 +4,8 @@
 
 <script language="javaScript">
 function sql_redirect() {
-   document.sql_form.sql_cmd.value = opener.codeToRun;
-   document.sql_form.submit();
+   document.code_form.sql_cmd.value = opener.codeToRun;
+   document.code_form.submit();
 }
 </script>
 
@@ -14,7 +14,7 @@ function sql_redirect() {
 <body onload="sql_redirect()">
 
 <form action="http://sqlcourse2.com/cgi-bin/sqlcmd-sqlcourse2.cgi"
-      method="get" name="sql_form"
+      method="get" name="code_form"
 >
 
    <input type="hidden" name="sql_cmd" value="">
