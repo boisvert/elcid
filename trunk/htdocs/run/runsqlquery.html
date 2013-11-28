@@ -4,7 +4,7 @@
 
 <script language="javaScript">
 function sql_redirect() {
-   document.code_form.sql_cmd.value = opener.codeToRun;
+   document.code_form.sql_cmd.value = opener.codeToRun();
    document.code_form.submit();
 }
 </script>

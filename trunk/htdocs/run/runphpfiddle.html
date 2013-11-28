@@ -5,7 +5,7 @@
 <script language="javaScript">
 
 function php_redirect() {
-   var params = "code=" + encodeURI( opener.codeToRun );
+   var params = "code=" + encodeURI( opener.codeToRun() );
    // alert('sending:\n'+params);
    fiddleRequest = POSTRequest('http://phpfiddle.org/api/run/code/json', params, phpFiddleResponse); 
 }
