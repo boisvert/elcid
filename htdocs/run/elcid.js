@@ -109,9 +109,6 @@ var clipboard = new textpad();
 var postit;
     // Yellow comment box
 
-var codeToRun='';
-var folderToRun='';
-    // codeToRun and folderToRun are filled in when the user presses the run button
 var testData;
     // testData is the info needed to test js functions
 
@@ -685,30 +682,30 @@ function elcid_move(step) {
 }
 
 function elcid_insert(step) {
-   elcid_delete(step)
-   if (displaying) disablePlayer()
+   elcid_delete(step);
+   if (displaying) disablePlayer();
    with (area) {
       var num_new_lines = step.lines.length
       if (num_new_lines>0) {
 
          // Move the lines further down to make space
-         var bound = lines.length
-         for (var i=bound-1; i>=y; i--) lines[i+num_new_lines] = lines[i]
+         var bound = lines.length;
+         for (var i=bound-1; i>=y; i--)
+            lines[i+num_new_lines] = lines[i];
 
          // cut up top line
-         lines[y] = lines[y].slice(0,x)+step.lines[0]
+         lines[y] = lines[y].slice(0,x)+step.lines[0];
 
          // Insert middle lines
-         for (i=1; i<num_new_lines; i++) {
-            lines[y+i] = step.lines[i]
-         }
+         for (i=1; i<num_new_lines; i++)
+            lines[y+i] = step.lines[i];
 
          // Move the cursor
          y=y+num_new_lines
 
          // make bottom line (including chars)
-         lines[y] = step.chars+lines[y].slice(x,lines[y].length)
-         x=step.chars.length
+         lines[y] = step.chars+lines[y].slice(x,lines[y].length);
+         x=step.chars.length;
          update();
       } else {
          // Add characters
@@ -1222,16 +1219,28 @@ function setTestOptions(testOp) {
 
 function runCode() {
    monitorUsage('run');
-   if (code.document.getElementById('edbox'))
-      codeToRun = code.document.getElementById('edbox').value;
-   else
-      codeToRun = area.lines.join('\n\r');
-   // insert base href in the head
    var interpreter = controls.interpreter.value;
-   folderToRun = location.protocol + "//" + location.host + folderPart(location.pathname) + (isServer()?folderPart(xmlDoc.url):AnimationsFolder);
    var winprop = 'height=400,width=600,location=no,scrollbars=yes,menu=no,toolbar=no,status=yes,resizable=yes';
    var w = window.open(interpreter, 'run', winprop);
    w.focus();
+}
+
+function codeToRun() {
+   var ctr = '';
+   if (code.document.getElementById('edbox'))
+      ctr = code.document.getElementById('edbox').value;
+   else
+      ctr = area.lines.join('\n\r');
+   // alert for debugging purposes
+   // var c; var disp = ''; var codes = '';
+   // for (var i=0; i<ctr.length; i++) {c=ctr.charCodeAt(i); codes += c+' '; disp+=(c>31&&c<127)?String.fromCharCode(c):(c==10)?'\n':'.';}
+   // alert(codes+'\n\n'+disp);
+   // end debug
+   return replaceAll(ctr,String.fromCharCode(160),' ');
+}
+
+function folderToRun() {
+ return location.protocol + "//" + location.host + folderPart(location.pathname) + (isServer()?folderPart(xmlDoc.url):AnimationsFolder);
 }
 
 function folderPart(str) {
