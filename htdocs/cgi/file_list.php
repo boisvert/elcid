@@ -65,7 +65,7 @@ function setTagsResponse() {
     query_db("UPDATE tags_tbl SET tag_requests = tag_requests+1 WHERE tag_name='$tag'");
 	
     $sql .= " INNER JOIN file_tags_tbl ON (files_tbl.file_key = file_tags_tbl.file_id)";
-	$sql .= " INNER JOIN tags_tbl ON ( tags_tbl.tags_key = file_tags_tbl.tag_id )";
+	 $sql .= " INNER JOIN tags_tbl ON ( tags_tbl.tags_key = file_tags_tbl.tag_id )";
     $sql .= " WHERE(file_active=1) AND (tags_tbl.tag_name='$tag')";
   }
 
@@ -123,5 +123,3 @@ function setTagsResponse() {
   echo "total files found: ".$total;
 
 ?>
-
-

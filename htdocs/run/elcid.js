@@ -1339,14 +1339,18 @@ function rateResponse() {
 
 function monitorUsage(currentCommand) {
    if (document.el_icon) {
-      if (fileUseID=='' || currentCommand=='load')
-         fileUseID = generateFileUseID();
-
-      var monitorString = '?command='+currentCommand+'&fileuseid='+fileUseID;
+      var monitorString = '?command='+currentCommand+'&fileuseid='+getFileUseID();
 	   if (editorIsOn) monitorString += '&editor=on';
       if (qString.full!='') monitorString += '&'+qString.full;
       document.el_icon.src = monitorImg+monitorString;
    }
+}
+
+function getFileUseID() {
+   if (fileUseID=='' || currentCommand=='load')
+      return generateFileUseID();
+   else
+      return fileUseID;
 }
 
 function generateFileUseID() {
@@ -1355,7 +1359,7 @@ function generateFileUseID() {
    var result = "";
 
    for (var i=0; i<27; i++) {
- 	  randNum = Math.floor(Math.random()*16);
+ 	   randNum = Math.floor(Math.random()*16);
       result += hexChars.charAt(randNum);
    }
 

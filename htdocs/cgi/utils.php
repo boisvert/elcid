@@ -85,4 +85,13 @@ function stripextension($file_name) {
    return $parts['filename'];
 }
 
+// Clean that magic quotes madness...
+function unescape(&$data) {
+   if (get_magic_quotes_gpc()) {
+      return stripslashes($data);
+   }
+   else
+      return $data;
+}
+
 ?>
