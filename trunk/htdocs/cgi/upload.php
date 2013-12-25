@@ -16,11 +16,7 @@ $pathname = "../run/".$filepath."/".$filename.".xml";
 
 debug_msg("The file is being saved in ".$pathname);
 
-$data = $_POST["data"];
-
-if (get_magic_quotes_gpc()) {
-    $data = stripslashes($data);
-}
+$data = unescape($_POST["data"]);
 
 // Open (create if needs be) the file and write the data
 $file = fopen($pathname,"w");
@@ -53,13 +49,13 @@ if (file_exists($pathname)) {
 
    query_db($sql);
 
-// if a temp save exists, delete it
+   // if a temp save exists, delete it
 
-$pathname = "../run/users/$username/temp/$filename.xml";
-if (file_exists($pathname)) {
-   unlink($pathname);
-   debug_msg("Temp save removed");
-}
+   $pathname = "../run/users/$username/temp/$filename.xml";
+   if (file_exists($pathname)) {
+      unlink($pathname);
+      debug_msg("Temp save removed");
+   }
 
    echo($reply."\n");
    echo("../users/$username/$filename.xml");

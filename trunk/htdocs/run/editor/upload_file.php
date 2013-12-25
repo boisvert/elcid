@@ -45,18 +45,18 @@ function save_xml_tutorial(&$file) {
 
    $filename = $file["name"];
 
-   $filepath = "../users/$username"; debug_msg("Path: $filepath");
+   $filepath = "users/$username"; debug_msg("Path: $filepath");
    $pathname = "$filepath/$filename";
 
-   debug_msg("File will be saved as $pathname");
+   debug_msg("File will be saved as ../$pathname");
 
    // Check if file exists and if not, write the data
    
-   if (file_exists($pathname)) {
+   if (file_exists("../$pathname")) {
       debug_msg("File exists - temporary storage");
-      if (!is_dir("$filepath/temp/"))
-         mkdir("$filepath/temp/");
-      move_uploaded_file($tmpfile,"$filepath/temp/$filename");
+      if (!is_dir("../$filepath/temp/"))
+         mkdir("../$filepath/temp/");
+      move_uploaded_file($tmpfile,"../$filepath/temp/$filename");
       $result = false;
    }
    else {
@@ -78,30 +78,24 @@ function save_xml_tutorial(&$file) {
    return $result;
 }
 
-
 function save_media(&$file) {
 
    global $username;
 
    debug_msg("File type is supported media");
 
-   $tmpfile = $file["tmp_name"];
-
-   $filename = $file["name"];
-
-   $filepath = "../users/$username"; debug_msg("Path: $filepath");
-   $pathname = "$filepath/$filename";
-
-   debug_msg("File will be saved as $pathname");
-
-   // Check if file exists and if not, write the data
-   
    if ($file["size"]>9999999) {
       debug_msg("File too large - no upload");
       move_uploaded_file($tmpfile,"$filepath/temp/$filename");
       $result = false;
    }
    else {
+      $tmpfile = $file["tmp_name"];
+      $filename = $file["name"];
+      $filepath = "../users/$username"; debug_msg("Path: $filepath");
+      $pathname = "$filepath/$filename";
+      debug_msg("File will be saved as $pathname");
+      // Check if file exists and if not, write the data
       move_uploaded_file($tmpfile,$pathname);
       debug_msg("Move succeeded");
       $result = $filename;

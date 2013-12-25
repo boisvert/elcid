@@ -18,11 +18,7 @@ $pathname = $filepath.$filename.".xml";
 
 debug_msg("The file is being saved in ".$pathname);
 
-$data = $_POST["data"];
-
-if (get_magic_quotes_gpc()) {
-    $data = stripslashes($data);
-}
+$data = unescape($_POST["data"]);
 
 // make temp directory if it doesn't already exist
 if (!is_dir($filepath))

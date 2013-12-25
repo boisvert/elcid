@@ -1,7 +1,7 @@
 <?php
 
   // definitions of database name, user, password
-  require_once('utils.php');
+  require_once('../cgi/utils.php');
   
 ?>
 

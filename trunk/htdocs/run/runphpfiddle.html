@@ -2,73 +2,24 @@
 
 <head>
 
-<script language="javaScript">
-
-function php_redirect() {
-   var params = "code=" + encodeURI( opener.codeToRun() );
-   // alert('sending:\n'+params);
-   fiddleRequest = POSTRequest('http://phpfiddle.org/api/run/code/json', params, phpFiddleResponse); 
-}
-
-function POSTRequest(url, parameters, responseProcess) {
-   var request = false;
-
-   if (window.XMLHttpRequest) { // Mozilla, Safari, Opera
-      request = new XMLHttpRequest();
-      if (request.overrideMimeType) {
-         // set type accordingly to anticipated content type
-         // eg 'text/xml' or 'text/html'
-         request.overrideMimeType('text/ascii');
-      }
-   }
-	else if (window.ActiveXObject) { // older IE
-      try {
-         request = new ActiveXObject("Msxml2.XMLHTTP");
-     } catch (e) {
-        try {
-           request = new ActiveXObject("Microsoft.XMLHTTP");
-        } catch (e) {}
-     }
-   }
-   
-   if (!request) {
-      alert('Cannot create XMLHTTP instance'); // Kludge this should raise an error
-   } else {
-      request.open('POST', url, true);
-      request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      request.setRequestHeader("Content-length", parameters.length);
-      request.setRequestHeader("Connection", "close");
-      request.send(parameters);
-      request.onreadystatechange = responseProcess;
-   }
-   return request;
-}
-
-function phpFiddleResponse() {
-   if (fiddleRequest.readyState == 4) {
-      if (fiddleRequest.status == 200) {
-         var data = JSON.parse(fiddleRequest.responseText);
-         // alert(fiddleRequest.responseText);
-         var txt = (data.result)?data.result:"Execution error:"+data.error;
-         resDiv = document.getElementById("fiddle");
-         // alert(txt);
-         resDiv.innerHTML = txt;
-      }
-      else {
-         alert('PHP Fiddle connot execute the code.\nHTTP Status: '+fiddleRequest.status+'\nResponse:\n'+fiddleRequest.responseText);
-      }
-   }
-}
-
-</script>
-
 </head>
 
-<body onload="php_redirect()">
+<body>
 
-<div id="fiddle">
-</div>
+<form action="runphpfiddle.php"
+      method="post" name="php_form"
+>
+   <input type="hidden" name="fileUseID" value="">
+   <input type="hidden" name="code" value="">
+
+</form>
 
 </body>
+
+<script language="javaScript">
+   document.php_form.fileUseID.value = opener.getFileUseID();
+   document.php_form.code.value = opener.codeToRun();
+   document.php_form.submit();
+</script>
 
 </html>
