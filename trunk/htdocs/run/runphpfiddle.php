@@ -53,6 +53,12 @@ function save_file(&$code,$fname) {
 
 function fiddle_exec($furl) {
    $url = 'http://phpfiddle.org/api/run/url';
+   if ($_SERVER["QUERY_STRING"]) {
+      $url .= '?'.$_SERVER["QUERY_STRING"];
+   }
+   
+   debug_msg("Calling phpfiddle at URL: $url");
+   
    $data = $_POST;
    $data['url'] = $furl;
 
