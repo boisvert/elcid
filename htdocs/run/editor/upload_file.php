@@ -1,6 +1,6 @@
 <?php
 
-// $debug = true;
+$debug = false;
 
 // secure page
 require('../../cgi/login.php');
@@ -60,7 +60,7 @@ function save_xml_tutorial(&$file) {
       $result = false;
    }
    else {
-      move_uploaded_file($tmpfile,$pathname);
+      move_uploaded_file($tmpfile,"../$pathname");
       debug_msg("Move succeeded");
 	  
       // update database
@@ -86,7 +86,7 @@ function save_media(&$file) {
 
    if ($file["size"]>9999999) {
       debug_msg("File too large - no upload");
-      move_uploaded_file($tmpfile,"$filepath/temp/$filename");
+      move_uploaded_file($tmpfile,"../$filepath/temp/$filename");
       $result = false;
    }
    else {
