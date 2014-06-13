@@ -21,11 +21,8 @@ if ($loggedin) {
 <title>eL-CID :- Edit file details</title>
 
 <?php
-
-   $styleURL=$htURL."images/style.css";
-  
+   $styleURL=$htURL."css/style.css";
    echo '<link rel="StyleSheet" href="'.$styleURL.'" type="text/css">';
-
 ?>
 
 </head>

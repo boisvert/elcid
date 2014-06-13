@@ -1,7 +1,5 @@
 /*
  Site behaviours
- by Charles Boisvert 
- 21 March 2008
 */
 
 var loginRequest = false;
