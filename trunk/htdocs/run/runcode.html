@@ -1,16 +1,24 @@
+<html>
+
+<head>
+
+</head>
+
+<body>
+
+<form action="runcode.php"
+      method="post" name="php_form"
+>
+   <input type="hidden" name="code" value="">
+   <input type="hidden" name="folder" value="">
+</form>
+
+</body>
+
 <script language="javaScript">
-
-var code = opener.codeToRun();
-
-var folder = opener.folderToRun();
-
-var i = code.indexOf("</head>");
-if (i>=0)
-   code = code.slice(0,i)+'<base href="'+folder+'" >'+code.slice(i,code.length);
-else
-   code = '<head><base href="'+folder+'" ></head>'+code;
-
-document.write(code);
-
+   document.php_form.code.value = opener.codeToRun();
+   document.php_form.folder.value = opener.folderToRun();
+   document.php_form.submit();
 </script>
 
+</html>

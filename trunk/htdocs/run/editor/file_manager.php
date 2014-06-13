@@ -1,7 +1,6 @@
 <?php
 // login, username
 require('../../cgi/login.php');
-
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -17,7 +16,7 @@ require('../../cgi/login.php');
 
 <?php // base and style sheet
 
-$styleURL=$htURL."images/style.css";
+$styleURL=$htURL."css/style.css";
 
 echo '<link rel="StyleSheet" href="'.$styleURL.'" type="text/css">';
 

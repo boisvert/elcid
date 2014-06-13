@@ -4,14 +4,15 @@
 require('cgi/utils.php');
 
 $title = "eL-CID :- Learn programming, step by step";
-$trail = 'You are here: <a href="index.php">Home</a>';
   
 $tag = "";
 
 if (isset($_GET["tag"])) {
    $tag = $_GET["tag"];
    $title = "$title - $tag";
-   $trail = "$trail &gt; $tag";
+   $trail = "<li><a href='index.php'>Home</a></li> <li class='active'>$tag</li>";
+} else {
+   $trail = "<li class='active'>Home</li>";
 }
 
 ?>
@@ -26,30 +27,31 @@ if (isset($_GET["tag"])) {
 <meta name="google-site-verification" content="RLxrL5kZLGnDtFMuWI0mL134ynxrQ21P9r_Z6UQu0Mk">
 <title><?php echo $title; ?></title>
 
-<link rel="StyleSheet" href="/images/style.css" type="text/css">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link rel="StyleSheet" href="css/style.css" type="text/css">
 
 </head>
 
 <body onload="monitor();">
 
-<?php include("images/header.php"); ?>
+<?php include("header.php"); ?>
 
-<div id="trail">
-   <?php echo $trail; ?>
+<div class="container">
+
+<ol class="breadcrumb">
+You are here: 
+  <?php echo $trail; ?>
+</ol>
+
+<div class="col-md-4" style="background:#00AF64; color:#FFFFFF; border-radius: 5px;">
+
+<h2>Choose:</h2>
+
+<div style="overflow: scroll;" id = "tagCloud">
+  <?php include("cgi/tag_cloud.php"); ?>
 </div>
 
-<div style="position:absolute; top:70px; left: 5px; width:280px;">
-
-<h2>Topics</h2>
-Choose a tag to find the relevant tutorials.
-
-<div style="width:280; overflow: scroll;" id = "tagCloud">
-
-<?php include("cgi/tag_cloud.php"); ?>
-
-</div>
-
-<h2>What is this?</h2>
+<h2>Learn to program</h2>
 
 <p>
 This site is a repository of web programming and web design tutorials.
@@ -60,25 +62,25 @@ The tutorials all present some code and play through its successive changes.
 </p>
 
 <p>
-You can also <a href="about">Find out about the system</a>, or <a href="project">visit the project page</a>.
+You can also <a href="about.php" style="color:#DAE9FF;">Find out about the system</a>, or <a href="project.php" style="color:#DAE9FF;">visit the project page</a>.
 </p>
 
 <p>
-Questions, bugs, enthusiastic Oohs and Aahs ;-) all welcome, <a href="contact">contact me</a>.
+Questions, bugs, enthusiastic Oohs and Aahs ;-) all welcome, <a href="contact.php" style="color:#DAE9FF;">contact me</a>.
 </p>
 
 </div>
 
-<div id="main">
-
-<h2>Tutorials</h2>
-These show the development of HTML/Javascript programs. Select a file to open.
-
-<div style="width:650; height:500; overflow: scroll;" id = "fileList">
-<?php include("cgi/file_list.php"); ?>
+<div class="col-md-8">
+   <?php include("cgi/file_list.php"); ?>
 </div>
 
 </div>
+
+<?php include("footer.php"); ?>
+
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 
 </body>
 

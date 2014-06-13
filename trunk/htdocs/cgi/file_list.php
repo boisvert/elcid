@@ -10,15 +10,15 @@
 var tagsRequest = false;
 
 function hitags(elt) {
- if (loggedin) elt.className='hitags';
+ if (parent.loggedin) elt.className='hitags';
 }
 
 function lotags(elt) {
- if (loggedin) elt.className='tags';
+ if (parent.loggedin) elt.className='tags';
 }
 
 function editTags(elt) {
-   if (loggedin) {
+   if (parent.loggedin) {
       var tags = elt.innerHTML;
       if (tags.indexOf(';')==-1) // if no tags
 	     tags = '';
@@ -33,7 +33,7 @@ function editTags(elt) {
 function setTags(fileId, tags) {
    var fileKey = fileId.substring(1);
    var parameters = "file="+fileKey+"&tags="+tags;
-   tagsRequest = POSTRequest('cgi/set_tags.php', parameters, setTagsResponse);
+   tagsRequest = parent.POSTRequest('cgi/set_tags.php', parameters, setTagsResponse);
 }
 
 function setTagsResponse() {
@@ -50,76 +50,65 @@ function setTagsResponse() {
 
 <?php
 
-  // select database  
-  open_db();
+   // select database  
+   open_db();
 
-  // Make the query
-  $sql  = "SELECT files_tbl.*, count(file_use_key) AS popularity, avg(rate) as stars FROM files_tbl";
-  $sql .= " LEFT JOIN file_uses_tbl ON (files_tbl.file_key = file_uses_tbl.file_id)";
-  $sql .= " LEFT JOIN file_rating_tbl ON (files_tbl.file_key = file_rating_tbl.file_id)";
+   // Make the query
+   $sql  = "SELECT files_tbl.*, count(file_use_key) AS popularity, avg(rate) as stars FROM files_tbl";
+   $sql .= " LEFT JOIN file_uses_tbl ON (files_tbl.file_key = file_uses_tbl.file_id)";
+   $sql .= " LEFT JOIN file_rating_tbl ON (files_tbl.file_key = file_rating_tbl.file_id)";
 
-  if ($tag == "")
-    $sql .= " WHERE (file_active=1)";
-  else
-  {
-    query_db("UPDATE tags_tbl SET tag_requests = tag_requests+1 WHERE tag_name='$tag'");
-	
-    $sql .= " INNER JOIN file_tags_tbl ON (files_tbl.file_key = file_tags_tbl.file_id)";
-	 $sql .= " INNER JOIN tags_tbl ON ( tags_tbl.tags_key = file_tags_tbl.tag_id )";
-    $sql .= " WHERE(file_active=1) AND (tags_tbl.tag_name='$tag')";
-  }
+   if ($tag == "")
+      $sql .= " WHERE (file_active=1)";
+   else
+   {
+      query_db("UPDATE tags_tbl SET tag_requests = tag_requests+1 WHERE tag_name='$tag'");
+      $sql .= " INNER JOIN file_tags_tbl ON (files_tbl.file_key = file_tags_tbl.file_id)";
+	   $sql .= " INNER JOIN tags_tbl ON ( tags_tbl.tags_key = file_tags_tbl.tag_id )";
+      $sql .= " WHERE(file_active=1) AND (tags_tbl.tag_name='$tag')";
+   }
 
-  $sql .= " GROUP BY files_tbl.file_key ORDER BY popularity DESC;";
-  
-  echo "<table class='filelist' cellspacing='15' cellpadding='5'>";
+   $sql .= " GROUP BY files_tbl.file_key ORDER BY popularity DESC;";
 
-  $total=0;
-  $result = query_db($sql);
+   $total=0;
+   $result = query_db($sql);
+   $count = mysql_num_rows($result);
 
-  while ($record = mysql_fetch_array($result)) {
-   	  $column = $total % 3 + 1;
-	     if ($column==1) echo "<tr>";
+   echo "<h2>$count tutorials</h2>";
+   
+   while ($record = mysql_fetch_array($result)) {
 
-        $file_key = $record["file_key"];
-		  $file_author = $record["file_author"];
-	     $file = $record["file_path"]."/".$record["file_name"].".xml";
-        $url = $htURL.'run/elcid.html?file='.URLEncode($file);
-        $js = 'runTutorial("'.$file.'"); return false;';
+      $file_key = $record["file_key"];
+	   $file_author = $record["file_author"];
+      $file = $record["file_path"]."/".$record["file_name"].".xml";
+      $url = $htURL.'run/elcid.html?file='.URLEncode($file);
+      $js = "parent.runTutorial('$file'); return false;";
 
-	     $sql2  = "select GROUP_CONCAT( tag_name SEPARATOR '; ' ) from tags_tbl";
-		  $sql2 .= " INNER JOIN file_tags_tbl ON tags_tbl.tags_key = file_tags_tbl.tag_id";
-	     $sql2 .= " WHERE file_id=".$file_key;
-		  $tags = query_one_item($sql2);
-		  if ($tags==false) 
-		     $tagcell = "no tags";
-	     else
-			  $tagcell = $tags;
-        ?>
-
-	     <td width='33%'>
-	        <a target='_top' href='<?php echo $url;?>' onClick='<?php echo $js;?>'>
-			   <?php echo $record["file_name"];?>
-			</a>
-			<br>
-		    <?php echo $record["file_date"];?> <br>
-		    <?php echo "By ".$record["file_author"];?>
-		    <p><?php echo $record["file_description"];?></p>
-            <div id="k<?php echo $file_key;?>" class="tags"
-			     onClick="editTags(this);" onMouseover="hitags(this);" onMouseout="lotags(this)"
-			><?php echo $tagcell;?></div>
-	     </td>
-
-		 <?php
-		 if ($column==3) echo "</tr>";
-		 $total++;
+      $sql2  = "select GROUP_CONCAT( tag_name SEPARATOR '; ' ) from tags_tbl";
+	   $sql2 .= " INNER JOIN file_tags_tbl ON tags_tbl.tags_key = file_tags_tbl.tag_id";
+      $sql2 .= " WHERE file_id=".$file_key;
+	   $tags = query_one_item($sql2);
+      if ($tags==false) 
+		   $tagcell = "no tags";
+	   else
+			$tagcell = $tags;
+      ?>
+	      <div class="panel panel-default" style="display:inline-block; margin:5px;">
+	         <h3><a target='_top' href='<?php echo $url;?>' onClick='<?php echo $js;?>' class="label label-primary">
+			      <?php echo $record["file_name"];?>
+		    	</a></h3>
+			   <br />
+		      <?php echo "<strong>Added on: </strong>" .$record["file_date"];?> <br>
+		      <?php echo "<strong>By: </strong>".$record["file_author"];?><br>
+		      <?php echo "<strong>Description: </strong>" .$record["file_description"];?>
+            <div id="k<?php echo $file_key;?>" class="tags" onClick="editTags(this);" onMouseover="hitags(this);" onMouseout="lotags(this)">
+			      <?php echo "<strong>Tags: </strong>" .$tagcell;?>
+            </div>
+	      </div>
+		<?php
+		$total++;
 	} // finish showing the files
-
-  close_db();  // on ferme la connexion
-
-  if ($column<3)  echo "</tr>"; // finish off the last row of the table if required
-
-  echo "</table>\n";
-
-  echo "total files found: ".$total;
+   close_db();  // on ferme la connexion
 
 ?>
+
