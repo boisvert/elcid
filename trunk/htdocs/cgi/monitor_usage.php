@@ -1,12 +1,10 @@
 <?php
 
-// debug mode. Set to true to get debug messages on screen.
-$debug = false;
+// debug mode. Uncomment to get debug messages on screen.
+//$debug = true;
 
 // database and debug functionality
 require('utils.php');
-
-session_start();
 
 $time = date("H:i:s");
 
