@@ -1227,7 +1227,7 @@ function runCode() {
 
 function codeToRun() {
    var ctr = '';
-   if (code.document.getElementById('edbox'))
+   if (userEdited())
       ctr = code.document.getElementById('edbox').value;
    else
       ctr = area.lines.join('\n\r');
@@ -1237,6 +1237,12 @@ function codeToRun() {
    // alert(codes+'\n\n'+disp);
    // end debug
    return replaceAll(ctr,String.fromCharCode(160),' ');
+}
+
+function userEdited() {
+   result = false;
+   if (code.document.getElementById('edbox')) result = true;
+   return result;
 }
 
 function folderToRun() {

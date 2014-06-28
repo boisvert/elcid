@@ -1,10 +1,11 @@
 <?php
-// uncomment to display debug info
-//$debug = true;
-
 require_once("../cgi/utils.php");
 
+// uncomment to display debug info
+$debug = true;
+
 $code = unescape($_POST['code']);
+$fdir = $htURL."run/phpbin/";
 
 if ($code=='') {
    debug_msg('No PHP Code found. Recovering session.');
@@ -20,13 +21,8 @@ else {
    $fname = session_id();
    // todo: if the file has not been manually changed by the user,
    // there is no need for local save, as local save is for security monitoring purposes.
-   // remote save is sufficient
-   $userEdited = unescape($_POST['userEdited']);
-   debug_msg("User edited file: $userEdited");
-   if ($userEdited=='yes') {
-      debug_msg('Saving for monitoring.');
-      save_file($code,$fname);
-   }
+   // remote save would be sufficient
+   save_file($code,$fname);
    $_SESSION['file']=$fname;
    remote_save($code,$fname);
 }
@@ -47,7 +43,6 @@ function save_file(&$code,$fname) {
    // to allow easy safety monitoring
    $fmonitorname = $fname.date('-YmdHis');
    debug_msg('File name:'.$fmonitorname);
-   // $fdir = $htURL."run/phpbin/";
    $fh = fopen('phpbin/'.$fmonitorname, 'w') or die("can't open file");
    fwrite($fh, $code);
    fclose($fh);
@@ -55,8 +50,6 @@ function save_file(&$code,$fname) {
 }
 
 function remote_save(&$code,$fname) {
-   global $remotePHP;
-   $url = $remotePHP."/save.php";
    // name of remote file is sessionID
    // no other data needed: on the contrary, old unused files should be overwritten
    $data = array(
@@ -72,17 +65,14 @@ function remote_save(&$code,$fname) {
       ),
    );
    $context  = stream_context_create($options);
-   debug_msg("Saving $url");
-   $result = file_get_contents($url, false, $context);
+   $result = file_get_contents($remotePHP, false, $context);
 
    return $result;
 }
 
 function fiddle_exec($fname) {
-   global $remotePHP;
-   $url = $remotePHP."/go.php";
-   if ($_SERVER["QUERY_STRING"]) {
-      $url .= $url.'?'.$_SERVER["QUERY_STRING"];
+  if ($_SERVER["QUERY_STRING"]) {
+      $url .= $remotePHP.'?'.$_SERVER["QUERY_STRING"];
    }
    $data = $_POST;
    $data['fname'] = $fname;
@@ -96,14 +86,14 @@ function fiddle_exec($fname) {
       ),
    );
    $context  = stream_context_create($options);
-   debug_msg("Executing $url");
    $result = file_get_contents($url, false, $context);
 
    return $result;
 }
 
 function safe_referrer($file, $msg) {
-   global $htURL;
+   debug_msg($_SERVER['HTTP_REFERER']);
+   debug_msg($htURL.$file);
    if ($_SERVER['HTTP_REFERER'] != $htURL.$file) {
       echo "Not allowed.<br />";
       die($msg);
