@@ -61,7 +61,7 @@ Using with new iterative development tutorials
 var AnimationsFolder = 'users/example/';
     // This folder is where XML data is loaded from by default
 
-var monitorImg= cgiURL + 'monitor_usage.php';
+var rateImg= cgiURL + 'rate_stars.php';
     // The eL-CID icon is a link to my database
     // to find out how eL-CID is being used. Replace it if you hate the idea.
 
@@ -70,7 +70,7 @@ var fileUseID = '';
 
 var qString = new queryString();
     // To hold the query string. See the queryString function for details
-   
+
 var xmlDoc = new XMLdocument();
     // The xmlDoc is how eL-CID stores the iterative development example
 
@@ -79,7 +79,7 @@ xmlDoc.onload = parse;
 
 var source = new Array();
     // Initial source code of example - an array of string (one per line)
-    
+
 var steps = new Array();
     // Parse will store the iterative changes in an array of steps
 
@@ -132,37 +132,59 @@ Object initialisations:
 
 ***********************/
 
-// Query string parsing
+// Query string parsing and generation
 
 function queryString() {
-   this.full = URLDecode(location.search);
-   this.pairs = new Array();
-   this.parsed = false;
+   this.pairs = new Array(); // array containing the data
+   this.parsed = false; // to parse the string only when needed
+   this.full = ''; // the full query string
 
-   if (this.full.indexOf('?')==0)
-      this.full = this.full.substring(1, this.full.length);
+   // set the query string to the current one
+   this.setToLocation = function() {
+      this.full = location.search;
+      if (this.full.indexOf('?')==0)
+         this.full = this.full.substring(1, this.full.length);   
+   }
 
+   // find the data from a "full" qs
    this.parse = function() {
       if (!this.parsed) {
+         if (!this.full) this.setToLocation();
          var parts = new Array();
          var bits = new Array();
          parts = this.full.split('&');
          for (var i in parts) {
             bits = parts[i].split('=');
-            this.pairs[bits[0]] = bits[1];
+            this.pairs[bits[0]] = decodeURIComponent(bits[1]);
          }
          this.parsed=true;
       }
    }
 
+   // find a value
    this.value = function(feature) {
       if (!this.parsed) this.parse()
-      var val = ''
+      var val = '';
       for (var i in this.pairs)
          if (i==feature)
-            val=this.pairs[i]
-      return val
+            val=this.pairs[i];
+      return val;
    }
+
+   // add a value to the QS
+   this.add = function(feature, value) {
+      this.parsed = true;
+      this.pairs[feature] = value;
+   }
+
+   // generate the full QS from values
+   this.generate = function() {
+      var val = '';
+      for (var i in this.pairs)
+         val+=i+'='+encodeURIComponent(this.pairs[i])+'&';
+      return val;
+   }
+
 }
 
 // This XMLdocument object wraps the Netscape and IE versions.
@@ -961,10 +983,7 @@ but it was quicker to rewrite them.
 ***********************/
 
 function getURL() {
-   var loc = new String(window.location)
-   var endURL = loc.indexOf('?')
-   if (endURL==-1) endURL = loc.length
-   return URLDecode(loc.substring(0,endURL))
+   return loc = location.protocol+location.host+location.pathname;
 }
 
 function format_num(num,blanks) {
@@ -1014,24 +1033,20 @@ function replaceAll(str,ch,newchars) {
 }
 
 function lastIndexOf(ch,str) {
-
-   var i=0; var j=0;
-   while (str.indexOf(ch)>=0) {
-      j = str.indexOf(ch)+ch.length;
+   var i = 0;
+   var j = str.indexOf(ch);
+   while (j>=0) {
+      j += ch.length;
       i += j;
       str=str.slice(j,str.length);
+      j = str.indexOf(ch);
    }
-
    return i;
 }
 
 function insert_chars (str,index,chars) {
    str =  str.slice(0,index)+(chars+str.slice(index,str.length));
    return str;
-}
-
-function URLDecode(encoded) {
-   return unescape(replaceAll(encoded,'+',' '));
 }
 
 function stringRepeat(str,occurs) {
@@ -1135,11 +1150,15 @@ function fast_to(step) {
       current_step++;
    }
    displaying = true;
-   forward();
+   forward_to();
 }
 
 function forward() {
    monitorUsage('forward');
+   forward_to();
+}
+
+function forward_to() {
    if (current_step<steps.length) {
       var step=steps[current_step];
       current_step++;
@@ -1175,19 +1194,20 @@ function isServer() {
 
 function loadCommandClient(filename) {
    if (filename!='') {
-      filename = replaceAll(filename,'\\','/');
+      filename = sanitize_fileName(filename);
 	   filename = filename.slice(lastIndexOf('/',filename),filename.length);
       filename = AnimationsFolder+filename;
       if (editorIsOn) filename = '../'+filename;
-      location=getURL()+'?file='+escape(filename);
+      location=getURL()+'?file='+encodeURIComponent(filename);
    }
 }
 
 function loadCommandServer(fileName) {
    if (fileName!='') {
-      fileName = replaceAll(fileName,'\\','/');
+      fileName = sanitize_fileName(fileName);
+      if (editorIsOn) filename = '../'+filename;
       window.focus();
-      location=getURL()+'?file='+escape(fileName);
+      location=getURL()+'?file='+encodeURIComponent(fileName);
    }
 }
 
@@ -1195,20 +1215,25 @@ function loadfile() {
    monitorUsage('load');
    var filename = qString.value('file');
    if (filename == '') {
-      document.el_icon.alt="Rate a tutorial (you need to load one first)";
+      document.el_icon.alt='Rate a tutorial (you need to load one first)';
       disablePlayer();
    }
    else {
+      filename = sanitize_fileName(filename);
+      show_stars(filename);
       if (loggedin) {
 	     document.el_icon.alt="Rate this tutorial";
       }
 	  else {
          document.el_icon.alt="Login to rate this tutorial";
       }
-      filename = replaceAll(filename,'\\','/');
       xmlDoc.load(filename);
       document.getElementById('filename').innerHTML=filename;
    }
+}
+
+function show_stars(filename) {
+   document.el_icon.src = rateImg+'?file='+encodeURIComponent(filename);
 }
 
 function setTestOptions(testOp) {
@@ -1246,11 +1271,19 @@ function userEdited() {
 }
 
 function folderToRun() {
- return location.protocol + "//" + location.host + folderPart(location.pathname) + (isServer()?folderPart(xmlDoc.url):AnimationsFolder);
+ return location.protocol + '//' + location.host + folderPart(location.pathname) + (isServer()?folderPart(xmlDoc.url):AnimationsFolder);
 }
 
 function folderPart(str) {
-   return str.slice(0,lastIndexOf("/",str));
+   return str.slice(0,lastIndexOf('/',str));
+}
+
+function filePart(str) {
+   return str.slice(lastIndexOf('/',str),str.length);
+}
+
+function sanitize_fileName(f) {
+  return replaceAll(f,'\\','/');
 }
 
 function editCode() {
@@ -1298,7 +1331,7 @@ function rateTutorial() {
 }
 
 function rateFinish(stars) {
-   var rateURL = cgiURL+'rate_file.php?file='+xmlDoc.url+'&rate='+stars;
+   var rateURL = cgiURL+'rate_file.php?file='+encodeURIComponent(xmlDoc.url)+'&rate='+stars;
    var rateRequest = GETRequest( rateURL, rateResponse );
    monitorUsage('rate');
 }
@@ -1338,25 +1371,31 @@ function rateResponse() {
       else {
          alert('Sorry rating is broken.');
       }
-      document.getElementById("rates").style.visibility='hidden';
-	   document.el_icon.alt="You have rated this tutorial";
+      document.getElementById('rates').style.visibility='hidden';
+      show_stars(xmlDoc.url);
+	   document.el_icon.alt='You have rated this tutorial';
    }
 }
 
 function monitorUsage(currentCommand) {
    if (document.el_icon) {
-      var monitorString = '?command='+currentCommand+'&fileuseid='+getFileUseID();
-	   if (editorIsOn) monitorString += '&editor=on';
-      if (qString.full!='') monitorString += '&'+qString.full;
-      document.el_icon.src = monitorImg+monitorString;
-   }
-}
+      if (fileUseID=='' || currentCommand=='load') fileUseID=generateFileUseID();
+      q = new queryString();
+      q.add('command',currentCommand);
+      q.add('fileuseid',fileUseID);
+	   if (editorIsOn) q.add('editor','on');
+      var file = qString.value('file');
+      if (file != '') {
+         q.add('fpath',folderPart(file));
+         q.add('fname',filePart(file));
+      }
+      var monitorString = q.generate();
+      if (qString.full!='') monitorString += qString.full;
+      //alert(monitorString);
 
-function getFileUseID() {
-   if (fileUseID=='' || currentCommand=='load')
-      return generateFileUseID();
-   else
-      return fileUseID;
+      var monitorURL = cgiURL+'monitor_usage.php?'+monitorString;
+      var monitorRequest = GETRequest( monitorURL, function(){} );
+   }
 }
 
 function generateFileUseID() {
@@ -1391,4 +1430,3 @@ function enableRadioGroup (radioGroup) {
       for (var b = 0; b < radioGroup.length; b++)
          radioGroup[b].disabled = false;
 }
-
