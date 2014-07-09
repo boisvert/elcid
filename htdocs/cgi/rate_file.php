@@ -8,8 +8,6 @@ require('utils.php');
 
 session_start();
 
-$time = date("H:i:s");
-
 $file = $_GET["file"];
 debug_msg("Parsing file info: ".$file.", ".strlen($file)." characters");
 
