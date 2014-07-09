@@ -13,26 +13,14 @@ debug_msg("Looking for file use (No. ".$file_use_key.")");
 
 $editor = $_GET["editor"];
 if (!$editor == 'on') $editor = 'off';
-debug_msg("Editor is used: ".$editor);
+debug_msg("Editor: ".$editor);
 
-$file = $_GET["file"];
-debug_msg("Parsing file info: ".$file.", ".strlen($file)." characters");
+// strrpos($file,"/");
 
-// Parse file to find name and path
-
-$fname_pos = strrpos($file,"/");
-debug_msg("file name found at character no: ".$fname_pos);
-
-$file_name = substr($file,$fname_pos+1,strlen($file)-$fname_pos-5);
-
-$start_path = 0;
-// if editor is being used, then look for a leading ../ and remove from path
-if ($_GET["editor"] == "on")
-	if (strpos($file,"../")==0)
-	   $start_path = 3;
+$file_name = $_GET["fname"];
 
 // path is everything up to the final /
-$file_path = substr($file,$start_path,$fname_pos-$start_path);
+$file_path = substr($_GET["fpath"], 0, -1);
 
 debug_msg("Looking for file (name: ".$file_name."; path: ".$file_path.")");
 
@@ -116,32 +104,10 @@ $sql = $sql." VALUES ('".$command."','".$file_use_key."','".$time."')";
 
 query_db($sql, $debug);
 
-$sql = "SELECT round(avg(rate)) as rating FROM file_rating_tbl WHERE file_id = $file_key;";
-
-$rating = query_one_item($sql);
-
-if ($rating=='0') {
-  $stars="noStars";
-} else if ($rating=='1') {
-   $stars="oneStar";
-} else if ($rating=='2') {
-   $stars="twoStars";
-} else if ($rating=='3') {
-   $stars="threeStars";
-} else if ($rating=='4') {
-   $stars="fourStars";
-} else if (!$rating) {
-   debug_msg("File not rated.");
-   $stars="notRated";
-}
-
 mysql_close(); // on ferme la connexion
 
-debug_msg("Displaying the file ".$stars);
+debug_msg("Getting the file ");
 
-if (!$debug)
-{
-   header("Location: ".$htURL."run/images/".$stars.".png");
-}
+echo "OK";
 
 ?>
