@@ -6,5 +6,5 @@
 
 */
 
-var htURL = 'http://'+location.hostname+'/';
+var htURL = 'http://'+location.hostname+'/elcid/';
 var cgiURL = htURL + 'cgi/';

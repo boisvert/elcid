@@ -2,10 +2,7 @@
 -- version 4.1.12
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 24, 2014 at 11:44 PM
--- Server version: 5.6.16
--- PHP Version: 5.5.11
+-- Generation Time: Dec 26, 2014 at 09:00 PM
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -26,7 +23,7 @@ SET time_zone = "+00:00";
 -- Table structure for table 'command'
 --
 
-CREATE TABLE IF NOT EXISTS command (
+CREATE TABLE command (
   session_id varchar(255) NOT NULL DEFAULT '',
   load_id bigint(20) NOT NULL,
   command_time time NOT NULL DEFAULT '00:00:00',
@@ -41,7 +38,7 @@ CREATE TABLE IF NOT EXISTS command (
 -- Table structure for table 'file'
 --
 
-CREATE TABLE IF NOT EXISTS file (
+CREATE TABLE `file` (
   file_id int(11) NOT NULL AUTO_INCREMENT,
   file_date date NOT NULL,
   file_author varchar(255) DEFAULT NULL,
@@ -49,10 +46,11 @@ CREATE TABLE IF NOT EXISTS file (
   file_path varchar(255) NOT NULL DEFAULT 'samples',
   file_description text NOT NULL,
   file_active tinyint(1) NOT NULL DEFAULT '1',
+  file_clicks int(11) DEFAULT NULL,
   PRIMARY KEY (file_id),
   UNIQUE KEY file_name (file_name,file_path),
   KEY file_author (file_author)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=58 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -60,7 +58,7 @@ CREATE TABLE IF NOT EXISTS file (
 -- Table structure for table 'file_rating'
 --
 
-CREATE TABLE IF NOT EXISTS file_rating (
+CREATE TABLE file_rating (
   file_id int(11) NOT NULL,
   user_id varchar(255) NOT NULL,
   rate int(1) NOT NULL,
@@ -74,7 +72,7 @@ CREATE TABLE IF NOT EXISTS file_rating (
 -- Table structure for table 'file_tag'
 --
 
-CREATE TABLE IF NOT EXISTS file_tag (
+CREATE TABLE file_tag (
   file_id int(11) NOT NULL DEFAULT '0',
   tag varchar(255) NOT NULL,
   file_tagger varchar(255) NOT NULL DEFAULT 'guest',
@@ -89,7 +87,7 @@ CREATE TABLE IF NOT EXISTS file_tag (
 -- Table structure for table 'file_use'
 --
 
-CREATE TABLE IF NOT EXISTS file_use (
+CREATE TABLE file_use (
   session_id varchar(255) NOT NULL DEFAULT '',
   load_id bigint(20) NOT NULL,
   file_id int(11) NOT NULL DEFAULT '0',
@@ -105,11 +103,11 @@ CREATE TABLE IF NOT EXISTS file_use (
 -- Table structure for table 'page_load'
 --
 
-CREATE TABLE IF NOT EXISTS page_load (
+CREATE TABLE page_load (
   session_id varchar(255) NOT NULL,
   load_id bigint(255) NOT NULL,
-  date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  time time NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `time` time NOT NULL,
   url varchar(255) NOT NULL,
   query_string varchar(255) NOT NULL,
   referer varchar(255) NOT NULL,
@@ -120,22 +118,10 @@ CREATE TABLE IF NOT EXISTS page_load (
 -- --------------------------------------------------------
 
 --
--- Table structure for table 'persons'
---
-
-CREATE TABLE IF NOT EXISTS persons (
-  firstname varchar(20) NOT NULL,
-  lastname varchar(20) NOT NULL,
-  description varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table 'session'
 --
 
-CREATE TABLE IF NOT EXISTS session (
+CREATE TABLE `session` (
   session_id varchar(255) NOT NULL DEFAULT '',
   session_date date NOT NULL DEFAULT '2000-01-01',
   session_time time NOT NULL DEFAULT '00:00:00',
@@ -153,7 +139,7 @@ CREATE TABLE IF NOT EXISTS session (
 -- Table structure for table 'tag'
 --
 
-CREATE TABLE IF NOT EXISTS tag (
+CREATE TABLE tag (
   tag varchar(255) NOT NULL DEFAULT '',
   tag_requests int(11) NOT NULL DEFAULT '0',
   tag_creation_date date NOT NULL DEFAULT '2014-01-01',
@@ -161,6 +147,23 @@ CREATE TABLE IF NOT EXISTS tag (
   PRIMARY KEY (tag),
   UNIQUE KEY tag_name (tag),
   KEY tag_author (tag_author)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table 'user'
+--
+
+CREATE TABLE `user` (
+  country varchar(255) NOT NULL DEFAULT '',
+  e_mail varchar(255) NOT NULL DEFAULT '',
+  first_name varchar(255) NOT NULL DEFAULT '',
+  last_name varchar(255) NOT NULL DEFAULT '',
+  pwd varchar(255) DEFAULT NULL,
+  user_id varchar(255) NOT NULL DEFAULT '',
+  user_level int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -178,22 +181,22 @@ ALTER TABLE command
 -- Constraints for table file
 --
 ALTER TABLE file
-  ADD CONSTRAINT file_ibfk_1 FOREIGN KEY (file_author) REFERENCES user (user_id);
+  ADD CONSTRAINT file_ibfk_1 FOREIGN KEY (file_author) REFERENCES `user` (user_id);
 
 --
 -- Constraints for table file_rating
 --
 ALTER TABLE file_rating
   ADD CONSTRAINT file_rating_ibfk_1 FOREIGN KEY (file_id) REFERENCES file (file_id),
-  ADD CONSTRAINT file_rating_ibfk_2 FOREIGN KEY (user_id) REFERENCES user (user_id);
+  ADD CONSTRAINT file_rating_ibfk_2 FOREIGN KEY (user_id) REFERENCES `user` (user_id);
 
 --
 -- Constraints for table file_tag
 --
 ALTER TABLE file_tag
-  ADD CONSTRAINT file_tag_ibfk_1 FOREIGN KEY (file_tagger) REFERENCES user (user_id),
+  ADD CONSTRAINT file_tag_ibfk_1 FOREIGN KEY (file_tagger) REFERENCES `user` (user_id),
   ADD CONSTRAINT file_tag_ibfk_2 FOREIGN KEY (tag) REFERENCES tag (tag),
-  ADD CONSTRAINT file_tag_ibfk_3 FOREIGN KEY (file_tagger) REFERENCES user (user_id),
+  ADD CONSTRAINT file_tag_ibfk_3 FOREIGN KEY (file_tagger) REFERENCES `user` (user_id),
   ADD CONSTRAINT file_tag_ibfk_4 FOREIGN KEY (file_id) REFERENCES file (file_id);
 
 --
@@ -214,13 +217,13 @@ ALTER TABLE page_load
 -- Constraints for table session
 --
 ALTER TABLE session
-  ADD CONSTRAINT session_ibfk_1 FOREIGN KEY (session_user) REFERENCES user (user_id);
+  ADD CONSTRAINT session_ibfk_1 FOREIGN KEY (session_user) REFERENCES `user` (user_id);
 
 --
 -- Constraints for table tag
 --
 ALTER TABLE tag
-  ADD CONSTRAINT tag_ibfk_1 FOREIGN KEY (tag_author) REFERENCES user (user_id);
+  ADD CONSTRAINT tag_ibfk_1 FOREIGN KEY (tag_author) REFERENCES `user` (user_id);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
