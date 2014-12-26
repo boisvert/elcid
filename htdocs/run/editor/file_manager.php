@@ -1,6 +1,10 @@
 <?php
+// debug mode, uncomment to use
+// $debug=true;
+
 // login, username
 require('../../cgi/login.php');
+
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -10,7 +14,6 @@ require('../../cgi/login.php');
 
 <head>
 
-<script LANGUAGE="JavaScript" src="../config.js" type="text/javascript"> </script>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>eL-CID :- file manager</title>
 
@@ -83,8 +86,8 @@ function detailsDialog(fileKey) {
 	<?php 
    
    // Find the sort order
-	if ($m = $_GET["msg"])
-	   echo "$m<br/>";
+	if (isset($_GET["msg"]))
+      echo $_GET["msg"]."<br/>";
 
    if (isset($_GET["order"]))
 	   $order = $_GET["order"];
@@ -177,7 +180,7 @@ if (isset($_POST["key"]) && isset($_POST["date"])) {
 
    $key=$_POST["key"];
  
-   $sql = "UPDATE files_tbl SET $sets WHERE file_key=$key AND file_author='$username';";
+   $sql = "UPDATE file SET $sets WHERE file_id=$key AND file_author='$username';";
 	query_db($sql);
 
    // update file classification tags
@@ -185,7 +188,7 @@ if (isset($_POST["key"]) && isset($_POST["date"])) {
    debug_msg("Tags:".$tags);
 
    // Remove old tags
-   $sql = "DELETE FROM file_tags_tbl WHERE (file_id=$key)";
+   $sql = "DELETE FROM file_tag WHERE (file_id=$key)";
    query_db($sql);
 
    // Put in the new tags
@@ -195,30 +198,27 @@ if (isset($_POST["key"]) && isset($_POST["date"])) {
 	   $tag=trim($tag);
 	   if ($tag!="")
       {
-         $sql = "INSERT INTO tags_tbl(tag_name,tag_author) VALUES ('$tag','$username')";
+         $sql = "INSERT INTO tag(tag,tag_creation_date,tag_author) VALUES ('$tag',now(),'$username')";
 
-         debug_msg($sql);
-	      mysql_query($sql);
+	      query_db($sql);
 
-         $sql = "SELECT tags_key FROM tags_tbl WHERE (tag_name='$tag')";
-	      $tag_key = query_one_item($sql);
-         $sql = "INSERT INTO file_tags_tbl VALUES ($key,$tag_key,'$username')";
+         $sql = "INSERT INTO file_tag VALUES ($key,'$tag','$username')";
          query_db($sql);
 		} // one tag
    } // each tag
 } // File updated if needed
 
 // Query the file list
-$sql  = "SELECT file_key, file_active AS active, file_name AS name, file_date AS date, file_path AS path, count(file_use_key) AS visits FROM files_tbl";
-$sql .= " LEFT JOIN file_uses_tbl ON (files_tbl.file_key = file_uses_tbl.file_id)";
+$sql  = "SELECT file.file_id, file_active AS active, file_name AS name, file_date AS date, file_path AS path, count(load_id) AS visits FROM file";
+$sql .= " LEFT JOIN file_use ON (file.file_id = file_use.file_id)";
 $sql .= " WHERE (file_author='$username')";
-$sql .= " GROUP BY files_tbl.file_key ORDER BY $order $dir";
+$sql .= " GROUP BY file.file_id ORDER BY $order $dir";
 
 $total=0;
 $result = query_db($sql);
 
-while ($record = mysql_fetch_array($result)) {
-   $file_key = $record["file_key"];
+while ($record = mysqli_fetch_array($result)) {
+   $file_id = $record["file_id"];
 	$file = $record["name"];
    $path = "../".$record["path"];
    $url = "$path/$file.xml";
@@ -227,7 +227,7 @@ while ($record = mysql_fetch_array($result)) {
       <tr onMouseover="hifile(this);" onMouseout="lofile(this);" />
 		<td><form>
 		   <input type="checkbox" onChange="togglePublic(this.id, this.checked);"
-		          id="<?php echo $file_key;?>" <?php echo ($record["active"])?"checked":"" ?> / >
+		          id="<?php echo $file_id;?>" <?php echo ($record["active"])?"checked":"" ?> / >
 		</form></td>
 		<td>
 	      <a href='<?php echo $url;?>' onClick='<?php echo $js;?>'>
@@ -242,7 +242,7 @@ while ($record = mysql_fetch_array($result)) {
 		</td>
 		<td>
 	      <img src="../../images/pencil.png" alt="Edit details"
-		        id="<?php echo $file_key;?>" onClick="detailsDialog(this.id);" / >
+		        id="<?php echo $file_id;?>" onClick="detailsDialog(this.id);" / >
 	   </td>
       <td bgcolor="ffffff">
          <?php recovery($file,$path); ?>

@@ -21,15 +21,16 @@ with the distribution.
    <title>eL-CID: e-Learning by Communicating Iterative Development</title>
    <link rel="stylesheet" type="text/css" href="images/code.css">
    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
-   
+
    <style>
       a {text-decoration:underline; color:blue;}
    </style>
 
 <script type="text/javascript">
 
-function runTutorial(tutorial)  {
-   document.filename.file.value=tutorial;
+function runTutorial(fileName) {
+  opener.location = htURL+"run/elcid.html?file="+encodeURI(fileName);
+  opener.focus();
 }
 
 </script>
@@ -38,21 +39,16 @@ function runTutorial(tutorial)  {
 
 <body>
 
-<form name="filename">
-   Select a file:<br />
-   <input type="text" name="file" size="40">
-   <p>
-      <input type="button" value="Load file"
-          onClick="opener.loadCommandServer(document.filename.file.value); opener.focus();">
-      <input type="button" value="Cancel" onClick="opener.focus();">
-   </p>
-</form>
+<?php
 
+$tag = "";
+if (isset($_GET["tag"])) {
+   $tag = $_GET["tag"];
+}
 
-<div style="width:650; height:500; overflow: scroll;" id = "fileList">
-<?php include("../cgi/file_list.php"); ?>
-</div>
+include("../cgi/file_list.php");
 
+?>
 
 </body>
 

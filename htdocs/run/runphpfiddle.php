@@ -8,7 +8,7 @@ $code = unescape($_POST['code']);
 
 if ($code=='') {
    debug_msg('No PHP Code found. Recovering session.');
-   if (!isset($_SESSION['file'])) die("Nothing to execute.");
+   if (!isset($_SESSION['file'])) bow_out("Nothing to execute.");
    // file is already saved.
    $fname = $_SESSION['file'];
 }
@@ -31,7 +31,7 @@ else {
    remote_save($code,$fname);
 }
 
-if (!isset($fname)) die('Nothing to execute.');
+if (!isset($fname)) bow_out('Nothing to execute.');
 
 // create a URL to use for PHPFiddle
 debug_msg('PHP file is available:'.$fname);
@@ -48,7 +48,7 @@ function save_file(&$code,$fname) {
    $fmonitorname = $fname.date('-YmdHis');
    debug_msg('File name:'.$fmonitorname);
    // $fdir = $htURL."run/phpbin/";
-   $fh = fopen('phpbin/'.$fmonitorname, 'w') or die("can't open file");
+   $fh = fopen('phpbin/'.$fmonitorname, 'w') or bow_out("can't open file");
    fwrite($fh, $code);
    fclose($fh);
    debug_msg("Save succeeded");
@@ -106,7 +106,7 @@ function safe_referrer($file, $msg) {
    global $htURL;
    if ($_SERVER['HTTP_REFERER'] != $htURL.$file) {
       echo "Not allowed.<br />";
-      die($msg);
+      bow_out($msg);
    }
    debug_msg('Referrer correct.');
 }

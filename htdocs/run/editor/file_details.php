@@ -31,39 +31,37 @@ if ($loggedin) {
 
 <?php
 
-  $file_key = $_GET["file"];
-  // Make the query
+   $file_id = $_GET["file"];
+   // Make the query
 
-  // select database
-  open_db();
+   // select database
+   open_db();
 
-  $sql = "SELECT *, count(file_use_key) AS popularity FROM files_tbl";
-  $sql=$sql." LEFT JOIN file_uses_tbl ON (files_tbl.file_key = file_uses_tbl.file_id)";
-  $sql=$sql." WHERE (file_key=$file_key) AND (file_author='$username') GROUP BY files_tbl.file_key";
+   $sql = "SELECT *, count(load_id) AS popularity FROM file";
+   $sql .= " LEFT JOIN file_use ON (file.file_id = file_use.file_id)";
+   $sql .= " WHERE (file.file_id=$file_id) AND (file_author='$username') GROUP BY file.file_id";
 
-  $result = query_db($sql);
+   $result = query_db($sql);
 
-  if ($record = mysql_fetch_array($result)) {
+   if ($record = mysqli_fetch_array($result)) {
 
-	   $sql2 = "select tag_name from tags_tbl";
-	   $sql2 = $sql2." INNER JOIN file_tags_tbl ON tags_tbl.tags_key = file_tags_tbl.tag_id";
-	   $sql2 = $sql2." WHERE file_id=".$file_key;
+	   $sql2 = "select tag from file_tag WHERE file_id=".$file_id;
 	   $tags = query_db($sql2);
 
-       if ($tag = mysql_fetch_array($tags)) {
-          $tagcell = $tag["tag_name"];
-	      while ($tag = mysql_fetch_array($tags)) {
-             $tagcell = $tagcell."; ".$tag["tag_name"];
+      if ($tag = mysqli_fetch_array($tags)) {
+         $tagcell = $tag["tag"];
+	      while ($tag = mysqli_fetch_array($tags)) {
+            $tagcell = $tagcell."; ".$tag["tag"];
 	      }
-       } else {
-          $tagcell = "";
+      } else {
+         $tagcell = "";
 	   }
 
 ?>
-	   <form name="filedetails" target="elcidTutorial" action="file_manager.php"
+	   <form name="filedetails" action="file_manager.php"
 	         onSubmit="opener.focus();" onCancel="opener.focus();" method="post" >
 		  <b>File details</b> <br />
-	      <input type="hidden" name="key" value="<?php echo $file_key;?>" />
+	      <input type="hidden" name="key" value="<?php echo $file_id;?>" />
 	      <table align="top">
 		    <tr>
 			<td>Name:</td> <td><input type="text" name="name" value="<?php echo $record["file_name"];?>" disabled="true" /> </td>
@@ -90,7 +88,7 @@ if ($loggedin) {
 <?php
 	} // finish showing the files
 
-  mysql_close();  // on ferme la connexion
+  close_db();  // on ferme la connexion
 }
 ?>
 

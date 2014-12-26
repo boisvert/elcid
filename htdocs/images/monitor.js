@@ -3,26 +3,9 @@ var monitorRequest = false;
 var fileUseID = '';
 
 function monitor() {
-
    var url = cgiURL+'monitor_home.php';
-
-   if (fileUseID=='')
-      fileUseID = generateFileUseID();
-		
-   var params = 'command=doh&fileuseid='+fileUseID;
-   monitorRequest = GETRequest(url, params);
-}
-
-function generateFileUseID() {
-   var hexChars = "0123456789ABCDEF";
-   var randNum = 0;
-   var result = "";
-
-   for (var i=0; i<27; i++) {
- 	  randNum = Math.floor(Math.random()*16);
-      result += hexChars.charAt(randNum);
-   }
-   return result;
+   if (fileUseID=='') fileUseID=generateFileUseID();
+   monitorRequest = GETRequest(url, 'fileuseid='+fileUseID);
 }
 
 function GETRequest(url, parameters) {
@@ -55,7 +38,7 @@ function GETRequest(url, parameters) {
    else {
       request.open('GET', url+'?'+parameters, true);
       request.setRequestHeader("Connection", "close");
-      // request.onreadystatechange = alertContents;
+      request.onreadystatechange = alertContents;
       request.send(null);
    }
    return request;
@@ -70,3 +53,17 @@ function alertContents() {
       }
    }
 }
+
+function generateFileUseID() {
+   var hexChars = "0123456789ABCDEF";
+   var randNum = 0;
+   var result = "";
+
+   for (var i=0; i<27; i++) {
+ 	   randNum = Math.floor(Math.random()*16);
+      result += hexChars.charAt(randNum);
+   }
+
+   return result;
+}
+

@@ -4,25 +4,26 @@
   open_db();
 
   // Get tag stats
-  $sql = "SELECT AVG(tag_requests) FROM tags_tbl";
+  $sql = "SELECT AVG(tag_requests) FROM tag";
 
   $avg_tag_weight = max(query_one_item($sql),1); // at least 1 to avoid div by 0 errors
      
 
   // Make the query
-  $sql = "SELECT tag_name, Count(1) AS tag_use, tag_requests";
-  $sql = $sql." FROM tags_tbl, file_tags_tbl, files_tbl";
-  $sql = $sql." WHERE tags_key=tag_id AND file_key=file_id AND file_active=1";
-  $sql = $sql." GROUP BY tags_key ORDER BY tag_use DESC;";
+  $sql = "SELECT tag.tag, Count(1) AS tag_use, tag_requests";
+  $sql = $sql." FROM tag, file_tag, file";
+  $sql = $sql." WHERE tag.tag = file_tag.tag AND file.file_id=file_tag.file_id AND file_active=1";
+  $sql = $sql." GROUP BY tag.tag ORDER BY tag_use DESC;";
 
+  
   $result = query_db($sql);
 
   //counter
 
-  while ($record = mysql_fetch_array($result)) {
+  while ($record = $result -> fetch_array()) {
      $tagweight = $record["tag_requests"];
      $tagweight = round(150*sqrt($tagweight/$avg_tag_weight));
-     $tagname = $record["tag_name"];
+     $tagname = $record["tag"];
      $url = 'index.php?tag='.urlencode($tagname);
      $style="font-size:".max($tagweight,60)."%;";
 
@@ -34,6 +35,6 @@
      }
   } // finish showing the files
 
-  mysql_close();  // on ferme la connexion
+  close_db();  // on ferme la connexion
 
 ?>

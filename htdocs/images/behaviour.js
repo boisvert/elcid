@@ -65,7 +65,7 @@ function POSTRequest(url, parameters, responseProcess) {
 
 function loginResponse() {
    if (loginRequest.readyState == 4) {
-      // alert(loginRequest.status+'\n'+loginRequest.responseText);
+      //alert(loginRequest.status+'\n'+loginRequest.responseText);
       if (loginRequest.status == 200) {
          loggedin = true;
          userName = document.getElementById("user").value;

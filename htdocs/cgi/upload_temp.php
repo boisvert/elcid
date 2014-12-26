@@ -3,7 +3,7 @@
 header('Content-type: text/plain');
 
 // database and debug functionality
-require('utils.php');
+require_once('utils.php');
 
 // Need user name, but login may have lapsed
 // so username is from earlier page.

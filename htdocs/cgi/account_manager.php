@@ -1,14 +1,14 @@
 <?php
 // secure page
 require('login.php');
+//uncomment the line below for verbose execution
+//$debug = true;
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 
 <title>eL-CID - Register</title>
-
-<script type="text/javascript" src="/run/config.js"> </script>
 
 <script language="javascript">
 
@@ -170,12 +170,12 @@ function message(msg) {
 
  User: <?php echo $username?> <input type="hidden" id="user" value="<?php echo $username?>"> <br />
 
- <?
+ <?php
   open_db();
-  $sql = "SELECT user_level, country, e_mail, first_name, last_name FROM users_tbl WHERE user_name='$username';";
+  $sql = "SELECT user_level, country, e_mail, first_name, last_name FROM user WHERE user_id='$username';";
   $userdata = query_one_row($sql);
  ?>
- 
+
  <fieldset>
    <legend>Change Password</legend>
    Old password: <input type="password" id="old_pass"> <br />

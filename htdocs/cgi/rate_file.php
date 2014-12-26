@@ -4,7 +4,7 @@
 $debug = false;
 
 // database and debug functionality
-require('utils.php');
+require_once('utils.php');
 
 session_start();
 
@@ -32,20 +32,20 @@ debug_msg("Looking for file (name: ".$file_name."; path: ".$file_path.")");
 // select database  
 open_db();
 
-$sql = "SELECT file_key FROM files_tbl WHERE file_name='".$file_name."' AND file_path='".$file_path."' ";
+$sql = "SELECT file_id FROM file WHERE file_name='".$file_name."' AND file_path='".$file_path."' ";
 
-$file_data = mysql_fetch_row(query_db($sql));
+$file_data = query_one_row($sql);
 
 if ($file_data) { // update the data if the file was found
    $file_id = $file_data[0];
 
    $rating = $_GET['rate']; //needs validation - number
 
-   $sql = "INSERT INTO file_rating_tbl VALUES ($file_id, '$username', $rating);";
+   $sql = "INSERT INTO file_rating VALUES ($file_id, '$username', $rating);";
 
    query_db($sql);
 }
 
-mysql_close(); // on ferme la connexion
+close_db(); // on ferme la connexion
 
 ?>

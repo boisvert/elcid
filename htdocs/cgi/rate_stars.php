@@ -4,7 +4,7 @@
 //$debug = true;
 
 // database and debug functionality
-require('utils.php');
+require_once('utils.php');
 
 $file = $_GET["file"];
 debug_msg("Parsing file info: ".$file.", ".strlen($file)." characters");
@@ -18,9 +18,10 @@ $file_name = substr($file,$fname_pos+1,strlen($file)-$fname_pos-5);
 
 $start_path = 0;
 // if editor is being used, then look for a leading ../ and remove from path
-if ($_GET["editor"] == "on")
-	if (strpos($file,"../")==0)
-	   $start_path = 3;
+if (isset($_GET["editor"]))
+   if ($_GET["editor"] == "on")
+	   if (strpos($file,"../")==0)
+	      $start_path = 3;
 
 // path is everything up to the final /
 $file_path = substr($file,$start_path,$fname_pos-$start_path);
@@ -32,11 +33,11 @@ open_db();
 
 // (1) Check if the file is known in the DB, if not, record it 
 // Is there a file in the DB with this name & path?
-$sql = "SELECT round(avg(rate)) as rating FROM file_rating_tbl WHERE file_id = (SELECT file_key FROM files_tbl WHERE file_name='$file_name' AND file_path='$file_path');";
+$sql = "SELECT round(avg(rate)) as rating FROM file_rating WHERE file_id = (SELECT file_id FROM file WHERE file_name='$file_name' AND file_path='$file_path');";
 
 $rating = query_one_item($sql);
 
-mysql_close(); // on ferme la connexion
+close_db(); // on ferme la connexion
 
 if ($rating=='0') {
   $stars="noStars";

@@ -2,7 +2,8 @@
 
 // secure page
 require('login.php');
-
+// uncomment the line below to get execution detail
+// $debug=true;
 $file_id = trim($_POST["file"]);
 $tags = $_POST["tags"];
 
@@ -15,21 +16,18 @@ if ($file_id !="") {
    open_db();
 
    // Remove existing tags
-   $sql = "DELETE FROM file_tags_tbl WHERE (file_id=$file_id)"; 
+   $sql = "DELETE FROM file_tag WHERE (file_id=$file_id)"; 
    query_db($sql);
 
    foreach ($tagsArray as $tag) {
 
       $tag=trim($tag);
-	  if ($tag!="") {
+	   if ($tag!="") {
 
-	     $sql = "INSERT INTO tags_tbl(tag_name,tag_author) VALUES ('$tag','$username')";
-		 debug_msg("Running query: ".$sql);
-	     mysql_query($sql);
-         $sql = "SELECT tags_key FROM tags_tbl WHERE (tag_name='$tag')";
-	     $tag_key = query_one_item($sql);	     
+	      $sql = "INSERT INTO tag(tag,tag_author) VALUES ('$tag','$username')";
+		   query_db($sql);  
 
-         $sql = "INSERT INTO file_tags_tbl VALUES ($file_id,$tag_key,'$username')";
+         $sql = "INSERT INTO file_tag VALUES ($file_id,'$tag','$username')";
          query_db($sql);
 	  }
    }
