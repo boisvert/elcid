@@ -1,18 +1,19 @@
--- phpMyAdmin SQL Dump
--- version 4.1.12
--- http://www.phpmyadmin.net
---
--- Generation Time: Dec 25, 2014 at 11:46 AM
-
 --
 -- Database: 'elcid_test'
 --
 
 --
+-- Dumping data for table 'user'
+--
+
+INSERT INTO user VALUES('', '', '', '', NULL, 'example', 0);
+
+
+--
 -- Dumping data for table 'file'
 --
 
-INSERT INTO file VALUES (1, '2011-05-05', 'example', 'cut_down_rollover_example', 'users/example', '', 1);
+INSERT INTO file VALUES (1, '2011-05-05', 'example', 'cut_down_rollover_example', 'users/example', '', 1, NULL);
 
 --
 -- Dumping data for table 'file_rating'
@@ -36,8 +37,3 @@ INSERT INTO file_tag VALUES(1, 'images', 'example');
 INSERT INTO file_tag VALUES(1, 'javascript', 'example');
 INSERT INTO file_tag VALUES(1, 'easy', 'example');
 
---
--- Dumping data for table 'user'
---
-
-INSERT INTO user VALUES('', '', '', '', NULL, 'example', 0);
