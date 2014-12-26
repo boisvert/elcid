@@ -1,7 +1,7 @@
 <?php
 
   // definitions of database name, user, password
-require('utils.php');
+require_once('utils.php');
 
 $debug=false;
 
@@ -22,7 +22,7 @@ if ($loggedin)
       open_db();
 
       // Make the query
-      $sql = "UPDATE files_tbl SET file_active=$public WHERE (file_key=$file_id) AND (file_author='$username')"; 
+      $sql = "UPDATE file SET file_active=$public WHERE (file_id=$file_id) AND (file_author='$username')"; 
 
       query_db($sql);
 

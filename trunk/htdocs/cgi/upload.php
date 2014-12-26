@@ -32,17 +32,17 @@ if (file_exists($pathname)) {
    open_db();
 
    // Is there a file in the DB with this name & path?
-   $sql = "SELECT file_key FROM files_tbl WHERE file_name='$filename' AND file_path='$filepath';";
+   $sql = "SELECT file_id FROM file WHERE file_name='$filename' AND file_path='$filepath';";
 
    $date = date("Y-m-d");
    $reply = "File $filename ";
 
    if ($key = query_one_item($sql)) {
-      $sql = "UPDATE files_tbl SET file_date='".$date."' WHERE file_key = ".$key.";";
+      $sql = "UPDATE file SET file_date='".$date."' WHERE file_id = ".$key.";";
       $reply .= "updated.";
    }
    else {
-      $sql = "INSERT INTO files_tbl (file_date, file_author, file_path, file_name) ".
+      $sql = "INSERT INTO file (file_date, file_author, file_path, file_name) ".
                     "VALUES ('".$date."','".$username."','".$filepath."','".$filename."')";
       $reply .= "created.";
    }

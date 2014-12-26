@@ -1,8 +1,5 @@
 <?php
 
-// definitions of database name, user, password
-require('cgi/utils.php');
-
 $title = "eL-CID :- Learn programming, step by step";
   
 $tag = "";
@@ -78,9 +75,6 @@ Questions, bugs, enthusiastic Oohs and Aahs ;-) all welcome, <a href="contact.ph
 </div>
 
 <?php include("footer.php"); ?>
-
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
 
 </body>
 

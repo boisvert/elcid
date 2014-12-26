@@ -1,6 +1,6 @@
 <?php
 // database utilities
-require('utils.php');
+require_once('utils.php');
 
 $username = $_POST["user"];
 $firstname = $_POST["firstname"];
@@ -14,7 +14,7 @@ $country = $_POST["country"];
 open_db();
 
 // Is there a user in the DB with this name & pwd?
-$sql = "SELECT * FROM users_tbl WHERE user_name='".$username."'";
+$sql = "SELECT 1 FROM user WHERE user_id='".$username."'";
 
 if (query_one_item($sql))
    {
@@ -22,7 +22,7 @@ if (query_one_item($sql))
    }
    else
    {
-      $sql = "INSERT INTO users_tbl VALUES('$country','$email','$firstname','$lastname','$password','$username',0)";
+      $sql = "INSERT INTO user VALUES('$country','$email','$firstname','$lastname','$password','$username',0)";
       query_db($sql);
 	  mkdir("../run/users/$username", 0600, true);
 	  echo("Your registration is recorded.");

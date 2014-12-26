@@ -67,7 +67,7 @@ function save_xml_tutorial(&$file) {
       $filenoext = stripextension($filename);
       open_db();
       $date = date("Y-m-d");
-      $sql = "INSERT INTO files_tbl (file_date, file_author, file_path, file_name)".
+      $sql = "INSERT INTO file (file_date, file_author, file_path, file_name)".
              " VALUES ('$date','$username','$filepath','$filenoext')".
              " ON DUPLICATE KEY UPDATE file_date='$date';";
 

@@ -65,8 +65,8 @@ var rateImg= cgiURL + 'rate_stars.php';
     // The eL-CID icon is a link to my database
     // to find out how eL-CID is being used. Replace it if you hate the idea.
 
-var fileUseID = '';
-    // Used for monitoring
+var loadID = '';
+    // used for monitoring
 
 var qString = new queryString();
     // To hold the query string. See the queryString function for details
@@ -983,7 +983,7 @@ but it was quicker to rewrite them.
 ***********************/
 
 function getURL() {
-   return loc = location.protocol+location.host+location.pathname;
+   return loc = location.protocol+'//'+location.host+location.pathname;
 }
 
 function format_num(num,blanks) {
@@ -1270,18 +1270,29 @@ function userEdited() {
    return result;
 }
 
+// works out the folder where animations (tutorials) are kept
+// needs some thought
 function folderToRun() {
  return location.protocol + '//' + location.host + folderPart(location.pathname) + (isServer()?folderPart(xmlDoc.url):AnimationsFolder);
 }
 
+// keeps only path (everything up to the last '/') of filename
+// removing the leading ../ if we are in edit mode
 function folderPart(str) {
-   return str.slice(0,lastIndexOf('/',str));
+   str = str.slice(0,lastIndexOf('/',str));
+   if (editorIsOn && str.slice(0,3)=='../') {
+      str = str.slice(3,str.length);
+   }
+   return str;
 }
 
+// strip path and extension from filename
 function filePart(str) {
-   return str.slice(lastIndexOf('/',str),str.length);
+   str = str.slice(lastIndexOf('/',str),str.length);
+   return str.slice(0,lastIndexOf('.',str)-1);
 }
 
+// clean file name by replacing all the \ with /
 function sanitize_fileName(f) {
   return replaceAll(f,'\\','/');
 }
@@ -1378,37 +1389,23 @@ function rateResponse() {
 }
 
 function monitorUsage(currentCommand) {
-   if (document.el_icon) {
-      if (fileUseID=='' || currentCommand=='load') fileUseID=generateFileUseID();
-      q = new queryString();
-      q.add('command',currentCommand);
-      q.add('fileuseid',fileUseID);
-	   if (editorIsOn) q.add('editor','on');
-      var file = qString.value('file');
-      if (file != '') {
-         q.add('fpath',folderPart(file));
-         q.add('fname',filePart(file));
-      }
-      var monitorString = q.generate();
-      if (qString.full!='') monitorString += qString.full;
-      //alert(monitorString);
-
-      var monitorURL = cgiURL+'monitor_usage.php?'+monitorString;
-      var monitorRequest = GETRequest( monitorURL, function(){} );
+   q = new queryString();
+   q.add('command',currentCommand);
+   if (loadID!='' && currentCommand!='load') q.add('loadid',loadID);
+   if (editorIsOn) q.add('editor','on');
+   var file = qString.value('file');
+   if (file != '') {
+      q.add('fpath',folderPart(file));
+      q.add('fname',filePart(file));
    }
-}
+   if (qString.full!='') q.add('query', qString.full);
+   var monitorString = q.generate();
 
-function generateFileUseID() {
-   var hexChars = "0123456789ABCDEF";
-   var randNum = 0;
-   var result = "";
+   //alert(monitorString);
 
-   for (var i=0; i<27; i++) {
- 	   randNum = Math.floor(Math.random()*16);
-      result += hexChars.charAt(randNum);
-   }
-
-   return result;
+   var monitorURL = cgiURL+'monitor_usage.php?'+monitorString;
+   // response function returns the new loadID
+   var monitorRequest = GETRequest( monitorURL, function(){loadID = parseInt(this.responseText);} );
 }
 
 function disablePlayer() { 
