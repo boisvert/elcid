@@ -12,3 +12,6 @@
 
 loggedin = <?php echo ($loggedin)?"true":"false"; ?>;
 userName = "<?php echo ($loggedin)?$username:""; ?>";
+
+<?php exit(); ?>
+
