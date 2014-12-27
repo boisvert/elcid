@@ -61,7 +61,6 @@ close_db(); // on ferme la connexion
 
 ?>
 
-<script type="text/javascript" src="elcid/file_use_id"> </script>
 <script type="text/javascript" src="images/behaviour.js"> </script>
 
 <script LANGUAGE="JavaScript" src="images/loggedin.php" type="text/javascript"> </script>
