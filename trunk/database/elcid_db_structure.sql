@@ -38,7 +38,7 @@ CREATE TABLE command (
 -- Table structure for table 'file'
 --
 
-CREATE TABLE `file` (
+CREATE TABLE file (
   file_id int(11) NOT NULL AUTO_INCREMENT,
   file_date date NOT NULL,
   file_author varchar(255) DEFAULT NULL,
@@ -155,7 +155,7 @@ CREATE TABLE tag (
 -- Table structure for table 'user'
 --
 
-CREATE TABLE `user` (
+CREATE TABLE user (
   country varchar(255) NOT NULL DEFAULT '',
   e_mail varchar(255) NOT NULL DEFAULT '',
   first_name varchar(255) NOT NULL DEFAULT '',

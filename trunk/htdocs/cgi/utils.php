@@ -7,9 +7,10 @@ if (!isset($_type)) {
    $_type = 'application/xhtml+xml';
 }
 
-if (session_status() == PHP_SESSION_NONE) {
+// 26.12.2014 - 000webhost doesn't yet support this PHP 5.4 technique
+//if (session_status() == PHP_SESSION_NONE) {
     session_start();
-}
+//}
 
 require('security.php');
 
@@ -25,7 +26,7 @@ if ($loggedin) {
 
 // any errors or debug messages will be logged in this file
 // choose your file.
-$_log_file = '/error.txt';
+$_log_file = 'error.txt';
 
 if (!isset($debug)) {
    $debug = false;
