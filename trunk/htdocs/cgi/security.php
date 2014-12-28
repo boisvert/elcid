@@ -1,7 +1,7 @@
 <?php
 
 if ($_type=='application/xhtml+xml') {
-   echo '<script type="text/javascript" src="/elcid/config.js"></script>';
+   echo '<script type="text/javascript" src="/config.js"></script>';
 }
 
 $server = 'localhost';

@@ -61,6 +61,8 @@ close_db(); // on ferme la connexion
 
 ?>
 
+<script type="text/javascript" src="/config.js"> </script>
+
 <script type="text/javascript" src="images/behaviour.js"> </script>
 
 <script LANGUAGE="JavaScript" src="images/loggedin.php" type="text/javascript"> </script>
