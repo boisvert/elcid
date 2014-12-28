@@ -60,7 +60,7 @@ if (isset($_POST['search'])) {
 
 </head>
 
-<body onload="monitor();">
+<body>
 
 <?php include("header.php"); ?>
 

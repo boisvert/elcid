@@ -71,7 +71,7 @@ if(isset($_POST['email'])) {
 
 </head>
 
-<body onload="monitor();">
+<body>
 
 <?php include("header.php"); ?>
 

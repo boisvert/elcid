@@ -4,7 +4,7 @@
 
 <title>eL-CID - Register</title>
 
-<script type="text/javascript" src="/elcid/config.js"> </script>
+<script type="text/javascript" src="/config.js"> </script>
 
 <script language="javascript">
 
