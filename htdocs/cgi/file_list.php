@@ -1,5 +1,8 @@
 <?php
 
+  // debug mode: uncomment to get debugging information
+  //$debug = true;
+
   // definitions of database name, user, password
   require_once('utils.php');
 
@@ -54,18 +57,20 @@ function setTagsResponse() {
    open_db();
 
    // Make the query
-   $sql  = "SELECT file.*, count(1) AS popularity, avg(rate) as stars FROM file";
-   $sql .= " LEFT JOIN file_use ON (file.file_id = file_use.file_id)";
+   $sql  = "SELECT file.*, count(1) AS popularity, avg(rate) as stars,";
+   $sql .= " (select GROUP_CONCAT(tag SEPARATOR '; ' ) from file_tag where file_tag.file_id=file.file_id) as tagset";
+   $sql .= " FROM file LEFT JOIN file_use ON (file.file_id = file_use.file_id)";
    $sql .= " LEFT JOIN file_rating ON (file.file_id = file_rating.file_id)";
 
    if ($tag == "")
+   {
       $sql .= " WHERE (file_active=1)";
+   }
    else
    {
       query_db("UPDATE tag SET tag_requests = tag_requests+1 WHERE tag.tag='$tag'");
       $sql .= " INNER JOIN file_tag ON (file.file_id = file_tag.file_id)";
-	   $sql .= " INNER JOIN tag ON ( tag.tag = file_tag.tag)";
-      $sql .= " WHERE(file_active=1) AND (tag.tag='$tag')";
+      $sql .= " WHERE (file_active=1) AND (file_tag.tag='$tag')";
    }
 
    $sql .= " GROUP BY file.file_id ORDER BY popularity DESC;";
@@ -83,15 +88,9 @@ function setTagsResponse() {
       $file = $record["file_path"]."/".$record["file_name"].".xml";
       $url = $htURL.'run/elcid.html?file='.URLEncode($file);
       $js = "runTutorial('$file'); return false;";
-
-      $sql2  = "select GROUP_CONCAT( tag.tag SEPARATOR '; ' ) from tag";
-	   $sql2 .= " INNER JOIN file_tag ON tag.tag = file_tag.tag";
-      $sql2 .= " WHERE file_id=".$file_id;
-	   $tags = query_one_item($sql2);
-      if ($tags==false) 
-		   $tagcell = "no tags";
-	   else
-			$tagcell = $tags;
+	   $tagset = $record["tagset"];
+      if (!$tagset) 
+		   $tagset = "no tags";
       ?>
 	      <div class="panel panel-default" style="display:inline-block; margin:5px;">
 	         <h3><a onClick="<?php echo $js;?>" class="label label-primary"> <!--href='<?php echo $url;?>' -->
@@ -103,7 +102,7 @@ function setTagsResponse() {
 		      <?php echo "<strong>Description: </strong>" .$record["file_description"];?><br />
             <strong>Tags: </strong>
             <span id="k<?php echo $file_id;?>" class="tags" onClick="editTags(this);" onMouseover="hitags(this);" onMouseout="lotags(this)">
-			      <?php echo $tagcell;?>
+			      <?php echo $tagset;?>
             </span>
 	      </div>
 		<?php

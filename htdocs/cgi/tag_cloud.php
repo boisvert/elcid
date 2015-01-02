@@ -11,9 +11,9 @@
 
   // Make the query
   $sql = "SELECT tag.tag, Count(1) AS tag_use, tag_requests";
-  $sql = $sql." FROM tag, file_tag, file";
-  $sql = $sql." WHERE tag.tag = file_tag.tag AND file.file_id=file_tag.file_id AND file_active=1";
-  $sql = $sql." GROUP BY tag.tag ORDER BY tag_use DESC;";
+  $sql .= " FROM tag, file_tag, file";
+  $sql .= " WHERE tag.tag = file_tag.tag AND file.file_id=file_tag.file_id AND file_active=1";
+  $sql .= " GROUP BY tag.tag ORDER BY tag_use DESC;";
 
   
   $result = query_db($sql);

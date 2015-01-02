@@ -22,11 +22,11 @@ if ($loadid = query_one_item("SELECT max(load_id)+1 FROM page_load WHERE session
 else {
    debug_msg("Session not yet recorded. Recording now.");
    $client_ip = $_SERVER['REMOTE_ADDR'];
-   $remote_host = $_SERVER['REMOTE_HOST'];
+   $remote_host = isset($_SERVER['REMOTE_HOST'])?$_SERVER['REMOTE_HOST']:'unknown';
    $client_desc = $_SERVER['HTTP_USER_AGENT'];
 
    $sql = "INSERT INTO";
-   $sql .= " session (client_description, client_ip, client_host_name, session_date, session_time, session_id)";
+   $sql .= " session (client_description, client_ip, session_date, session_time, session_id)";
    $sql .= " VALUES ('$client_desc','$client_ip','$remote_host','$date','$time','$session_id')";
 
    query_db($sql);
