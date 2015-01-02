@@ -31,7 +31,14 @@ if (isset($_GET["tag"])) {
 
 <body>
 
-<?php include("header.php"); ?>
+<?php
+
+  // debug mode: uncomment to get debugging information
+  //$debug = true;
+  
+include("header.php");
+
+?>
 
 <div class="container">
 
