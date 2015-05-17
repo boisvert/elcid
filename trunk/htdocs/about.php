@@ -30,12 +30,12 @@ You are here:
    <h2>Table of Contents</h2>
 
    <div class="list-group">
-		<a href="#What is eL-CID?" class="list-group-item">What is eL-CID?</a>
-		<a href="#How does it work?" class="list-group-item">How does it work?</a>
-		<a href="#I'd like to make tutorials" class="list-group-item">I'd like to make tutorials</a>
-		<a href="#It doesn't work in my browser" class="list-group-item">It doesn't work in my browser</a>
-		<a href="#Can I change the system or make my own version?" class="list-group-item">Can I change the system or make my own version?</a>
-	</div>
+<a href="#What is eL-CID?" class="list-group-item">What is eL-CID?</a>
+<a href="#How does it work?" class="list-group-item">How does it work?</a>
+<a href="#I'd like to make tutorials" class="list-group-item">I'd like to make tutorials</a>
+<a href="#It doesn't work in my browser" class="list-group-item">It doesn't work in my browser</a>
+<a href="#Can I change the system or make my own version?" class="list-group-item">Can I change the system or make my own version?</a>
+   </div>
 
 </div>
 

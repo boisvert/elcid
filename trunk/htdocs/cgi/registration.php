@@ -63,8 +63,8 @@ function register() {
       var l = document.getElementById("lastname").value;
       var e = document.getElementById("email").value;
       var c = document.getElementById("country").value;
-	  valid = nonEmpty(u) && nonEmpty(f) && nonEmpty(l) && nonEmpty(e) && nonEmpty(c);
-	  if (valid) {
+     valid = nonEmpty(u) && nonEmpty(f) && nonEmpty(l) && nonEmpty(e) && nonEmpty(c);
+     if (valid) {
          var params = "user=" + encodeURI( u ) +
                       "&firstname=" + encodeURI( f ) +
                       "&lastname=" + encodeURI( l ) +
@@ -74,14 +74,14 @@ function register() {
                       "&country=" + encodeURI( c );
          regRequest = opener.POSTRequest(cgiURL+'register.php', params, regResponse);
       }
-	  else
-	  {
-		  message("Please check the registration form");
-	  }
+     else
+     {
+  message("Please check the registration form");
+     }
    }
    else {
-	  message ("The passwords are not identical"); 
-   }	   
+     message ("The passwords are not identical"); 
+   }      
 }
 
 function regResponse() {
@@ -96,8 +96,8 @@ function regResponse() {
 }
 
 function nonEmpty(str) {
-	result = (str != "" )
-	return result;
+   result = (str != "" )
+   return result;
 }
 
 </script>
@@ -115,7 +115,7 @@ function nonEmpty(str) {
    <td>Password: </td>
    <td>
       <input type="password" id="pass">
-	  <input type="button" value="Login" onClick= "login();">
+     <input type="button" value="Login" onClick= "login();">
    </td>
 </tr>
 <tr> <td>Repeat password: </td> <td><input type="password" id="pass_again"></td> </tr>

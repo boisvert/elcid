@@ -1,114 +1,80 @@
-<?php
-// uncomment to display debug info
-//$debug = true;
+<html>
 
-require_once("../cgi/utils.php");
+<head>
 
-$code = unescape($_POST['code']);
+<script language="javaScript">
 
-if ($code=='') {
-   debug_msg('No PHP Code found. Recovering session.');
-   if (!isset($_SESSION['file'])) bow_out("Nothing to execute.");
-   // file is already saved.
-   $fname = $_SESSION['file'];
+function php_redirect() {
+   var params = "code=" + encodeURI( opener.codeToRun() );
+   var postdata = "<?php echo file_get_contents("php://input"); ?>";
+   if (postdata.length>0) params = params+'&'+postdata;
+   var getdata = "<?php echo file_get_contents("php://input"); ?>";
+   if (getdata.length>0) params = params+'&'+getdata.slice(1);
+   fiddleRequest = POSTRequest('http://phpfiddle.org/api/run/code/json', params, phpFiddleResponse); 
 }
-else {
-   // there is new code
-   debug_msg('PHP Code found. Processing '.strlen($code).' characters');
-   safe_referrer("run/runphpfiddle.html", "If you wish to use a PHP remote execution tool, consider PHPfiddle, Google appEngine or a free PHP host such as 000webhost.");
-   debug_msg('Making a file.');
-   $fname = session_id();
-   // todo: if the file has not been manually changed by the user,
-   // there is no need for local save, as local save is for security monitoring purposes.
-   // remote save is sufficient
-   $userEdited = unescape($_POST['userEdited']);
-   debug_msg("User edited file: $userEdited");
-   if ($userEdited=='yes') {
-      debug_msg('Saving for monitoring.');
-      save_file($code,$fname);
+
+function POSTRequest(url, parameters, responseProcess) {
+
+   // alert('Sending to:\n\t'+url+'\n\t'+parameters);
+   
+   var request = false;
+
+   if (window.XMLHttpRequest) { // Mozilla, Safari, Opera
+      request = new XMLHttpRequest();
+      if (request.overrideMimeType) {
+         // set type accordingly to anticipated content type
+         // eg 'text/xml' or 'text/html'
+         request.overrideMimeType('text/ascii');
+      }
    }
-   $_SESSION['file']=$fname;
-   remote_save($code,$fname);
-}
-
-if (!isset($fname)) bow_out('Nothing to execute.');
-
-// create a URL to use for PHPFiddle
-debug_msg('PHP file is available:'.$fname);
-debug_msg('Execution results:');
-// and send to run
-echo fiddle_exec($fname);
-
-// save file function.
-// alternatively, could the files be saved on the cloud, e.g. dropbox?
-function save_file(&$code,$fname) {
-   // name of file is sessionID-YYMMDDHHMMSS
-   // eventually should be author-filename/sessionID-YYMMDDHHMMSS
-   // to allow easy safety monitoring
-   $fmonitorname = $fname.date('-YmdHis');
-   debug_msg('File name:'.$fmonitorname);
-   // $fdir = $htURL."run/phpbin/";
-   $fh = fopen('phpbin/'.$fmonitorname, 'w') or bow_out("can't open file");
-   fwrite($fh, $code);
-   fclose($fh);
-   debug_msg("Save succeeded");
-}
-
-function remote_save(&$code,$fname) {
-   global $remotePHP;
-   $url = $remotePHP."/save.php";
-   // name of remote file is sessionID
-   // no other data needed: on the contrary, old unused files should be overwritten
-   $data = array(
-      'fname' => $fname,
-      'code' => $code,
-   );
-   // use key 'http' even if you send the request to https://...
-   $options = array(
-      'http' => array(
-         'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-         'method'  => 'POST',
-         'content' => http_build_query($data),
-      ),
-   );
-   $context  = stream_context_create($options);
-   debug_msg("Saving $url");
-   $result = file_get_contents($url, false, $context);
-
-   return $result;
-}
-
-function fiddle_exec($fname) {
-   global $remotePHP;
-   $url = $remotePHP."/go.php";
-   if ($_SERVER["QUERY_STRING"]) {
-      $url .= $url.'?'.$_SERVER["QUERY_STRING"];
+   else if (window.ActiveXObject) { // older IE
+      try {
+         request = new ActiveXObject("Msxml2.XMLHTTP");
+     } catch (e) {
+        try {
+           request = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (e) {}
+     }
    }
-   $data = $_POST;
-   $data['fname'] = $fname;
-
-   // use key 'http' even if you send the request to https://...
-   $options = array(
-      'http' => array(
-         'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-         'method'  => 'POST',
-         'content' => http_build_query($data),
-      ),
-   );
-   $context  = stream_context_create($options);
-   debug_msg("Executing $url");
-   $result = file_get_contents($url, false, $context);
-
-   return $result;
-}
-
-function safe_referrer($file, $msg) {
-   global $htURL;
-   if ($_SERVER['HTTP_REFERER'] != $htURL.$file) {
-      echo "Not allowed.<br />";
-      bow_out($msg);
+   
+   if (!request) {
+      alert('Cannot create XMLHTTP instance'); // Kludge this should raise an error
+   } else {
+      request.open('POST', url, true);
+      request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      request.setRequestHeader("Content-length", parameters.length);
+      request.setRequestHeader("Connection", "close");
+      request.send(parameters);
+      request.onreadystatechange = responseProcess;
    }
-   debug_msg('Referrer correct.');
+   return request;
 }
 
-?>
+function phpFiddleResponse() {
+   if (fiddleRequest.readyState == 4) {
+      if (fiddleRequest.status == 200) {
+         var data = JSON.parse(fiddleRequest.responseText);
+         // alert(fiddleRequest.responseText);
+         var txt = (data.result)?data.result:"Execution error:"+data.error;
+         resDiv = document.getElementById("fiddle");
+         // alert(txt);
+         resDiv.innerHTML = txt;
+      }
+      else {
+         alert('PHP Fiddle cannot execute the code.\nHTTP Status: '+fiddleRequest.status+'\nResponse:\n'+fiddleRequest.responseText);
+      }
+   }
+}
+
+</script>
+
+</head>
+
+<body onload="php_redirect()">
+
+<div id="fiddle">
+</div>
+
+</body>
+
+</html>

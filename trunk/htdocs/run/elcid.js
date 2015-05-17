@@ -91,7 +91,7 @@ var temp_chars='';
 
 var browser=getBrowser();
     // for browser-dependent display details like font sizes 
-	 // other javascript compatibility problems are dealt with by testing functionality
+    // other javascript compatibility problems are dealt with by testing functionality
 
 var controls;
     // the control panel
@@ -206,7 +206,7 @@ function XMLdocument () {
       this.request = new window.XMLHttpRequest();
       with (this) {
          request.onreadystatechange = function() {
-			   if (request.readyState == 4) {
+      if (request.readyState == 4) {
                main = request.responseXML;
                ready(); 
             }
@@ -214,18 +214,18 @@ function XMLdocument () {
          load = function(address) {
             url = address;
             request.open("GET",url+"?random="+Math.random(),true);
-                                       	         // random number so the xml file is not loaded from the cache
+                                                   // random number so the xml file is not loaded from the cache
             request.send(null);
          }
-		   setXML = function(text) {
-		      var parser = new DOMParser();
-			   main = parser.parseFromString(text,"text/xml");
-			   setTimeout("xmlDoc.ready();", 100);
-		   }
-		   ready = function() {
-		      parseError = new checkForParseError(main.documentElement); 
-			   onload();
-		   }
+   setXML = function(text) {
+      var parser = new DOMParser();
+      main = parser.parseFromString(text,"text/xml");
+      setTimeout("xmlDoc.ready();", 100);
+   }
+   ready = function() {
+      parseError = new checkForParseError(main.documentElement); 
+      onload();
+   }
       }
    }
    else if (window.ActiveXObject) { // older IE
@@ -240,15 +240,15 @@ function XMLdocument () {
             url = address;
             main.load(url);
          }
-		   setXML = function(text) {
-		      main.async = "false";
-			   main.loadXML(text);
-			   setTimeout("xmlDoc.ready();", 100);
-		   }
-		   ready = function() {
-		      parseError = main.parseError;
-			   onload();
-		   }
+   setXML = function(text) {
+      main.async = "false";
+      main.loadXML(text);
+      setTimeout("xmlDoc.ready();", 100);
+   }
+   ready = function() {
+      parseError = main.parseError;
+      onload();
+   }
       }
    }
 
@@ -637,7 +637,7 @@ function width(win) {
    if (win.innerHeight)
       width = win.innerWidth; // all except Explorer
    else if (win.document.documentElement && win.document.documentElement.clientHeight)
-      width = win.document.documentElement.clientWidth;	// Explorer 6 Strict Mode
+      width = win.document.documentElement.clientWidth;   // Explorer 6 Strict Mode
    else if (win.document.body)
       width = win.document.body.clientWidth; // other Explorers
 
@@ -788,12 +788,12 @@ function elcid_copy(step) {
       // loop to get the lines
       clipboard.lines[0] = area.lines[y].slice(x,area.lines[y].length);
       for (var i=1; i<area.selection_lines; i++) {
-			   clipboard.lines[i] = area.lines[y+i];
-			}
+      clipboard.lines[i] = area.lines[y+i];
+   }
       clipboard.chars = area.lines[y+selection_lines].slice(0,area.selection_chars);
    } else {
       clipboard.chars = area.lines[y].slice(x,area.selection_chars+x);
-	 }
+    }
    setTimeout('update();',100);
 
 }
@@ -1195,7 +1195,7 @@ function isServer() {
 function loadCommandClient(filename) {
    if (filename!='') {
       filename = sanitize_fileName(filename);
-	   filename = filename.slice(lastIndexOf('/',filename),filename.length);
+      filename = filename.slice(lastIndexOf('/',filename),filename.length);
       filename = AnimationsFolder+filename;
       if (editorIsOn) filename = '../'+filename;
       location=getURL()+'?file='+encodeURIComponent(filename);
@@ -1222,9 +1222,9 @@ function loadfile() {
       filename = sanitize_fileName(filename);
       show_stars(filename);
       if (loggedin) {
-	     document.el_icon.alt="Rate this tutorial";
+        document.el_icon.alt="Rate this tutorial";
       }
-	  else {
+     else {
          document.el_icon.alt="Login to rate this tutorial";
       }
       xmlDoc.load(filename);
@@ -1324,7 +1324,7 @@ function showComments() {
    document.images.iterateTab.src=iterateTabOff.src
    document.images.commentsTab.src=commentsTabOn.src
    document.images.editTab.src=editTabOff.src
-   disablePlayer()		 
+   disablePlayer() 
 }
 
 function showIterate() {
@@ -1337,7 +1337,7 @@ function showIterate() {
 
 function rateTutorial() {
    if (loggedin) {
-	  document.getElementById("rates").style.visibility='visible';
+     document.getElementById("rates").style.visibility='visible';
    }
 }
 
@@ -1353,7 +1353,7 @@ function GETRequest(url, responseProcess) {
    if (window.XMLHttpRequest) { // Mozilla, Safari, Opera
       request = new XMLHttpRequest();
    }
-	 else if (window.ActiveXObject) { // IE
+    else if (window.ActiveXObject) { // IE
       try {
          request = new ActiveXObject("Msxml2.XMLHTTP");
      } catch (e) {
@@ -1376,7 +1376,7 @@ function GETRequest(url, responseProcess) {
 function rateResponse() {
    if (this.readyState == 4) {
       if (this.status == 200) {
-	     // all good
+        // all good
         // alert('rating recorded:\n'+this.responseText);           
       }
       else {
@@ -1384,7 +1384,7 @@ function rateResponse() {
       }
       document.getElementById('rates').style.visibility='hidden';
       show_stars(xmlDoc.url);
-	   document.el_icon.alt='You have rated this tutorial';
+      document.el_icon.alt='You have rated this tutorial';
    }
 }
 
