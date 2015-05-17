@@ -26,7 +26,7 @@ else {
    $client_desc = $_SERVER['HTTP_USER_AGENT'];
 
    $sql = "INSERT INTO";
-   $sql .= " session (client_description, client_ip, session_date, session_time, session_id)";
+   $sql .= " session (client_description, client_ip, client_host_name, session_date, session_time, session_id)";
    $sql .= " VALUES ('$client_desc','$client_ip','$remote_host','$date','$time','$session_id')";
 
    query_db($sql);
@@ -109,7 +109,7 @@ close_db(); // on ferme la connexion
 </div>
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-	<div class="navbar-inner">
+   <div class="navbar-inner">
       <div class="container">
          <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">

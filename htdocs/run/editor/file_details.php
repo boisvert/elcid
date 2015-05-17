@@ -45,48 +45,48 @@ if ($loggedin) {
 
    if ($record = mysqli_fetch_array($result)) {
 
-	   $sql2 = "select tag from file_tag WHERE file_id=".$file_id;
-	   $tags = query_db($sql2);
+      $sql2 = "select tag from file_tag WHERE file_id=".$file_id;
+      $tags = query_db($sql2);
 
       if ($tag = mysqli_fetch_array($tags)) {
          $tagcell = $tag["tag"];
-	      while ($tag = mysqli_fetch_array($tags)) {
+         while ($tag = mysqli_fetch_array($tags)) {
             $tagcell = $tagcell."; ".$tag["tag"];
-	      }
+         }
       } else {
          $tagcell = "";
-	   }
+      }
 
 ?>
-	   <form name="filedetails" action="file_manager.php"
-	         onSubmit="opener.focus();" onCancel="opener.focus();" method="post" >
-		  <b>File details</b> <br />
-	      <input type="hidden" name="key" value="<?php echo $file_id;?>" />
-	      <table align="top">
-		    <tr>
-			<td>Name:</td> <td><input type="text" name="name" value="<?php echo $record["file_name"];?>" disabled="true" /> </td>
-			</tr>
-		    <tr>
-			<td>Owner:</td> <td><?php echo $record["file_author"];?> </td>
-			</tr>
-			<tr>
-		    <td>Date:</td> <td><input type="text" name="date" value="<?php echo $record["file_date"];?>" /> </td>
-			</tr>
-			<tr>
-		    <td>Description:</td> <td><textarea name="description"><?php echo $record["file_description"];?></textarea> </td>
-			</tr>
-			<tr>
+      <form name="filedetails" action="file_manager.php"
+            onSubmit="opener.focus();" onCancel="opener.focus();" method="post" >
+  <b>File details</b> <br />
+         <input type="hidden" name="key" value="<?php echo $file_id;?>" />
+         <table align="top">
+    <tr>
+   <td>Name:</td> <td><input type="text" name="name" value="<?php echo $record["file_name"];?>" disabled="true" /> </td>
+   </tr>
+    <tr>
+   <td>Owner:</td> <td><?php echo $record["file_author"];?> </td>
+   </tr>
+   <tr>
+    <td>Date:</td> <td><input type="text" name="date" value="<?php echo $record["file_date"];?>" /> </td>
+   </tr>
+   <tr>
+    <td>Description:</td> <td><textarea name="description"><?php echo $record["file_description"];?></textarea> </td>
+   </tr>
+   <tr>
             <td>Tags:</td> <td><textarea name="tags"><?php echo $tagcell;?></textarea> </td>
-			</tr>
-			<tr>
-		  </table>
+   </tr>
+   <tr>
+  </table>
           <input type="checkbox" name="public" value="true" <?php echo ($record["file_active"])?"checked":"" ?> /> Publicly available
-		  <blockquote>
-	        <input type="submit" value="OK" /> <input type="reset" value="Cancel" />
-		  </blockquote>
+  <blockquote>
+           <input type="submit" value="OK" /> <input type="reset" value="Cancel" />
+  </blockquote>
        </form>
 <?php
-	} // finish showing the files
+   } // finish showing the files
 
   close_db();  // on ferme la connexion
 }

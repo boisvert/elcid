@@ -45,12 +45,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 $qs = $_SERVER["QUERY_STRING"];
   
 $sql = "INSERT INTO";
-$sql .= " session (load_id, session_id, date, time, url, query_string, referrer)";
+$sql .= " page_load (load_id, session_id, date, time, url, query_string, referrer)";
 $sql .= " VALUES ('$fileuseid','$session_id','$date','$time','$qs','$referrer')";
 
 query_db($sql);
-
-
 
 close_db(); // on ferme la connexion
 

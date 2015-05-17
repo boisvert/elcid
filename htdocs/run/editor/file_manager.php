@@ -58,15 +58,15 @@ function togglePublic(fileKey, public) {
 function setPublicResponse(req) {
    // alert("Request readyState: " + parent.httpRequest.readyState);
    if (req.readyState == 4) {
-	   // alert("Response status: " + parent.httpRequest.status);
+      // alert("Response status: " + parent.httpRequest.status);
       if (req.status == 200) {
          window.location=window.location+" ";
-		 alert(req.responseText);
+ alert(req.responseText);
       }
       else {
-		 msg = 'There was a problem changing the file status.\nCheck that you are logged in\n';
+ msg = 'There was a problem changing the file status.\nCheck that you are logged in\n';
          alert(msg+req.responseText);
-	  }
+     }
    }
 }
 
@@ -74,7 +74,7 @@ function detailsDialog(fileKey) {
    var winloc="file_details.php?file="+fileKey;
    var winprop = 'height=500,width=450,location=no,scrollbars=no,menu=no,toolbar=no,status=no,resizable=yes';
    var w = window.open(winloc, 'file', winprop);
-	w.focus();
+   w.focus();
 }
 
 </script>
@@ -83,19 +83,19 @@ function detailsDialog(fileKey) {
 
 <body>
 
-	<?php 
+   <?php 
    
    // Find the sort order
-	if (isset($_GET["msg"]))
+   if (isset($_GET["msg"]))
       echo $_GET["msg"]."<br/>";
 
    if (isset($_GET["order"]))
-	   $order = $_GET["order"];
+      $order = $_GET["order"];
    else
       $order = "visits";
 
    if (isset($_GET["dir"]))
-	   $dir = $_GET["dir"];
+      $dir = $_GET["dir"];
    else
       $dir = "desc";
    
@@ -117,7 +117,7 @@ function detailsDialog(fileKey) {
       $q .= "'>$column</a>";
       return $q;      
    }
-	
+   
    // Shows a link to recover file if a copy of the file exists in the ./temp directory
    function recovery($file,$path) {
       $url = $path."/temp/$file.xml";
@@ -129,8 +129,8 @@ function detailsDialog(fileKey) {
          ?>
          Recover:
          <a href='<?php echo $url;?>' onClick='<?php echo $js;?>'>
-			   <?php echo $file;?>
-		   </a>
+      <?php echo $file;?>
+   </a>
          <?php
       }
       else {
@@ -142,14 +142,14 @@ function detailsDialog(fileKey) {
    <!-- file list -->
    <table class='filemanager' cellspacing='1' cellpadding='1'>
 
-	   <tr>
-		   <td><?php echo sort_header('active');?></td>
-		   <td><?php echo sort_header('name');?></td>
-		   <td><?php echo sort_header('date');?></td>
-		   <td><?php echo sort_header('visits');?></td>
-		   <td>Details</td>
+      <tr>
+   <td><?php echo sort_header('active');?></td>
+   <td><?php echo sort_header('name');?></td>
+   <td><?php echo sort_header('date');?></td>
+   <td><?php echo sort_header('visits');?></td>
+   <td>Details</td>
          <td bgcolor="ffffff"> <!--recovery column--> </td>
-	   </tr>
+      </tr>
 
 <?php
 
@@ -162,26 +162,26 @@ if (isset($_POST["key"]) && isset($_POST["date"])) {
    // Details to update
    
    $d = $_POST["date"];
-	$sets = "file_date='$d'";
+   $sets = "file_date='$d'";
    
-	if (isset($_POST["public"])) {
-		$sets .= ", file_active=1";
-	}
+   if (isset($_POST["public"])) {
+$sets .= ", file_active=1";
+   }
    else {
-		$sets .= ", file_active=0";
-	}
-	// also need file_name='$_POST["name"]',
-	// but not implemented because needs renaming the file itself
+$sets .= ", file_active=0";
+   }
+   // also need file_name='$_POST["name"]',
+   // but not implemented because needs renaming the file itself
 
    if (isset($_POST["description"])) {
       $d = $_POST["description"];
-		$sets .= ", file_description='$d'";
-	}
+$sets .= ", file_description='$d'";
+   }
 
    $key=$_POST["key"];
  
    $sql = "UPDATE file SET $sets WHERE file_id=$key AND file_author='$username';";
-	query_db($sql);
+   query_db($sql);
 
    // update file classification tags
    $tags = $_POST["tags"];
@@ -195,16 +195,16 @@ if (isset($_POST["key"]) && isset($_POST["date"])) {
    $tagsArray = explode(";",$tags);
 
    foreach ($tagsArray as $tag) {
-	   $tag=trim($tag);
-	   if ($tag!="")
+      $tag=trim($tag);
+      if ($tag!="")
       {
          $sql = "INSERT INTO tag(tag,tag_creation_date,tag_author) VALUES ('$tag',now(),'$username')";
 
-	      query_db($sql);
+         query_db($sql);
 
          $sql = "INSERT INTO file_tag VALUES ($key,'$tag','$username')";
          query_db($sql);
-		} // one tag
+} // one tag
    } // each tag
 } // File updated if needed
 
@@ -219,35 +219,35 @@ $result = query_db($sql);
 
 while ($record = mysqli_fetch_array($result)) {
    $file_id = $record["file_id"];
-	$file = $record["name"];
+   $file = $record["name"];
    $path = "../".$record["path"];
    $url = "$path/$file.xml";
    $js = 'opener.loadCommandServer("'.$url.'"); return false;';
 ?>
       <tr onMouseover="hifile(this);" onMouseout="lofile(this);" />
-		<td><form>
-		   <input type="checkbox" onChange="togglePublic(this.id, this.checked);"
-		          id="<?php echo $file_id;?>" <?php echo ($record["active"])?"checked":"" ?> / >
-		</form></td>
-		<td>
-	      <a href='<?php echo $url;?>' onClick='<?php echo $js;?>'>
-			   <?php echo $file;?>
-		   </a>
-		</td>
-		<td>
-		   <?php echo $record["date"];?>
-		</td>
-		<td>
-		   <?php echo $record["visits"];?>
-		</td>
-		<td>
-	      <img src="../../images/pencil.png" alt="Edit details"
-		        id="<?php echo $file_id;?>" onClick="detailsDialog(this.id);" / >
-	   </td>
+<td><form>
+   <input type="checkbox" onChange="togglePublic(this.id, this.checked);"
+          id="<?php echo $file_id;?>" <?php echo ($record["active"])?"checked":"" ?> / >
+</form></td>
+<td>
+         <a href='<?php echo $url;?>' onClick='<?php echo $js;?>'>
+      <?php echo $file;?>
+   </a>
+</td>
+<td>
+   <?php echo $record["date"];?>
+</td>
+<td>
+   <?php echo $record["visits"];?>
+</td>
+<td>
+         <img src="../../images/pencil.png" alt="Edit details"
+        id="<?php echo $file_id;?>" onClick="detailsDialog(this.id);" / >
+      </td>
       <td bgcolor="ffffff">
          <?php recovery($file,$path); ?>
       </td>
-	   </tr>
+      </tr>
 <?php
    $total++;
 } // finish showing the files

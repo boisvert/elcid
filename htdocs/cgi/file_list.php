@@ -24,8 +24,8 @@ function editTags(elt) {
    if (parent.loggedin) {
       var tags = elt.innerHTML.trim();
       if (tags == 'no tags') tags = '';
-	   newTags = prompt("Edit the tags:", tags.trim());
-	   if (newTags!=null && newTags!=tags) setTags(elt.id, newTags);
+      newTags = prompt("Edit the tags:", tags.trim());
+      if (newTags!=null && newTags!=tags) setTags(elt.id, newTags);
    }
    else {
       alert("Login or register to edit the tags.");
@@ -84,30 +84,30 @@ function setTagsResponse() {
    while ($record = mysqli_fetch_array($result)) {
 
       $file_id = $record["file_id"];
-	   $file_author = $record["file_author"];
+      $file_author = $record["file_author"];
       $file = $record["file_path"]."/".$record["file_name"].".xml";
       $url = $htURL.'run/elcid.html?file='.URLEncode($file);
       $js = "runTutorial('$file'); return false;";
-	   $tagset = $record["tagset"];
+      $tagset = $record["tagset"];
       if (!$tagset) 
-		   $tagset = "no tags";
+   $tagset = "no tags";
       ?>
-	      <div class="panel panel-default" style="display:inline-block; margin:5px;">
-	         <h3><a onClick="<?php echo $js;?>" class="label label-primary"> <!--href='<?php echo $url;?>' -->
-			      <?php echo $record["file_name"];?>
-		    	</a></h3>
-			   <br />
-		      <?php echo "<strong>Added on: </strong>" .$record["file_date"];?> <br />
-		      <?php echo "<strong>By: </strong>".$record["file_author"];?><br />
-		      <?php echo "<strong>Description: </strong>" .$record["file_description"];?><br />
+         <div class="panel panel-default" style="display:inline-block; margin:5px;">
+            <h3><a onClick="<?php echo $js;?>" class="label label-primary"> <!--href='<?php echo $url;?>' -->
+         <?php echo $record["file_name"];?>
+       </a></h3>
+      <br />
+      <?php echo "<strong>Added on: </strong>" .$record["file_date"];?> <br />
+      <?php echo "<strong>By: </strong>".$record["file_author"];?><br />
+      <?php echo "<strong>Description: </strong>" .$record["file_description"];?><br />
             <strong>Tags: </strong>
             <span id="k<?php echo $file_id;?>" class="tags" onClick="editTags(this);" onMouseover="hitags(this);" onMouseout="lotags(this)">
-			      <?php echo $tagset;?>
+         <?php echo $tagset;?>
             </span>
-	      </div>
-		<?php
-		$total++;
-	} // finish showing the files
+         </div>
+<?php
+$total++;
+   } // finish showing the files
    close_db();  // on ferme la connexion
 
 ?>

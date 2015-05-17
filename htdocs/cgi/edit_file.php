@@ -47,7 +47,7 @@ function save_xml_tutorial(&$file) {
    // Check if file exists and if not, write the data
    
    if (file_exists($pathname)) {
-  	   debug_msg("File exists - temporary storage");
+        debug_msg("File exists - temporary storage");
       if (!is_dir("../run/$filepath/temp/"))
          mkdir("../run/$filepath/temp/");
       move_uploaded_file($tmpfile,"../run/$filepath/temp/$filename");
@@ -55,10 +55,10 @@ function save_xml_tutorial(&$file) {
    }
    else {
       move_uploaded_file($tmpfile,$pathname);
-	   debug_msg("Move succeeded");
-	  
-	   // update database
-	   $filenoext = stripextension($filename);
+      debug_msg("Move succeeded");
+     
+      // update database
+      $filenoext = stripextension($filename);
       open_db();
       $date = date("Y-m-d");
       $sql = "INSERT INTO file (file_date, file_author, file_path, file_name)".
