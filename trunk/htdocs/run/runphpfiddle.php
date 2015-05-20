@@ -7,9 +7,10 @@
 function php_redirect() {
    var params = "code=" + encodeURI( opener.codeToRun() );
    var postdata = "<?php echo file_get_contents("php://input"); ?>";
-   if (postdata.length>0) params = params+'&'+postdata;
-   var getdata = "<?php echo file_get_contents("php://input"); ?>";
-   if (getdata.length>0) params = params+'&'+getdata.slice(1);
+   if (postdata.length>0) params += '&'+postdata;
+   var getdata = location.search;
+   if (getdata) params += '&'+getdata.slice(1);
+   // alert(params);
    fiddleRequest = POSTRequest('http://phpfiddle.org/api/run/code/json', params, phpFiddleResponse); 
 }
 
