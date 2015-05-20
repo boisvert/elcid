@@ -348,14 +348,6 @@ function make_step (node) {
       step.comment = (element[0].firstChild==null)?'':element[0].firstChild.nodeValue;
    }
 
-   var element = node.getElementsByTagName('test');
-   if (element.length==1) {
-      step.test = {};
-      var a = element[0].attributes;
-      for (var i in a) {
-         step.test[a[i].nodeName] = a[i].nodeValue;
-      }
-   }
    return step;
 }
 
@@ -376,13 +368,13 @@ function step_move () {
 }
 
 function parseMove(node,step) {
-   var element
-   element = node.getElementsByTagName('linenumber')
+   var element;
+   element = node.getElementsByTagName('linenumber');
    if (element.length==1)
-      step.line = parseInt(element[0].firstChild.nodeValue)
-   element = node.getElementsByTagName('colnumber')
+      step.line = parseInt(element[0].firstChild.nodeValue);
+   element = node.getElementsByTagName('colnumber');
    if (element.length==1)
-      step.col = parseInt(element[0].firstChild.nodeValue)
+      step.col = parseInt(element[0].firstChild.nodeValue);
 }
 
 function step_select () {
@@ -397,17 +389,17 @@ function step_select () {
 }
 
 function parseSelect(node,step) {
-   var element
-   element = node.getElementsByTagName('lines')
+   var element;
+   element = node.getElementsByTagName('lines');
    if (element.length==1)
-      step.lines = parseInt(element[0].firstChild.nodeValue)
-   element = node.getElementsByTagName('chars')
+      step.lines = parseInt(element[0].firstChild.nodeValue);
+   element = node.getElementsByTagName('chars');
    if (element.length==1)
-      step.chars = parseInt(element[0].firstChild.nodeValue)
+      step.chars = parseInt(element[0].firstChild.nodeValue);
 }
 
 function step_copy () {
-   this.type = 'Copy'
+   this.type = 'Copy';
    this.debug = function() { window.status = "copy";}
    this.forward = function() { elcid_copy(this); }
    this.show = function() { return showCopy(this); }
@@ -417,7 +409,7 @@ function step_copy () {
 }
 
 function step_paste() {
-   this.type = 'Paste'
+   this.type = 'Paste';
    this.debug = function() {window.status = "paste"}
    this.forward = function() {elcid_paste(this)}
    this.show = function() {return showPaste(this)}
@@ -426,36 +418,34 @@ function step_paste() {
 }
 
 function step_insert() {
-   this.type = 'Insert'
-   this.lines = new Array()
-   this.lines.length = 0
-   this.chars = ''
+   this.type = 'Insert';
+   this.lines = new Array();
+   this.lines.length = 0;
+   this.chars = '';
    this.debug = function() {window.status = "insert lines and chars"}
    this.forward =  function() {elcid_insert(this)}
    this.show = function() {return showInsert(this)}
    this.parse = function(node) {parseInsert(node,this)}
    this.generate = function() {return genInsert(this)}
-
 }
 
 function parseInsert(node,step) {
-   var len
-   var element
-   element = node.getElementsByTagName('chars')
+   var element;
+   element = node.getElementsByTagName('chars');
    if (element.length==1)
-      step.chars = element[0].firstChild.nodeValue
-   element = node.getElementsByTagName('line')
-   step.lines.length = element.length
+      step.chars = element[0].firstChild.nodeValue;
+   element = node.getElementsByTagName('line');
+   step.lines.length = element.length;
    for (var i=0; i<element.length; i++) {
       if (element[i].childNodes.length==1)
-         step.lines[i]=element[i].firstChild.nodeValue
+         step.lines[i]=element[i].firstChild.nodeValue;
       else
-         step.lines[i]=''
+         step.lines[i]='';
    }
 }
 
 function step_delete() {
-   this.type = 'Delete'
+   this.type = 'Delete';
    this.debug = function() {window.status = "delete"}
    this.forward =  function() {elcid_delete(this)}
    this.show = function() {return showDelete(this)}
@@ -464,12 +454,24 @@ function step_delete() {
 }
 
 function step_start() {
-   this.type = 'Start'
-   this.debug = function() {window.status = "start"}
+   this.type = 'Start';
+   this.debug = function() {window.status = "start";}
    this.forward =  function() {}
-   this.show = function() {return showStart(this)}
-   this.parse = function(node) {}
-   this.generate = function() {return genStart(this)}
+   this.show = function() {return showStart(this);}
+   this.parse = function(node) {parseStart(node,this);}
+   this.generate = function() {return genStart(this);}
+}
+
+function parseStart(node,step) {
+   var element = node.getElementsByTagName('test');
+   if (element.length==1) {
+      step.test = {};
+      var a = element[0].attributes;
+      for (var i in a) {
+         n = a[i].nodeName;
+         if (n!='undefined') step.test[n] = a[i].nodeValue;
+      }
+   }
 }
 
 function step_doh() {

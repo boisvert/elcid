@@ -32,6 +32,9 @@ function generateXML() {
    fullXML += "<elcid>\n\n";
    fullXML += genSource();
    fullXML += "<iteration>\n\n";
+   if (steps.start) {
+      fullXML += steps.start.generate();
+  }
    for (var i=0; i<steps.length; i++) {
       fullXML += steps[i].generate();
    }
@@ -125,10 +128,10 @@ function updateNewStep(newType) {
    else if (newType=="paste") step = new step_paste();
    else step = new step_doh(); // in case
 
-   step.comment = steps[num].comment
-   steps[num] = step
-   elcidTutorial.document.getElementById("step"+num).innerHTML = step.show()
-   delayUpdateDisplay()
+   step.comment = steps[num].comment;
+   steps[num] = step;
+   elcidTutorial.document.getElementById("step"+num).innerHTML = step.show();
+   delayUpdateDisplay();
 }
 
 function deleteStep() {
@@ -180,6 +183,22 @@ function genSource() {
    s += "<source>";
    s += myXMLEncode(elcidTutorial.document.forms.source.text.value);
    s += "</source>\n\n";
+   return s;
+}
+
+function genStart(step) {
+   var s = "";
+   s += "<start>\n";
+   if (step.test) {
+      s += "   <test\n";
+      for (var i in step.test) {
+         if (i != 'undefined')
+            s += '     '+i+' = "' + step.test[i] + '"\n';
+      }
+      s += "   />\n";
+   }
+   s += genComment(step.comment);
+   s += "</start>\n\n";
    return s;
 }
 
