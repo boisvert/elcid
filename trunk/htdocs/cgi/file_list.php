@@ -79,7 +79,7 @@ function setTagsResponse() {
    $result = query_db($sql);
    $count = mysqli_num_rows($result);
 
-   echo "<h2>$count tutorials</h2>";
+   echo "<h2> $count tutorials</h2>";
 
    while ($record = mysqli_fetch_array($result)) {
 
@@ -92,19 +92,21 @@ function setTagsResponse() {
       if (!$tagset) 
    $tagset = "no tags";
       ?>
-         <div class="panel panel-default" style="display:inline-block; margin:5px;">
-            <h3><a onClick="<?php echo $js;?>" class="label label-primary"> <!--href='<?php echo $url;?>' -->
-         <?php echo $record["file_name"];?>
-       </a></h3>
-      <br />
-      <?php echo "<strong>Added on: </strong>" .$record["file_date"];?> <br />
-      <?php echo "<strong>By: </strong>".$record["file_author"];?><br />
-      <?php echo "<strong>Description: </strong>" .$record["file_description"];?><br />
-            <strong>Tags: </strong>
+         <div class="panel col-md-3" style="margin:5px;">
+            <h3><a onClick="<?php echo $js;?>" class="label label-primary" href='<?php echo $url;?>'>
+               <?php echo $record["file_name"];?>
+            </a></h3>
+            <br />
+            Added on <?php echo $record["file_date"];?> <br />
+            by <?php echo $record["file_author"];?><br />
+            <?php echo $record["file_description"];?><br />
+            Tags: 
             <span id="k<?php echo $file_id;?>" class="tags" onClick="editTags(this);" onMouseover="hitags(this);" onMouseout="lotags(this)">
          <?php echo $tagset;?>
             </span>
          </div>
+         
+
 <?php
 $total++;
    } // finish showing the files
