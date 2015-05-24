@@ -6,7 +6,7 @@
 <head>
 
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>eL-CID :- about</title>
+<title>About - Learn programming, step by step :- eL-CID</title>
 
 <link href="css/bootstrap.css" rel="stylesheet">
 <link rel="StyleSheet" href="css/style.css" type="text/css">
@@ -25,7 +25,7 @@ You are here:
   <li class="active">About</li>
 </ol>
 
-<div class="col-md-4" style="background:#00AF64; color:#FFFFFF; border-radius: 5px;">
+<div class="col-md-4" style="background:#265a9c; color:#FFFFFF; border-radius: 5px;">
 
    <h2>Table of Contents</h2>
 

@@ -20,3 +20,13 @@
 #login a:hover {
    color: #ffffff;
 }
+
+#tagCloud a {
+   color: #cccccc;
+   text-decoration: none;
+}
+
+#tagCloud a:focus,
+#tagCloud a:hover {
+   color: #ffffff;
+}

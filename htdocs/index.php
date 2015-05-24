@@ -1,12 +1,12 @@
 <?php
 
-$title = "eL-CID :- Learn programming, step by step";
+$title = "Learn programming, step by step :- eL-CID";
   
 $tag = "";
 
 if (isset($_GET["tag"])) {
    $tag = $_GET["tag"];
-   $title = "$title - $tag";
+   $title = "$tag - $title";
    $trail = "<li><a href='index.php'>Home</a></li> <li class='active'>$tag</li>";
 } else {
    $trail = "<li class='active'>Home</li>";
@@ -47,11 +47,11 @@ You are here:
   <?php echo $trail; ?>
 </ol>
 
-<div class="col-md-4" style="background:#00AF64; color:#FFFFFF; border-radius: 5px;">
+<div class="col-md-4" style="background:#265a9c; color:#FFFFFF; border-radius: 5px;">
 
 <h2>Choose:</h2>
 
-<div style="overflow: scroll;" id = "tagCloud">
+<div style="width:280; overflow: scroll;" id = "tagCloud">
   <?php include("cgi/tag_cloud.php"); ?>
 </div>
 
@@ -75,9 +75,7 @@ Questions, bugs, enthusiastic Oohs and Aahs ;-) all welcome, <a href="contact.ph
 
 </div>
 
-<div class="col-md-8">
-   <?php include("cgi/file_list.php"); ?>
-</div>
+<?php include("cgi/file_list.php"); ?>
 
 </div>
 

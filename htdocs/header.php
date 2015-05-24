@@ -73,7 +73,7 @@ close_db(); // on ferme la connexion
       <a href="index.php"><img src="images/logo.jpg" height="100" class="img-responsive" /></a>
    </div>
    
-   <div class="col-md-7" style="background:#00AF64; color:#FFFFFF; border-radius: 5px;">
+   <div class="col-md-7" style="background:#265a9c; color:#FFFFFF; border-radius: 5px;">
 
       <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
          <!-- Indicators -->
