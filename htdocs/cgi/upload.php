@@ -65,4 +65,6 @@ else { // file does not exist despite fopen
    echo("\nFile could not be created");
 }
 
+exit;
+
 ?>

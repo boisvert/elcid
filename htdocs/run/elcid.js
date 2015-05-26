@@ -1246,7 +1246,8 @@ function setTestOptions(testOp) {
 
 function runCode() {
    monitorUsage('run');
-   var interpreter = controls.interpreter.value;
+   var interpreter = editorIsOn?"../":"";
+   interpreter += controls.interpreter.value;
    var winprop = 'height=400,width=600,location=no,scrollbars=yes,menu=no,toolbar=no,status=yes,resizable=yes';
    var w = window.open(interpreter, 'run', winprop);
    w.focus();
