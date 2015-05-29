@@ -55,11 +55,10 @@ function phpFiddleResponse() {
    if (fiddleRequest.readyState == 4) {
       if (fiddleRequest.status == 200) {
          var data = JSON.parse(fiddleRequest.responseText);
-         // alert(fiddleRequest.responseText);
-         var txt = (data.result)?data.result:"Execution error:"+data.error;
-         resDiv = document.getElementById("fiddle");
-         // alert(txt);
-         resDiv.innerHTML = txt;
+         var html = (data.result)?data.result:"Execution error:"+data.error;
+         var resDiv = document.getElementById('fiddle').contentWindow.document;
+         resDiv.write(html);
+         resDiv.close();
       }
       else {
          alert('PHP Fiddle cannot execute the code.\nHTTP Status: '+fiddleRequest.status+'\nResponse:\n'+fiddleRequest.responseText);
@@ -73,8 +72,8 @@ function phpFiddleResponse() {
 
 <body onload="php_redirect()">
 
-<div id="fiddle">
-</div>
+<iframe id="fiddle" width="100%" height="95%">
+</iframe>
 
 </body>
 
