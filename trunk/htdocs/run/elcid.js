@@ -206,7 +206,7 @@ function XMLdocument () {
       this.request = new window.XMLHttpRequest();
       with (this) {
          request.onreadystatechange = function() {
-      if (request.readyState == 4) {
+         if (request.readyState == 4) {
                main = request.responseXML;
                ready(); 
             }
