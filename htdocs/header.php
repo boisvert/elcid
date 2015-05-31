@@ -65,12 +65,12 @@ close_db(); // on ferme la connexion
 
 <script type="text/javascript" src="images/behaviour.js"> </script>
 
-<script LANGUAGE="JavaScript" src="images/loggedin.php" type="text/javascript"> </script>
+<script  src="images/loggedin.php" type="text/javascript"> </script>
 
 <div class="container">
 
    <div class="col-md-3">
-      <a href="index.php"><img src="images/logo.jpg" height="100" class="img-responsive" /></a>
+      <a href="index.php"><img src="images/logo.jpg" height="100" class="img-responsive" alt="learn to code"/></a>
    </div>
    
    <div class="col-md-7" style="background:#265a9c; color:#FFFFFF; border-radius: 5px;">

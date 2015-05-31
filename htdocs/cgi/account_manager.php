@@ -4,14 +4,13 @@ require('login.php');
 //uncomment the line below for verbose execution
 //$debug = true;
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 
 <title>eL-CID - Register</title>
 
-<script language="javascript">
+<script >
 
 var pwdRequest = false;
 var contactRequest = false;
