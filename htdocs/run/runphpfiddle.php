@@ -3,6 +3,17 @@
 
 <head>
 
+</head>
+
+<body onload="php_redirect();">
+
+<iframe
+   id="fiddle" width="100%" height="95%" frameborder="0"
+   style="height:100%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px"
+>
+</iframe>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 <script >
 
 function php_redirect() {
@@ -38,7 +49,7 @@ function POSTRequest(url, parameters, responseProcess) {
         } catch (e) {}
      }
    }
-   
+
    if (!request) {
       alert('Cannot create XMLHTTP instance'); // Kludge this should raise an error
    } else {
@@ -56,10 +67,9 @@ function phpFiddleResponse() {
    if (fiddleRequest.readyState == 4) {
       if (fiddleRequest.status == 200) {
          var data = JSON.parse(fiddleRequest.responseText);
-         var html = (data.result)?data.result:"Execution error:"+data.error;
-         var resDiv = document.getElementById('fiddle').contentWindow.document;
-         resDiv.write(html);
-         resDiv.close();
+         var code = (data.result)?data.result:"Execution error:"+data.error;
+         //$("#fiddle").contents().html(code);
+         fillIframe(code);
       }
       else {
          alert('PHP Fiddle cannot execute the code.\nHTTP Status: '+fiddleRequest.status+'\nResponse:\n'+fiddleRequest.responseText);
@@ -67,15 +77,27 @@ function phpFiddleResponse() {
    }
 }
 
+function fillIframe(code) {
+   var resDiv = $("#fiddle").get(0);
+   var resDivDoc = resDiv.document;
+   if (resDiv.contentDocument)
+      resDivDoc = resDiv.contentDocument;
+   else if (resDiv.contentWindow)
+      resDivDoc = resDiv.contentWindow.document;
+   if (resDivDoc){
+      // Put the content in the iframe
+      resDivDoc.open();
+      resDivDoc.writeln(code);
+      resDivDoc.close();
+      jQuery("form", resDivDoc).attr("target","_top");
+      
+   } else {
+      //just in case of browsers that don't support the above 3 properties.
+      //fortunately we don't come across such case so far.
+   }
+}
+
 </script>
-
-</head>
-
-<body onload="php_redirect()">
-
-<iframe id="fiddle" width="100%" height="95%">
-</iframe>
-
 </body>
 
 </html>
