@@ -31,7 +31,7 @@
    </p>
     
    <blockquote>
-      <a href="http://code.google.com/p/elcid">el-cid on Google Code</a>
+      <a href="https://github.com/boisvert/elcid">el-cid on GitHub</a>
    </blockquote>
     
    <p>
